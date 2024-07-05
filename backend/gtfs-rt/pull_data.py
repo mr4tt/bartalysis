@@ -1,5 +1,38 @@
-import requests
 import gtfs_realtime_pb2
+import requests
+import sqlite3
+import re
+
+def get_alerts():
+    url = "http://api.bart.gov/gtfsrt/alerts.aspx"
+    feed = gtfs_realtime_pb2.FeedMessage()
+
+    with requests.get(url, stream=True) as r:
+        r.raise_for_status()
+        feed.ParseFromString(r.content)
+
+    conn = sqlite3.connect('/workspaces/bartalysis/backend/bart.db')
+    curr = conn.cursor()
+
+    insert_alert = '''
+    INSERT OR IGNORE INTO alert 
+    VALUES (?, ?, ?)
+    '''
+
+    for entity in feed.entity:
+        if entity.HasField('alert'):
+            alert_id = re.sub(r'\D', '', entity.id)
+            info = entity.alert.description_text.translation[0].text
+            lang = entity.alert.description_text.translation[1].text if len(entity.alert.description_text.translation) > 1 else "en-US"
+            
+            # Execute the INSERT statement with the extracted values
+            curr.execute(insert_alert, (
+                alert_id, 
+                info, 
+                lang
+                ))
+    conn.commit()
+    conn.close()
 
 def get_trip_updates():
     url = "http://api.bart.gov/gtfsrt/tripupdate.aspx"
@@ -9,20 +42,64 @@ def get_trip_updates():
         r.raise_for_status()
         feed.ParseFromString(r.content)
 
-    with open('trip_updates.txt', 'w') as result_file:
-        for entity in feed.entity:
-            print(entity.trip_update.stop_time_update)
-            result_file.write(str(entity) + '\n')
-                
-def get_alerts():
-    url = "http://api.bart.gov/gtfsrt/alerts.aspx"
-    feed = gtfs_realtime_pb2.FeedMessage()
+    conn = sqlite3.connect('/workspaces/bartalysis/backend/bart.db')
+    curr = conn.cursor()
 
-    with requests.get(url, stream=True) as r:
-        r.raise_for_status()
-        feed.ParseFromString(r.content)
+    insert_trip = '''
+    INSERT OR IGNORE INTO trip (
+    id, 
+    schedule_relationship, 
+    vehicle
+    ) 
+    VALUES (?, ?, ?)
+    '''
 
-    with open('alerts.txt', 'w') as result_file:
-        for entity in feed.entity:
-            result_file.write(str(entity) + '\n')
+    insert_stop_time = '''
+    INSERT OR IGNORE INTO stop_time_update (
+    trip_id, 
+    stop_id, 
+    arrival_delay, 
+    arrival_time, 
+    arrival_uncertainty, 
+    departure_delay, 
+    departure_time, 
+    departure_uncertainty
+    ) 
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    '''
+
+    for entity in feed.entity:
+        if entity.HasField('trip_update'):
+            trip_id = entity.trip_update.trip.trip_id
+            schedule_relationship = entity.trip_update.trip.schedule_relationship
+            vehicle_label = entity.trip_update.vehicle.label
+            curr.execute(insert_trip, (
+                trip_id,
+                schedule_relationship,
+                vehicle_label
+            ))
+
+            for stop_time_update in entity.trip_update.stop_time_update:
+                stop_id = stop_time_update.stop_id
+                arrival_delay = stop_time_update.arrival.delay
+                arrival_time = stop_time_update.arrival.time
+                arrival_uncertainty = stop_time_update.arrival.uncertainty
+                departure_delay = stop_time_update.departure.delay
+                departure_time = stop_time_update.departure.time
+                departure_uncertainty = stop_time_update.departure.uncertainty
+                curr.execute(insert_stop_time, (
+                    trip_id,
+                    stop_id,
+                    arrival_delay,
+                    arrival_time,
+                    arrival_uncertainty,
+                    departure_delay,
+                    departure_time,
+                    departure_uncertainty
+                ))
+
+    conn.commit()
+    conn.close()
+                    
 get_trip_updates()
+get_alerts()
