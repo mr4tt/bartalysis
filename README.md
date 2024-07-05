@@ -14,8 +14,7 @@ sudo apt-get update
 sudo apt-get install sqlite3
 ```
 
-### Install Protoc
+### Install Protoc Compiler
 ```
 apt install -y protobuf-compiler
-pip install protobuf==3.20.1
 ```
