@@ -1,12 +1,14 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import React from 'react';
-import './App.css';
+import Nav from './components/Nav';
+import { Outlet } from 'react-router-dom';
 
+// root element
 function App() {
   return (
-    <h2 className='underline'>
-      hi bartalysis team!!!
-    </h2>
+    <div className="h-screen grid grid-rows-8 gap-4">
+      <Nav />
+      <Outlet />
+    </div>
   );
 }
 
