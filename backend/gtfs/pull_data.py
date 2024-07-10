@@ -1,4 +1,8 @@
 import csv
+
+import datetime
+from datetime import datetime
+
 import os
 import requests
 import zipfile
@@ -111,8 +115,8 @@ def write_gtfs_data():
                 row['friday'],
                 row['saturday'],
                 row['sunday'],
-                row['start_date'],
-                row['end_date']
+                datetime.strptime(str(row['start_date']), "%Y%m%d").strftime("%Y-%m-%d"),
+                datetime.strptime(str(row['end_date']), "%Y%m%d").strftime("%Y-%m-%d")
                 ))
         os.remove(path + '/calendar.txt')
     
@@ -151,7 +155,7 @@ def write_gtfs_data():
         for row in reader:
             curr.execute(insert_calendar_date, (
                 row['service_id'],
-                row['date'],
+                datetime.strptime(str(row['date']), "%Y%m%d").strftime("%Y-%m-%d"),
                 row['exception_type']
                 ))
         os.remove(path + '/calendar_dates.txt')
