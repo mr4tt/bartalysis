@@ -46,7 +46,7 @@ def get_trip_updates():
     curr = conn.cursor()
 
     insert_trip = '''
-    INSERT OR IGNORE INTO trip (
+    INSERT OR IGNORE INTO rt_trip (
     id, 
     schedule_relationship, 
     vehicle
@@ -55,7 +55,7 @@ def get_trip_updates():
     '''
 
     insert_stop_time = '''
-    INSERT OR IGNORE INTO stop_time_update (
+    INSERT OR IGNORE INTO rt_stop_time_update (
     trip_id, 
     stop_id, 
     arrival_delay, 
