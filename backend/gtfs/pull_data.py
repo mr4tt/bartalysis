@@ -85,82 +85,7 @@ def write_gtfs_data():
                 ))
         os.remove(path + '/feed_info.txt')
 
-    #Calendar
-    with open(path + '/calendar.txt', 'r') as csvfile:
-        reader = csv.DictReader(csvfile)
-
-        insert_calendar = '''
-        INSERT OR IGNORE INTO calendar (
-            service_id,
-            monday,
-            tuesday,
-            wednesday,
-            thursday,
-            friday,
-            saturday,
-            sunday,
-            start_date,
-            end_date
-        )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        '''
-
-        for row in reader:
-            curr.execute(insert_calendar, (
-                row['service_id'],
-                row['monday'],
-                row['tuesday'],
-                row['wednesday'],
-                row['thursday'],
-                row['friday'],
-                row['saturday'],
-                row['sunday'],
-                datetime.strptime(str(row['start_date']), "%Y%m%d").strftime("%Y-%m-%d"),
-                datetime.strptime(str(row['end_date']), "%Y%m%d").strftime("%Y-%m-%d")
-                ))
-        os.remove(path + '/calendar.txt')
-    
-    #Calendar Attributes
-    with open(path + '/calendar_attributes.txt', 'r') as csvfile:
-        reader = csv.DictReader(csvfile)
-
-        insert_calendar_attribute = '''
-        INSERT OR IGNORE INTO calendar_attribute (
-            service_id,
-            service_description
-        )
-        VALUES (?, ?)
-        '''
-
-        for row in reader:
-            curr.execute(insert_calendar_attribute, (
-                row['service_id'],
-                row['service_description']
-                ))
-        os.remove(path + '/calendar_attributes.txt')
-
-    #Calendar Dates
-    with open(path + '/calendar_dates.txt', 'r') as csvfile:
-        reader = csv.DictReader(csvfile)
-
-        insert_calendar_date = '''
-        INSERT OR IGNORE INTO calendar_date (
-            service_id,
-            date,
-            exception_type
-        )
-        VALUES (?, ?, ?)
-        '''
-
-        for row in reader:
-            curr.execute(insert_calendar_date, (
-                row['service_id'],
-                datetime.strptime(str(row['date']), "%Y%m%d").strftime("%Y-%m-%d"),
-                row['exception_type']
-                ))
-        os.remove(path + '/calendar_dates.txt')
-    
-    #Fare Attributes
+        #Fare Attributes
     with open(path + '/fare_attributes.txt', 'r') as csvfile:
         reader = csv.DictReader(csvfile)
 
@@ -187,27 +112,6 @@ def write_gtfs_data():
                 ))
         os.remove(path + '/fare_attributes.txt')
 
-    #Fare Rider Categories
-    with open(path + '/fare_rider_categories.txt', 'r') as csvfile:
-        reader = csv.DictReader(csvfile)
-
-        insert_fare_rider_category = '''
-        INSERT OR IGNORE INTO fare_rider_category (
-            fare_id,
-            rider_category_id,
-            price
-        )
-        VALUES (?, ?, ?)
-        '''
-
-        for row in reader:
-            curr.execute(insert_fare_rider_category, (
-                row['fare_id'],
-                row['rider_category_id'],
-                row['price']
-                ))
-        os.remove(path + '/fare_rider_categories.txt')
-    
     #Fare Rules
     with open(path + '/fare_rules.txt', 'r') as csvfile:
         reader = csv.DictReader(csvfile)
@@ -232,7 +136,72 @@ def write_gtfs_data():
                 row['contains_id']
                 ))
         os.remove(path + '/fare_rules.txt')
-    
+
+    #Rider Categories
+    with open(path + '/rider_categories.txt', 'r') as csvfile:
+        reader = csv.DictReader(csvfile)
+
+        insert_rider_category = '''
+        INSERT OR IGNORE INTO rider_category (
+        rider_category_id,
+        rider_category_description
+        )
+        VALUES (?, ?)
+        '''
+
+        for row in reader:
+            curr.execute(insert_rider_category, (
+                row['rider_category_id'],
+                row['rider_category_description']
+                ))
+        os.remove(path + '/rider_categories.txt')
+
+    #Fare Rider Categories
+    with open(path + '/fare_rider_categories.txt', 'r') as csvfile:
+        reader = csv.DictReader(csvfile)
+
+        insert_fare_rider_category = '''
+        INSERT OR IGNORE INTO fare_rider_category (
+            fare_id,
+            rider_category_id,
+            price
+        )
+        VALUES (?, ?, ?)
+        '''
+
+        for row in reader:
+            curr.execute(insert_fare_rider_category, (
+                row['fare_id'],
+                row['rider_category_id'],
+                row['price']
+                ))
+        os.remove(path + '/fare_rider_categories.txt')
+
+    #Shapes
+    with open(path + '/shapes.txt', 'r') as csvfile:
+        reader = csv.DictReader(csvfile)
+
+        insert_shape = '''
+        INSERT OR IGNORE INTO shape (
+            shape_id,
+            shape_pt_lat,
+            shape_pt_lon,
+            shape_pt_sequence,
+            shape_dist_traveled
+        )
+        VALUES (?, ?, ?, ?, ?)
+        '''
+
+        for row in reader:
+            curr.execute(insert_shape, (
+                row['shape_id'],
+                row['shape_pt_lat'],
+                row['shape_pt_lon'],
+                row['shape_pt_sequence'],
+                row['shape_dist_traveled']
+                ))
+        os.remove(path + '/shapes.txt')
+
     #Routes
     with open(path + '/routes.txt', 'r') as csvfile:
         reader = csv.DictReader(csvfile)
@@ -287,27 +256,6 @@ def write_gtfs_data():
                 ))
         os.remove(path + '/route_attributes.txt')
 
-    #Directions
-    with open(path + '/directions.txt', 'r') as csvfile:
-        reader = csv.DictReader(csvfile)
-
-        insert_direction = '''
-        INSERT OR IGNORE INTO direction (
-            route_id,
-            direction_id,
-            direction
-        )
-        VALUES (?, ?, ?)
-        '''
-
-        for row in reader:
-            curr.execute(insert_direction, (
-                row['route_id'],
-                row['direction_id'],
-                row['direction']
-                ))
-        os.remove(path + '/directions.txt')
-    
     #Realtime Routes
     with open(path + '/realtime_routes.txt', 'r') as csvfile:
         reader = csv.DictReader(csvfile)
@@ -330,80 +278,28 @@ def write_gtfs_data():
                 row['realtime_routecode']
                 ))
         os.remove(path + '/realtime_routes.txt')
-    
-    #Rider Categories
-    with open(path + '/rider_categories.txt', 'r') as csvfile:
+
+    #Directions
+    with open(path + '/directions.txt', 'r') as csvfile:
         reader = csv.DictReader(csvfile)
 
-        insert_rider_category = '''
-        INSERT OR IGNORE INTO rider_category (
-        rider_category_id,
-        rider_category_description
-        )
-        VALUES (?, ?)
-        '''
-
-        for row in reader:
-            curr.execute(insert_rider_category, (
-                row['rider_category_id'],
-                row['rider_category_description']
-                ))
-        os.remove(path + '/rider_categories.txt')
-
-    #Shapes
-    with open(path + '/shapes.txt', 'r') as csvfile:
-        reader = csv.DictReader(csvfile)
-
-        insert_shape = '''
-        INSERT OR IGNORE INTO shape (
-            shape_id,
-            shape_pt_lat,
-            shape_pt_lon,
-            shape_pt_sequence,
-            shape_dist_traveled
-        )
-        VALUES (?, ?, ?, ?, ?)
-        '''
-
-        for row in reader:
-            curr.execute(insert_shape, (
-                row['shape_id'],
-                row['shape_pt_lat'],
-                row['shape_pt_lon'],
-                row['shape_pt_sequence'],
-                row['shape_dist_traveled']
-                ))
-        os.remove(path + '/shapes.txt')
-
-    #Trips
-    with open(path + '/trips.txt', 'r') as csvfile:
-        reader = csv.DictReader(csvfile)
-
-        insert_trip = '''
-        INSERT OR IGNORE INTO trip (
+        insert_direction = '''
+        INSERT OR IGNORE INTO direction (
             route_id,
-            service_id,
-            trip_id,
-            trip_headsign,
             direction_id,
-            block_id,
-            shape_id
+            direction
         )
-        VALUES (?, ?, ?, ?, ?, ?, ?)
+        VALUES (?, ?, ?)
         '''
 
         for row in reader:
-            curr.execute(insert_trip, (
+            curr.execute(insert_direction, (
                 row['route_id'],
-                row['service_id'],
-                row['trip_id'],
-                row['trip_headsign'],
                 row['direction_id'],
-                row['block_id'],
-                row['shape_id']
+                row['direction']
                 ))
-        os.remove(path + '/trips.txt')
-    
+        os.remove(path + '/directions.txt')
+
     #Stops
     with open(path + '/stops.txt', 'r') as csvfile:
         reader = csv.DictReader(csvfile)
@@ -494,6 +390,110 @@ def write_gtfs_data():
                 row['min_transfer_time']
                 ))
         os.remove(path + '/transfers.txt')
+        
+    #Calendar
+    with open(path + '/calendar.txt', 'r') as csvfile:
+        reader = csv.DictReader(csvfile)
+
+        insert_calendar = '''
+        INSERT OR IGNORE INTO calendar (
+            service_id,
+            monday,
+            tuesday,
+            wednesday,
+            thursday,
+            friday,
+            saturday,
+            sunday,
+            start_date,
+            end_date
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        '''
+
+        for row in reader:
+            curr.execute(insert_calendar, (
+                row['service_id'],
+                row['monday'],
+                row['tuesday'],
+                row['wednesday'],
+                row['thursday'],
+                row['friday'],
+                row['saturday'],
+                row['sunday'],
+                datetime.strptime(str(row['start_date']), "%Y%m%d").strftime("%Y-%m-%d"),
+                datetime.strptime(str(row['end_date']), "%Y%m%d").strftime("%Y-%m-%d")
+                ))
+        os.remove(path + '/calendar.txt')
+    
+    #Calendar Attributes
+    with open(path + '/calendar_attributes.txt', 'r') as csvfile:
+        reader = csv.DictReader(csvfile)
+
+        insert_calendar_attribute = '''
+        INSERT OR IGNORE INTO calendar_attribute (
+            service_id,
+            service_description
+        )
+        VALUES (?, ?)
+        '''
+
+        for row in reader:
+            curr.execute(insert_calendar_attribute, (
+                row['service_id'],
+                row['service_description']
+                ))
+        os.remove(path + '/calendar_attributes.txt')
+
+    #Calendar Dates
+    with open(path + '/calendar_dates.txt', 'r') as csvfile:
+        reader = csv.DictReader(csvfile)
+
+        insert_calendar_date = '''
+        INSERT OR IGNORE INTO calendar_date (
+            service_id,
+            date,
+            exception_type
+        )
+        VALUES (?, ?, ?)
+        '''
+
+        for row in reader:
+            curr.execute(insert_calendar_date, (
+                row['service_id'],
+                datetime.strptime(str(row['date']), "%Y%m%d").strftime("%Y-%m-%d"),
+                row['exception_type']
+                ))
+        os.remove(path + '/calendar_dates.txt')
+
+    #Trips
+    with open(path + '/trips.txt', 'r') as csvfile:
+        reader = csv.DictReader(csvfile)
+
+        insert_trip = '''
+        INSERT OR IGNORE INTO trip (
+            route_id,
+            service_id,
+            trip_id,
+            trip_headsign,
+            direction_id,
+            block_id,
+            shape_id
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+        '''
+
+        for row in reader:
+            curr.execute(insert_trip, (
+                row['route_id'],
+                row['service_id'],
+                row['trip_id'],
+                row['trip_headsign'],
+                row['direction_id'],
+                row['block_id'],
+                row['shape_id']
+                ))
+        os.remove(path + '/trips.txt')
 
     conn.commit()
     conn.close()
