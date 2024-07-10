@@ -18,7 +18,11 @@ def get_alerts():
     curr = conn.cursor()
 
     insert_alert = '''
-    INSERT OR IGNORE INTO alert 
+    INSERT OR IGNORE INTO rt_alert (
+    alert_id,
+    info, 
+    lang
+    )
     VALUES (?, ?, ?)
     '''
 
@@ -50,7 +54,7 @@ def get_trip_updates():
 
     insert_trip = '''
     INSERT OR IGNORE INTO rt_trip (
-    id, 
+    trip_id,
     schedule_relationship, 
     vehicle
     ) 
