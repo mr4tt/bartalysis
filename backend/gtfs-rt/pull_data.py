@@ -1,7 +1,7 @@
-import gtfs_realtime_pb2
 import requests
-import sqlite3
 import re
+import sqlite3
+import gtfs_realtime_pb2
 
 def get_alerts():
     url = "http://api.bart.gov/gtfsrt/alerts.aspx"
@@ -67,7 +67,7 @@ def get_trip_updates():
     ) 
     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     '''
-
+    
     for entity in feed.entity:
         if entity.HasField('trip_update'):
             trip_id = entity.trip_update.trip.trip_id

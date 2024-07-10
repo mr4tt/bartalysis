@@ -1,8 +1,8 @@
+import csv
+import os
 import requests
 import zipfile
-import os
 import sqlite3
-import csv
 
 def get_gtfs_data():
     temp_zip_path = "temp.zip"
