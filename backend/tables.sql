@@ -163,7 +163,7 @@ CREATE TABLE trip (
     trip_id INT PRIMARY KEY,
     trip_headsign TEXT NOT NULL,
     direction_id TEXT NOT NULL,
-    block_id TEXT NOT NULL,
+    block_id TEXT,
     shape_id TEXT REFERENCES shape(shape_id)
 ); 
 
