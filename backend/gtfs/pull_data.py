@@ -31,7 +31,7 @@ def write_gtfs_data():
     curr = conn.cursor()
     path = "/workspaces/bartalysis/backend/gtfs/data/"
 
-    #Agency
+    # Agency
     with open(path + '/agency.txt', 'r') as csvfile:
         reader = csv.DictReader(csvfile)
 
@@ -58,7 +58,7 @@ def write_gtfs_data():
                 ))
         os.remove(path + '/agency.txt')
     
-    #Feed Info
+    # Feed Info
     with open(path + '/feed_info.txt', 'r') as csvfile:
         reader = csv.DictReader(csvfile)
 
@@ -85,7 +85,7 @@ def write_gtfs_data():
                 ))
         os.remove(path + '/feed_info.txt')
 
-        #Fare Attributes
+    # Fare Attributes
     with open(path + '/fare_attributes.txt', 'r') as csvfile:
         reader = csv.DictReader(csvfile)
 
@@ -112,7 +112,7 @@ def write_gtfs_data():
                 ))
         os.remove(path + '/fare_attributes.txt')
 
-    #Fare Rules
+    # Fare Rules
     with open(path + '/fare_rules.txt', 'r') as csvfile:
         reader = csv.DictReader(csvfile)
 
@@ -137,7 +137,7 @@ def write_gtfs_data():
                 ))
         os.remove(path + '/fare_rules.txt')
 
-    #Rider Categories
+    # Rider Categories
     with open(path + '/rider_categories.txt', 'r') as csvfile:
         reader = csv.DictReader(csvfile)
 
@@ -156,7 +156,7 @@ def write_gtfs_data():
                 ))
         os.remove(path + '/rider_categories.txt')
 
-    #Fare Rider Categories
+    # Fare Rider Categories
     with open(path + '/fare_rider_categories.txt', 'r') as csvfile:
         reader = csv.DictReader(csvfile)
 
@@ -202,7 +202,7 @@ def write_gtfs_data():
                 ))
         os.remove(path + '/shapes.txt')
 
-    #Routes
+    # Routes
     with open(path + '/routes.txt', 'r') as csvfile:
         reader = csv.DictReader(csvfile)
 
@@ -233,7 +233,7 @@ def write_gtfs_data():
                 ))
         os.remove(path + '/routes.txt')
     
-    #Route Attributes
+    # Route Attributes
     with open(path + '/route_attributes.txt', 'r') as csvfile:
         reader = csv.DictReader(csvfile)
 
@@ -256,7 +256,7 @@ def write_gtfs_data():
                 ))
         os.remove(path + '/route_attributes.txt')
 
-    #Realtime Routes
+    # Realtime Routes
     with open(path + '/realtime_routes.txt', 'r') as csvfile:
         reader = csv.DictReader(csvfile)
 
@@ -279,7 +279,7 @@ def write_gtfs_data():
                 ))
         os.remove(path + '/realtime_routes.txt')
 
-    #Directions
+    # Directions
     with open(path + '/directions.txt', 'r') as csvfile:
         reader = csv.DictReader(csvfile)
 
@@ -300,7 +300,7 @@ def write_gtfs_data():
                 ))
         os.remove(path + '/directions.txt')
 
-    #Stops
+    # Stops
     with open(path + '/stops.txt', 'r') as csvfile:
         reader = csv.DictReader(csvfile)
 
@@ -335,7 +335,7 @@ def write_gtfs_data():
                 ))
         os.remove(path + '/stops.txt')
     
-    #Stop Times
+    # Stop Times
     with open(path + '/stop_times.txt', 'r') as csvfile:
         reader = csv.DictReader(csvfile)
 
@@ -368,7 +368,7 @@ def write_gtfs_data():
                 ))
         os.remove(path + '/stop_times.txt') 
     
-    #Transfers
+    # Transfers
     with open(path + '/transfers.txt', 'r') as csvfile:
         reader = csv.DictReader(csvfile)
 
@@ -391,7 +391,7 @@ def write_gtfs_data():
                 ))
         os.remove(path + '/transfers.txt')
         
-    #Calendar
+    # Calendar
     with open(path + '/calendar.txt', 'r') as csvfile:
         reader = csv.DictReader(csvfile)
 
@@ -426,7 +426,7 @@ def write_gtfs_data():
                 ))
         os.remove(path + '/calendar.txt')
     
-    #Calendar Attributes
+    # Calendar Attributes
     with open(path + '/calendar_attributes.txt', 'r') as csvfile:
         reader = csv.DictReader(csvfile)
 
@@ -445,7 +445,7 @@ def write_gtfs_data():
                 ))
         os.remove(path + '/calendar_attributes.txt')
 
-    #Calendar Dates
+    # Calendar Dates
     with open(path + '/calendar_dates.txt', 'r') as csvfile:
         reader = csv.DictReader(csvfile)
 
@@ -466,7 +466,7 @@ def write_gtfs_data():
                 ))
         os.remove(path + '/calendar_dates.txt')
 
-    #Trips
+    # Trips
     with open(path + '/trips.txt', 'r') as csvfile:
         reader = csv.DictReader(csvfile)
 
