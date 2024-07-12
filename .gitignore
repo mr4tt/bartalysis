@@ -25,5 +25,6 @@ dist-ssr
 
 env
 __pycache__
+__init
 gtfs_realtime_pb2.py
 bart.db
