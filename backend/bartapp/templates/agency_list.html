@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Agency List</title>
+</head>
+<body>
+    <h1>Agency List</h1>
+    <ul>
+        {% for agency in agencies %}
+            <li>{{ agency.agency_name }} - {{ agency.agency_url }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

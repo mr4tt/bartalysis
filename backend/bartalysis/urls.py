@@ -17,7 +17,11 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path
+from bartapp.views import get_departures
+from bartapp.views import get_agencies
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("api/departures/", get_departures),
+    path('agencies/', get_agencies, name='agencies')
 ]
