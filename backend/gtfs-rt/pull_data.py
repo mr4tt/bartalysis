@@ -32,12 +32,12 @@ def get_alerts():
             info = entity.alert.description_text.translation[0].text
             lang = entity.alert.description_text.translation[1].text if len(entity.alert.description_text.translation) > 1 else "en-US"
             
-            # Execute the INSERT statement with the extracted values
             curr.execute(insert_alert, (
                 alert_id, 
                 info, 
                 lang
-                ))
+            ))
+            
     conn.commit()
     conn.close()
 
