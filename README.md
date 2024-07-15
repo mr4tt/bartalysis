@@ -1,12 +1,15 @@
 # bartalysis
 
-# Build Instructions
+## Build Instructions
 
 ## Tech Stack
 
 - React
 - TypeScript
 - TailwindCSS
+- Python
+- Django
+- SQLite
 
 ## Building the Frontend
 
@@ -30,26 +33,35 @@ npm install
 npm run dev
 ```
 
+Go to http://localhost:5173/ to access the webpage
+
 ## Building the Backend
 
 ### Update Packages
+
 ```
 sudo apt-get update
 ```
 
 ### Install SQLite3
+
 ```
 sudo apt-get install sqlite3
 ```
 
 ### Install Protoc Compiler
+
 First install the protoc package.
+
 ```
 pip install protobuf==3.20.0
 apt install -y protobuf-compiler
 ```
-Then run the proto.py file. 
+
+Then run the proto.py file.
+
 ```
 python backend/gtfs-rt/proto.py
 ```
+
 This is required to pull data from GTFS-RT.
