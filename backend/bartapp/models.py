@@ -204,3 +204,32 @@ class Trip(models.Model):
 
     class Meta:
         db_table = 'trips'
+
+class RTStopTimeUpdate(models.Model):
+    trip_id = models.IntegerField()
+    stop_id = models.CharField()
+    arrival_delay = models.IntegerField()
+    arrival_time = models.IntegerField()
+    arrival_uncertainty = models.IntegerField()
+    departure_delay = models.IntegerField()
+    departure_time = models.IntegerField()
+    departure_uncertainty = models.IntegerField()
+
+    class Meta:
+        db_table = 'rt_stop_time_updates'
+
+class RTAlert(models.Model):
+    alert_id = models.IntegerField(primary_key=True)
+    info = models.CharField()
+    lang = models.CharField()
+
+    class Meta:
+        db_table = 'rt_alerts'
+
+class RTTrip(models.Model):
+    trip_id = models.IntegerField(primary_key=True)
+    schedule_relationship = models.CharField()
+    vehicle = models.CharField()
+
+    class Meta:
+        db_table = 'rt_trips'
