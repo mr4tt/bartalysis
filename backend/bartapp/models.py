@@ -1,12 +1,12 @@
 from django.db import models
 
 class Agency(models.Model):
-    agency_id = models.CharField(max_length=100, primary_key=True)
-    agency_name = models.CharField(max_length=100)
+    agency_id = models.TextField(primary_key=True)
+    agency_name = models.TextField()
     agency_url = models.URLField()
-    agency_timezone = models.CharField(max_length=50, null=True, blank=True)
-    agency_lang = models.CharField(max_length=10, null=True, blank=True)
-    agency_phone = models.CharField(max_length=20)
+    agency_timezone = models.TextField(null=True)
+    agency_lang = models.TextField(null=True)
+    agency_phone = models.TextField()
 
     class Meta:
         db_table = 'agency'
@@ -15,12 +15,12 @@ class Agency(models.Model):
         return self.agency_name
 
 class FeedInfo(models.Model):
-    feed_publisher_name = models.CharField(max_length=100)
+    feed_publisher_name = models.TextField()
     feed_publisher_url = models.URLField()
-    feed_lang = models.CharField(max_length=10)
+    feed_lang = models.TextField()
     feed_start_date = models.DateField()
     feed_end_date = models.DateField()
-    feed_version = models.CharField(max_length=20)
+    feed_version = models.TextField()
 
     class Meta:
         db_table = 'feed_info'
@@ -29,12 +29,12 @@ class FeedInfo(models.Model):
         return self.feed_publisher_name
 
 class FareAttribute(models.Model):
-    fare_id = models.CharField(max_length=100)
+    fare_id = models.IntegerField(primary_key=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    currency_type = models.CharField(max_length=3)
+    currency_type = models.TextField()
     payment_method = models.IntegerField()
-    transfers = models.IntegerField()
-    transfer_duration = models.IntegerField(null=True, blank=True)
+    transfers = models.IntegerField(null=True)
+    transfer_duration = models.IntegerField(null=True)
 
     class Meta:
         db_table = 'fare_attributes'
@@ -43,18 +43,18 @@ class FareAttribute(models.Model):
         return self.fare_id
 
 class FareRule(models.Model):
-    fare_id = models.CharField(max_length=100)
-    route_id = models.CharField(max_length=100, null=True, blank=True)
-    origin_id = models.CharField(max_length=100, null=True, blank=True)
-    destination_id = models.CharField(max_length=100, null=True, blank=True)
-    contains_id = models.CharField(max_length=100, null=True, blank=True)
+    fare_id = models.OneToOneField(FareAttribute, on_delete=models.CASCADE, primary_key=True)
+    route_id = models.TextField(null=True)
+    origin_id = models.TextField()
+    destination_id = models.TextField()
+    contains_id = models.TextField(null=True)
 
     class Meta:
         db_table = 'fare_rules'
 
 class RiderCategory(models.Model):
-    rider_category_id = models.CharField(max_length=100, primary_key=True)
-    rider_category_description = models.CharField(max_length=255)
+    rider_category_id = models.IntegerField(primary_key=True)
+    rider_category_description = models.TextField()
 
     class Meta:
         db_table = 'rider_categories'
@@ -63,32 +63,22 @@ class RiderCategory(models.Model):
         return self.rider_category_id
 
 class FareRiderCategory(models.Model):
-    fare_id = models.CharField(max_length=100)
-    rider_category_id = models.CharField(max_length=100)
+    fare_id = models.ForeignKey(FareAttribute, on_delete=models.CASCADE)
+    rider_category_id = models.ForeignKey(RiderCategory, on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=10, decimal_places=2)
 
     class Meta:
         db_table = 'fare_rider_categories'
 
-class Shape(models.Model):
-    shape_id = models.CharField(max_length=100)
-    shape_pt_lat = models.FloatField()
-    shape_pt_lon = models.FloatField()
-    shape_pt_sequence = models.IntegerField()
-    shape_dist_traveled = models.FloatField(null=True, blank=True)
-
-    class Meta:
-        db_table = 'shapes'
-
 class Route(models.Model):
-    route_id = models.CharField(max_length=100, primary_key=True)
-    route_short_name = models.CharField(max_length=50, null=True, blank=True)
-    route_long_name = models.CharField(max_length=255)
-    route_desc = models.CharField(max_length=255, null=True, blank=True)
+    route_id = models.TextField(primary_key=True)
+    route_short_name = models.TextField()
+    route_long_name = models.TextField(null=True)
+    route_desc = models.TextField()
     route_type = models.IntegerField()
-    route_url = models.URLField(null=True, blank=True)
-    route_color = models.CharField(max_length=10, null=True, blank=True)
-    route_text_color = models.CharField(max_length=10, null=True, blank=True)
+    route_url = models.URLField(null=True)
+    route_color = models.TextField()
+    route_text_color = models.TextField()
 
     class Meta:
         db_table = 'routes'
@@ -96,43 +86,17 @@ class Route(models.Model):
     def __str__(self):
         return self.route_long_name
 
-class RouteAttribute(models.Model):
-    route_id = models.CharField(max_length=100)
-    category = models.CharField(max_length=50, null=True, blank=True)
-    subcategory = models.CharField(max_length=50, null=True, blank=True)
-    running_way = models.CharField(max_length=50, null=True, blank=True)
-
-    class Meta:
-        db_table = 'route_attributes'
-
-class RealtimeRoute(models.Model):
-    route_id = models.CharField(max_length=100)
-    realtime_enabled = models.BooleanField()
-    realtime_routename = models.CharField(max_length=100, null=True, blank=True)
-    realtime_routecode = models.CharField(max_length=50, null=True, blank=True)
-
-    class Meta:
-        db_table = 'realtime_routes'
-
-class Direction(models.Model):
-    route_id = models.CharField(max_length=100)
-    direction_id = models.CharField(max_length=50)
-    direction = models.CharField(max_length=100)
-
-    class Meta:
-        db_table = 'directions'
-
 class Stop(models.Model):
-    stop_id = models.CharField(max_length=100, primary_key=True)
-    stop_code = models.CharField(max_length=50, null=True, blank=True)
-    stop_name = models.CharField(max_length=255)
-    stop_desc = models.CharField(max_length=255, null=True, blank=True)
-    stop_lat = models.FloatField()
-    stop_lon = models.FloatField()
-    zone_id = models.CharField(max_length=50, null=True, blank=True)
-    plc_url = models.URLField(null=True, blank=True)
-    location_type = models.IntegerField(null=True, blank=True)
-    parent_station = models.CharField(max_length=100, null=True, blank=True)
+    stop_id = models.TextField(primary_key=True)
+    stop_code = models.TextField(null=True)
+    stop_name = models.TextField()
+    stop_desc = models.TextField(null=True)
+    stop_lat = models.TextField()
+    stop_lon = models.TextField()
+    zone_id = models.TextField(null=True)
+    plc_url = models.URLField(null=True)
+    location_type = models.IntegerField()
+    parent_station = models.TextField(null=True)
 
     class Meta:
         db_table = 'stops'
@@ -140,31 +104,20 @@ class Stop(models.Model):
     def __str__(self):
         return self.stop_name
 
-class StopTime(models.Model):
-    trip_id = models.CharField(max_length=100)
-    arrival_time = models.CharField(max_length=20)
-    departure_time = models.CharField(max_length=20)
-    stop_id = models.CharField(max_length=100)
-    stop_sequence = models.IntegerField()
-    stop_headsign = models.CharField(max_length=255, null=True, blank=True)
-    pickup_type = models.IntegerField(null=True, blank=True)
-    drop_off_type = models.IntegerField(null=True, blank=True)
-    shape_distance_traveled = models.FloatField(null=True, blank=True)
+class Trip(models.Model):
+    route_id = models.TextField(null=True)
+    service_id = models.TextField(null=True)
+    trip_id = models.IntegerField(primary_key=True)
+    trip_headsign = models.TextField()
+    direction_id = models.TextField()
+    block_id = models.TextField()
+    shape_id = models.TextField()
 
     class Meta:
-        db_table = 'stop_times'
-
-class Transfer(models.Model):
-    from_stop_id = models.CharField(max_length=100)
-    to_stop_id = models.CharField(max_length=100)
-    transfer_type = models.IntegerField()
-    min_transfer_time = models.IntegerField(null=True, blank=True)
-
-    class Meta:
-        db_table = 'transfers'
+        db_table = 'trips'
 
 class Calendar(models.Model):
-    service_id = models.CharField(max_length=100, primary_key=True)
+    service_id = models.TextField(primary_key=True)
     monday = models.IntegerField()
     tuesday = models.IntegerField()
     wednesday = models.IntegerField()
@@ -178,36 +131,87 @@ class Calendar(models.Model):
     class Meta:
         db_table = 'calendar'
 
+class RouteAttribute(models.Model):
+    route_id = models.ForeignKey(Route, on_delete=models.CASCADE)
+    category = models.TextField()
+    subcategory = models.TextField()
+    running_way = models.TextField()
+
+    class Meta:
+        db_table = 'route_attributes'
+
+class RealtimeRoute(models.Model):
+    route_id = models.ForeignKey(Route, on_delete=models.CASCADE)
+    realtime_enabled = models.BooleanField()
+    realtime_routename = models.TextField(null=True)
+    realtime_routecode = models.TextField(null=True)
+
+    class Meta:
+        db_table = 'realtime_routes'
+
+class Direction(models.Model):
+    route_id = models.ForeignKey(Route, on_delete=models.CASCADE)
+    direction_id = models.TextField()
+    direction = models.TextField()
+
+    class Meta:
+        db_table = 'directions'
+
+class StopTime(models.Model):
+    trip_id = models.ForeignKey(Trip, on_delete=models.CASCADE)
+    arrival_time = models.TextField()
+    departure_time = models.TextField()
+    stop_id = models.ForeignKey(Stop, on_delete=models.CASCADE)
+    stop_sequence = models.IntegerField(null=True)
+    pickup_type = models.IntegerField(null=True)
+    drop_off_type = models.IntegerField(null=True)
+    shape_distance_traveled = models.IntegerField()
+
+    class Meta:
+        db_table = 'stop_times'
+
+class Transfer(models.Model):
+    from_stop_id = models.TextField()
+    to_stop_id = models.TextField()
+    transfer_type = models.IntegerField(null=True)
+    min_transfer_time = models.IntegerField(null=True)
+    from_route_id = models.TextField(null=True)
+    to_route_id = models.TextField(null=True)
+    from_trip_id = models.TextField(null=True)
+    to_trip_id = models.TextField(null=True)
+
+    class Meta:
+        db_table = 'transfers'
+
+class Shape(models.Model):
+    shape_id = models.ForeignKey(Trip, on_delete=models.CASCADE)
+    shape_pt_lat = models.IntegerField()
+    shape_pt_lon = models.IntegerField()
+    shape_pt_sequence = models.IntegerField()
+    shape_dist_traveled = models.IntegerField()
+
+    class Meta:
+        db_table = 'shapes'
+
+
 class CalendarAttribute(models.Model):
-    service_id = models.CharField(max_length=100)
-    service_description = models.CharField(max_length=255)
+    service_id = models.OneToOneField(Calendar, on_delete=models.CASCADE, primary_key=True)
+    service_description = models.TextField(max_length=255)
 
     class Meta:
         db_table = 'calendar_attributes'
 
 class CalendarDate(models.Model):
-    service_id = models.CharField(max_length=100)
+    service_id = models.ForeignKey(Calendar, on_delete=models.CASCADE)
     date = models.DateField()
     exception_type = models.IntegerField()
 
     class Meta:
         db_table = 'calendar_dates'
 
-class Trip(models.Model):
-    route_id = models.CharField(max_length=100)
-    service_id = models.CharField(max_length=100)
-    trip_id = models.CharField(max_length=100, primary_key=True)
-    trip_headsign = models.CharField(max_length=255, null=True, blank=True)
-    direction_id = models.CharField(max_length=50, null=True, blank=True)
-    block_id = models.CharField(max_length=50, null=True, blank=True)
-    shape_id = models.CharField(max_length=50, null=True, blank=True)
-
-    class Meta:
-        db_table = 'trips'
-
 class RTStopTimeUpdate(models.Model):
     trip_id = models.IntegerField()
-    stop_id = models.CharField()
+    stop_id = models.TextField()
     arrival_delay = models.IntegerField()
     arrival_time = models.IntegerField()
     arrival_uncertainty = models.IntegerField()
@@ -220,16 +224,16 @@ class RTStopTimeUpdate(models.Model):
 
 class RTAlert(models.Model):
     alert_id = models.IntegerField(primary_key=True)
-    info = models.CharField()
-    lang = models.CharField()
+    info = models.TextField()
+    lang = models.TextField()
 
     class Meta:
         db_table = 'rt_alerts'
 
 class RTTrip(models.Model):
     trip_id = models.IntegerField(primary_key=True)
-    schedule_relationship = models.CharField()
-    vehicle = models.CharField()
+    schedule_relationship = models.TextField()
+    vehicle = models.TextField()
 
     class Meta:
         db_table = 'rt_trips'
