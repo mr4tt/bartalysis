@@ -65,3 +65,17 @@ python backend/gtfs-rt/proto.py
 ```
 
 This is required to pull data from GTFS-RT.
+
+### Build the Database
+
+Create the django user database.
+
+```
+python manage.py migrate
+```
+
+Create the BART database.
+
+```
+python manage.py migrate --database=bart
+```
