@@ -44,18 +44,12 @@ sudo apt-get update
 pip install -r requirements.txt
 ```
 
-### Install SQLite3
-
-```
-sudo apt-get install sqlite3
-```
-
 ### Create Protoc Compiler
 
 Run the proto.py file.
 
 ```
-python backend/gtfs-rt/proto.py
+python proto.py
 ```
 
 Ensure the gtfs_realtime_pb2.py file is located in the gtfs-rt directory. This is required to pull data from GTFS-RT.
