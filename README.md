@@ -37,10 +37,11 @@ Go to http://localhost:5173/ to access the webpage
 
 ## Building the Backend
 
-### Update Packages
+### Update and Install Packages
 
 ```
 sudo apt-get update
+pip install -r requirements.txt
 ```
 
 ### Install SQLite3
@@ -49,15 +50,9 @@ sudo apt-get update
 sudo apt-get install sqlite3
 ```
 
-### Install Protoc Compiler
+### Create Protoc Compiler
 
-First install the protoc package.
-
-```
-sudo apt install -y protobuf-compiler
-```
-
-Then run the proto.py file.
+Run the proto.py file.
 
 ```
 python backend/gtfs-rt/proto.py
