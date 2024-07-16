@@ -10,20 +10,21 @@ from .views import (
     StopTimeViewSet,
     CalendarViewSet,
     FeedInfoViewSet,
-    FareAttributeViewSet,
-    FareRuleViewSet,
-    RiderCategoryViewSet,
-    FareRiderCategoryViewSet,
-    ShapeViewSet,
-    RouteAttributeViewSet,
-    RealtimeRouteViewSet,
-    DirectionViewSet,
-    TransferViewSet,
-    CalendarAttributeViewSet,
-    CalendarDateViewSet,
-    RtStopTimeUpdateViewSet,
-    RtAlertViewSet,
-    RtTripViewSet,
+    # FareAttributeViewSet,
+    # FareRuleViewSet,
+    # RiderCategoryViewSet,
+    # FareRiderCategoryViewSet,
+    # ShapeViewSet,
+    # RouteAttributeViewSet,
+    # RealtimeRouteViewSet,
+    # DirectionViewSet,
+    # TransferViewSet,
+    # CalendarAttributeViewSet,
+    # CalendarDateViewSet,
+    # RtStopTimeUpdateViewSet,
+    # RtAlertViewSet,
+    # RtTripViewSet,
+    IncomingTrainsView
 )
 
 router = DefaultRouter()
@@ -34,20 +35,20 @@ router.register(r'trips', TripViewSet, basename='trip')
 router.register(r'stop_times', StopTimeViewSet, basename='stoptime')
 router.register(r'calendar', CalendarViewSet, basename='calendar')
 router.register(r'feed_info', FeedInfoViewSet, basename='feedinfo')
-router.register(r'fare_attributes', FareAttributeViewSet, basename='fareattribute')
-router.register(r'fare_rules', FareRuleViewSet, basename='farerule')
-router.register(r'rider_categories', RiderCategoryViewSet, basename='ridercategory')
-router.register(r'fare_rider_categories', FareRiderCategoryViewSet, basename='fareridercategory')
-router.register(r'shapes', ShapeViewSet, basename='shape')
-router.register(r'route_attributes', RouteAttributeViewSet, basename='routeattribute')
-router.register(r'realtime_routes', RealtimeRouteViewSet, basename='realtimeroute')
-router.register(r'directions', DirectionViewSet, basename='direction')
-router.register(r'transfers', TransferViewSet, basename='transfer')
-router.register(r'calendar_attributes', CalendarAttributeViewSet, basename='calendarattribute')
-router.register(r'calendar_dates', CalendarDateViewSet, basename='calendardate')
-router.register(r'rt_stop_time_updates', RtStopTimeUpdateViewSet, basename='rtstoptimeupdate')
-router.register(r'rt_alerts', RtAlertViewSet, basename='rtalert')
-router.register(r'rt_trips', RtTripViewSet, basename='rttrip')
+# router.register(r'fare_attributes', FareAttributeViewSet, basename='fareattribute')
+# router.register(r'fare_rules', FareRuleViewSet, basename='farerule')
+# router.register(r'rider_categories', RiderCategoryViewSet, basename='ridercategory')
+# router.register(r'fare_rider_categories', FareRiderCategoryViewSet, basename='fareridercategory')
+# router.register(r'shapes', ShapeViewSet, basename='shape')
+# router.register(r'route_attributes', RouteAttributeViewSet, basename='routeattribute')
+# router.register(r'realtime_routes', RealtimeRouteViewSet, basename='realtimeroute')
+# router.register(r'directions', DirectionViewSet, basename='direction')
+# router.register(r'transfers', TransferViewSet, basename='transfer')
+# router.register(r'calendar_attributes', CalendarAttributeViewSet, basename='calendarattribute')
+# router.register(r'calendar_dates', CalendarDateViewSet, basename='calendardate')
+# router.register(r'rt_stop_time_updates', RtStopTimeUpdateViewSet, basename='rtstoptimeupdate')
+# router.register(r'rt_alerts', RtAlertViewSet, basename='rtalert')
+# router.register(r'rt_trips', RtTripViewSet, basename='rttrip')
 
 urlpatterns = [
     path('api/departures/', get_departures, name='departures'),

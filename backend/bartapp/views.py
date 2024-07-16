@@ -1,17 +1,37 @@
 from django.shortcuts import render
-
 from django.http import JsonResponse
 import requests
 
 from rest_framework import viewsets
-from .models import Agency, Route, Stop, StopTime, Calendar, Trip, TrainSchedule
-from .serializers import AgencySerializer, RouteSerializer, StopSerializer, StopTimeSerializer, CalendarSerializer, TripSerializer, RealtimeStopTimeUpdateSerializer
+from .models import (
+    Agency, 
+    FeedInfo,
+    Route, 
+    Stop, 
+    StopTime, 
+    Calendar, 
+    Trip, 
+    TrainSchedule,
+    RealtimeStopTimeUpdate
+)
+
+from .serializers import (
+    AgencySerializer, 
+    FeedInfoSerializer,
+    RouteSerializer, 
+    StopSerializer, 
+    StopTimeSerializer, 
+    CalendarSerializer, 
+    TripSerializer, 
+    RealtimeStopTimeUpdateSerializer
+)
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from datetime import datetime
 
+# Deprecated
 def get_departures(request):
     API_KEY = 'MW9S-E7SL-26DU-VV8V'
     BART_API_URL = f'http://api.bart.gov/api/etd.aspx?cmd=etd&orig=all&key={API_KEY}&json=y'
