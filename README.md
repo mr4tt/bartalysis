@@ -54,8 +54,7 @@ sudo apt-get install sqlite3
 First install the protoc package.
 
 ```
-pip install protobuf==3.20.0
-apt install -y protobuf-compiler
+sudo apt install -y protobuf-compiler
 ```
 
 Then run the proto.py file.
@@ -64,7 +63,7 @@ Then run the proto.py file.
 python backend/gtfs-rt/proto.py
 ```
 
-This is required to pull data from GTFS-RT.
+Ensure the gtfs_realtime_pb2.py file is located in the gtfs-rt directory. This is required to pull data from GTFS-RT.
 
 ### Build the Database
 
