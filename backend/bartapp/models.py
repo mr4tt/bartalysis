@@ -165,6 +165,7 @@ class StopTime(models.Model):
     departure_time = models.TextField()
     stop_id = models.ForeignKey(Stop, on_delete=models.CASCADE, db_column='stop_id')
     stop_sequence = models.IntegerField(null=True)
+    stop_headsign = models.TextField(null=True)
     pickup_type = models.IntegerField(null=True)
     drop_off_type = models.IntegerField(null=True)
     shape_distance_traveled = models.IntegerField()

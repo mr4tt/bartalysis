@@ -90,7 +90,7 @@ def write_gtfs_data():
         reader = csv.DictReader(csvfile)
 
         insert_fare_attribute = '''
-        INSERT OR IGNORE INTO fare_attribute (
+        INSERT OR IGNORE INTO fare_attributes (
             fare_id,
             price,
             currency_type,
@@ -117,7 +117,7 @@ def write_gtfs_data():
         reader = csv.DictReader(csvfile)
 
         insert_fare_rule = '''
-        INSERT OR IGNORE INTO fare_rule (
+        INSERT OR IGNORE INTO fare_rules (
             fare_id,
             route_id,
             origin_id,
@@ -142,7 +142,7 @@ def write_gtfs_data():
         reader = csv.DictReader(csvfile)
 
         insert_rider_category = '''
-        INSERT OR IGNORE INTO rider_category (
+        INSERT OR IGNORE INTO rider_categories (
         rider_category_id,
         rider_category_description
         )
@@ -161,7 +161,7 @@ def write_gtfs_data():
         reader = csv.DictReader(csvfile)
 
         insert_fare_rider_category = '''
-        INSERT OR IGNORE INTO fare_rider_category (
+        INSERT OR IGNORE INTO fare_rider_categories (
             fare_id,
             rider_category_id,
             price
@@ -182,7 +182,7 @@ def write_gtfs_data():
         reader = csv.DictReader(csvfile)
 
         insert_shape = '''
-        INSERT OR IGNORE INTO shape (
+        INSERT OR IGNORE INTO shapes (
             shape_id,
             shape_pt_lat,
             shape_pt_lon,
@@ -207,7 +207,7 @@ def write_gtfs_data():
         reader = csv.DictReader(csvfile)
 
         insert_route = '''
-        INSERT OR IGNORE INTO route (
+        INSERT OR IGNORE INTO routes (
             route_id,
             route_short_name,
             route_long_name,
@@ -238,7 +238,7 @@ def write_gtfs_data():
         reader = csv.DictReader(csvfile)
 
         insert_route_attribute = '''
-        INSERT OR IGNORE INTO route_attribute (
+        INSERT OR IGNORE INTO route_attributes (
             route_id,
             category,
             subcategory,
@@ -261,7 +261,7 @@ def write_gtfs_data():
         reader = csv.DictReader(csvfile)
 
         insert_realtime_route = '''
-        INSERT OR IGNORE INTO realtime_route (
+        INSERT OR IGNORE INTO realtime_routes (
             route_id,
             realtime_enabled,
             realtime_routename,
@@ -284,7 +284,7 @@ def write_gtfs_data():
         reader = csv.DictReader(csvfile)
 
         insert_direction = '''
-        INSERT OR IGNORE INTO direction (
+        INSERT OR IGNORE INTO directions (
             route_id,
             direction_id,
             direction
@@ -305,7 +305,7 @@ def write_gtfs_data():
         reader = csv.DictReader(csvfile)
 
         insert_stop = '''
-        INSERT OR IGNORE INTO stop (
+        INSERT OR IGNORE INTO stops (
             stop_id,
             stop_code,
             stop_name,
@@ -340,7 +340,7 @@ def write_gtfs_data():
         reader = csv.DictReader(csvfile)
 
         insert_stop_time = '''
-        INSERT OR IGNORE INTO stop_time (
+        INSERT OR IGNORE INTO stop_times (
             trip_id,
             arrival_time,
             departure_time,
@@ -373,7 +373,7 @@ def write_gtfs_data():
         reader = csv.DictReader(csvfile)
 
         insert_transfer = '''
-        INSERT OR IGNORE INTO transfer (
+        INSERT OR IGNORE INTO transfers (
             from_stop_id,
             to_stop_id,
             transfer_type,
@@ -431,7 +431,7 @@ def write_gtfs_data():
         reader = csv.DictReader(csvfile)
 
         insert_calendar_attribute = '''
-        INSERT OR IGNORE INTO calendar_attribute (
+        INSERT OR IGNORE INTO calendar_attributes (
             service_id,
             service_description
         )
@@ -450,7 +450,7 @@ def write_gtfs_data():
         reader = csv.DictReader(csvfile)
 
         insert_calendar_date = '''
-        INSERT OR IGNORE INTO calendar_date (
+        INSERT OR IGNORE INTO calendar_dates (
             service_id,
             date,
             exception_type
@@ -471,7 +471,7 @@ def write_gtfs_data():
         reader = csv.DictReader(csvfile)
 
         insert_trip = '''
-        INSERT OR IGNORE INTO trip (
+        INSERT OR IGNORE INTO trips (
             route_id,
             service_id,
             trip_id,
