@@ -1,6 +1,3 @@
-import datetime
-from datetime import datetime, timezone
-
 import requests
 import re
 import sqlite3
