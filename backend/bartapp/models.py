@@ -1,6 +1,7 @@
 from django.db import models
 
 # Models for all GTFS tables
+
 class Agency(models.Model):
     agency_id = models.TextField(primary_key=True)
     agency_name = models.TextField()
@@ -30,7 +31,7 @@ class FeedInfo(models.Model):
         return self.feed_publisher_name
 
 class FareAttribute(models.Model):
-    fare_id = models.CharField(max_length=100, primary_key=True)
+    fare_id = models.IntegerField(primary_key=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     currency_type = models.TextField()
     payment_method = models.IntegerField()
@@ -44,11 +45,11 @@ class FareAttribute(models.Model):
         return self.fare_id
 
 class FareRule(models.Model):
-    fare_id = models.ForeignKey(FareAttribute, on_delete=models.CASCADE)
-    route_id = models.CharField(max_length=100, null=True, blank=True)
-    origin_id = models.CharField(max_length=100, null=True, blank=True)
-    destination_id = models.CharField(max_length=100, null=True, blank=True)
-    contains_id = models.CharField(max_length=100, null=True, blank=True)
+    fare_id = models.OneToOneField(FareAttribute, on_delete=models.CASCADE, primary_key=True, db_column='fare_id')
+    route_id = models.TextField(null=True)
+    origin_id = models.TextField()
+    destination_id = models.TextField()
+    contains_id = models.TextField(null=True)
 
     class Meta:
         db_table = 'fare_rules'
@@ -64,10 +65,8 @@ class RiderCategory(models.Model):
         return self.rider_category_id
 
 class FareRiderCategory(models.Model):
-    fare_id = models.ForeignKey(FareAttribute, on_delete=models.CASCADE)
-    rider_category_id = models.ForeignKey(RiderCategory, on_delete=models.CASCADE)
-    fare_id = models.ForeignKey(FareAttribute, on_delete=models.CASCADE)
-    rider_category_id = models.ForeignKey(RiderCategory, on_delete=models.CASCADE)
+    fare_id = models.ForeignKey(FareAttribute, on_delete=models.CASCADE, db_column='fare_id')
+    rider_category_id = models.ForeignKey(RiderCategory, on_delete=models.CASCADE, db_column='rider_category_id')
     price = models.DecimalField(max_digits=10, decimal_places=2)
 
     class Meta:
@@ -89,32 +88,6 @@ class Route(models.Model):
     def __str__(self):
         return self.route_long_name
 
-class RouteAttribute(models.Model):
-    route_id = models.ForeignKey(Route, on_delete=models.CASCADE)
-    category = models.CharField(max_length=50, null=True, blank=True)
-    subcategory = models.CharField(max_length=50, null=True, blank=True)
-    running_way = models.CharField(max_length=50, null=True, blank=True)
-
-    class Meta:
-        db_table = 'route_attributes'
-
-class RealtimeRoute(models.Model):
-    route_id = models.ForeignKey(Route, on_delete=models.CASCADE)
-    realtime_enabled = models.BooleanField()
-    realtime_routename = models.CharField(max_length=100, null=True, blank=True)
-    realtime_routecode = models.CharField(max_length=50, null=True, blank=True)
-
-    class Meta:
-        db_table = 'realtime_routes'
-
-class Direction(models.Model):
-    route_id = models.ForeignKey(Route, on_delete=models.CASCADE)
-    direction_id = models.CharField(max_length=50)
-    direction = models.CharField(max_length=100)
-
-    class Meta:
-        db_table = 'directions'
-
 class Stop(models.Model):
     stop_id = models.TextField(primary_key=True)
     stop_code = models.TextField(null=True)
@@ -133,28 +106,17 @@ class Stop(models.Model):
     def __str__(self):
         return self.stop_name
 
-class StopTime(models.Model):
-    trip_id = models.ForeignKey('Trip', on_delete=models.CASCADE)
-    arrival_time = models.CharField(max_length=20)
-    departure_time = models.CharField(max_length=20)
-    stop_id = models.ForeignKey(Stop, on_delete=models.CASCADE)
-    stop_sequence = models.IntegerField()
-    stop_headsign = models.CharField(max_length=255, null=True, blank=True)
-    pickup_type = models.IntegerField(null=True, blank=True)
-    drop_off_type = models.IntegerField(null=True, blank=True)
-    shape_distance_traveled = models.FloatField(null=True, blank=True)
+class Trip(models.Model):
+    route_id = models.TextField(null=True)
+    service_id = models.TextField(null=True)
+    trip_id = models.IntegerField(primary_key=True)
+    trip_headsign = models.TextField()
+    direction_id = models.TextField()
+    block_id = models.TextField()
+    shape_id = models.TextField()
 
     class Meta:
-        db_table = 'stop_times'
-
-class Transfer(models.Model):
-    from_stop_id = models.ForeignKey(Stop, related_name='from_stop', on_delete=models.CASCADE)
-    to_stop_id = models.ForeignKey(Stop, related_name='to_stop', on_delete=models.CASCADE)
-    transfer_type = models.IntegerField()
-    min_transfer_time = models.IntegerField(null=True, blank=True)
-
-    class Meta:
-        db_table = 'transfers'
+        db_table = 'trips'
 
 class Calendar(models.Model):
     service_id = models.TextField(primary_key=True)
@@ -172,7 +134,7 @@ class Calendar(models.Model):
         db_table = 'calendar'
 
 class RouteAttribute(models.Model):
-    route_id = models.ForeignKey(Route, on_delete=models.CASCADE)
+    route_id = models.ForeignKey(Route, on_delete=models.CASCADE, db_column='route_id')
     category = models.TextField()
     subcategory = models.TextField()
     running_way = models.TextField()
@@ -181,7 +143,7 @@ class RouteAttribute(models.Model):
         db_table = 'route_attributes'
 
 class RealtimeRoute(models.Model):
-    route_id = models.ForeignKey(Route, on_delete=models.CASCADE)
+    route_id = models.ForeignKey(Route, on_delete=models.CASCADE, db_column='route_id')
     realtime_enabled = models.BooleanField()
     realtime_routename = models.TextField(null=True)
     realtime_routecode = models.TextField(null=True)
@@ -190,7 +152,7 @@ class RealtimeRoute(models.Model):
         db_table = 'realtime_routes'
 
 class Direction(models.Model):
-    route_id = models.ForeignKey(Route, on_delete=models.CASCADE)
+    route_id = models.ForeignKey(Route, on_delete=models.CASCADE, db_column='route_id')
     direction_id = models.TextField()
     direction = models.TextField()
 
@@ -198,11 +160,12 @@ class Direction(models.Model):
         db_table = 'directions'
 
 class StopTime(models.Model):
-    trip_id = models.ForeignKey(Trip, on_delete=models.CASCADE)
+    trip_id = models.ForeignKey(Trip, on_delete=models.CASCADE, db_column='trip_id')
     arrival_time = models.TextField()
     departure_time = models.TextField()
-    stop_id = models.ForeignKey(Stop, on_delete=models.CASCADE)
+    stop_id = models.ForeignKey(Stop, on_delete=models.CASCADE, db_column='stop_id')
     stop_sequence = models.IntegerField(null=True)
+    stop_headsign = models.TextField(null=True)
     pickup_type = models.IntegerField(null=True)
     drop_off_type = models.IntegerField(null=True)
     shape_distance_traveled = models.IntegerField()
@@ -224,7 +187,7 @@ class Transfer(models.Model):
         db_table = 'transfers'
 
 class Shape(models.Model):
-    shape_id = models.ForeignKey(Trip, on_delete=models.CASCADE)
+    shape_id = models.ForeignKey(Trip, on_delete=models.CASCADE, db_column='shape_id')
     shape_pt_lat = models.IntegerField()
     shape_pt_lon = models.IntegerField()
     shape_pt_sequence = models.IntegerField()
@@ -235,64 +198,48 @@ class Shape(models.Model):
 
 
 class CalendarAttribute(models.Model):
-    service_id = models.ForeignKey(Calendar, on_delete=models.CASCADE)
-    service_description = models.CharField(max_length=255)
+    service_id = models.OneToOneField(Calendar, on_delete=models.CASCADE, primary_key=True, db_column='service_id')
+    service_description = models.TextField(max_length=255)
 
     class Meta:
         db_table = 'calendar_attributes'
 
 class CalendarDate(models.Model):
-    service_id = models.ForeignKey(Calendar, on_delete=models.CASCADE)
-    service_id = models.ForeignKey(Calendar, on_delete=models.CASCADE)
+    service_id = models.ForeignKey(Calendar, on_delete=models.CASCADE, db_column='service_id')
     date = models.DateField()
     exception_type = models.IntegerField()
 
     class Meta:
         db_table = 'calendar_dates'
 
-class Trip(models.Model):
-    route_id = models.ForeignKey(Route, on_delete=models.CASCADE)
-    service_id = models.ForeignKey(Calendar, on_delete=models.CASCADE)
-    trip_id = models.CharField(max_length=100, primary_key=True)
-    trip_headsign = models.CharField(max_length=255, null=True, blank=True)
-    direction_id = models.CharField(max_length=50, null=True, blank=True)
-    block_id = models.CharField(max_length=50, null=True, blank=True)
-    shape_id = models.ForeignKey(Shape, on_delete=models.CASCADE, null=True, blank=True)
-
-    class Meta:
-        db_table = 'trips'
-
-
 class RealtimeStopTimeUpdate(models.Model):
-    trip_id = models.ForeignKey(Trip, on_delete=models.CASCADE)
-    stop_id = models.CharField(max_length=255, null=True, blank=True)
-    arrival_delay = models.IntegerField(null=True, blank=True)
-    arrival_time = models.DateTimeField(null=True, blank=True)
-    arrival_uncertainty = models.IntegerField(null=True, blank=True)
-    departure_delay = models.IntegerField(null=True, blank=True)
-    departure_time = models.DateTimeField(null=True, blank=True)
-    departure_uncertainty = models.IntegerField(null=True, blank=True
+    trip_id = models.ForeignKey(Trip, on_delete=models.CASCADE, db_column='trip_id')
+    stop_id = models.ForeignKey(Stop, on_delete=models.CASCADE, db_column='stop_id')
+    arrival_delay = models.IntegerField()
+    arrival_time = models.IntegerField()
+    arrival_uncertainty = models.IntegerField()
+    departure_delay = models.IntegerField()
+    departure_time = models.IntegerField()
+    departure_uncertainty = models.IntegerField()
 
     class Meta:
         db_table = 'realtime_stop_time_updates'
 
 class RealtimeAlert(models.Model):
-    alert_id = models.CharField(max_length=100, primary_key=True)
+    alert_id = models.IntegerField(primary_key=True)
     info = models.TextField()
-    lang = models.CharField(max_length=10, null=True, blank=True)
-    
+    lang = models.TextField()
+
     class Meta:
         db_table = 'realtime_alerts'
 
 class RealtimeTrip(models.Model):
-    trip_id = models.ForeignKey(Trip, on_delete=models.CASCADE)
-    schedule_relationship = models.IntegerField()
-    vehicle = models.CharField(max_length=100, null=True, blank=True)
+    trip_id = models.ForeignKey(Trip, on_delete=models.CASCADE, db_column='trip_id')
+    schedule_relationship = models.TextField()
+    vehicle = models.TextField()
 
     class Meta:
         db_table = 'realtime_trips'
-
-
 
 # Models for specific use cases
 class TrainSchedule(models.Model):

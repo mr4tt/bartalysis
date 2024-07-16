@@ -18,7 +18,7 @@ def get_alerts():
     curr = conn.cursor()
 
     insert_alert = '''
-    INSERT OR IGNORE INTO rt_alert (
+    INSERT OR IGNORE INTO realtime_alerts (
     alert_id,
     info, 
     lang
@@ -53,7 +53,7 @@ def get_trip_updates():
     curr = conn.cursor()
 
     insert_trip = '''
-    INSERT OR IGNORE INTO rt_trip (
+    INSERT OR IGNORE INTO realtime_trips (
     trip_id,
     schedule_relationship, 
     vehicle
@@ -62,7 +62,7 @@ def get_trip_updates():
     '''
 
     insert_stop_time = '''
-    INSERT OR IGNORE INTO rt_stop_time_update (
+    INSERT OR IGNORE INTO realtime_stop_time_updates (
     trip_id, 
     stop_id, 
     arrival_delay, 
@@ -89,10 +89,10 @@ def get_trip_updates():
             for stop_time_update in entity.trip_update.stop_time_update:
                 stop_id = stop_time_update.stop_id
                 arrival_delay = stop_time_update.arrival.delay
-                arrival_time = datetime.fromtimestamp(stop_time_update.arrival.time, tz=timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
+                arrival_time = stop_time_update.arrival.time
                 arrival_uncertainty = stop_time_update.arrival.uncertainty
                 departure_delay = stop_time_update.departure.delay
-                departure_time = datetime.fromtimestamp(stop_time_update.departure.time, tz=timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
+                departure_time = stop_time_update.departure.time
                 departure_uncertainty = stop_time_update.departure.uncertainty
                 curr.execute(insert_stop_time, (
                     trip_id,
