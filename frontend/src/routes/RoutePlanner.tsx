@@ -14,13 +14,14 @@ export default function RoutePlanner() {
 
     const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setTrip({...trip, [e.target.id]: e.target.value})
+        console.log(e.target.id, e.target.value)
     }
 
     return (
         <div className="  row-span-7 grid grid-rows-6 gap-12">
             <div className="flex justify-around row-span-2">
-                <div className=" bg-slate-400 w-2/5 px-12 py-6 rounded-sm">
-                    <label htmlFor="starting-point">Choose your starting point</label>
+                <div className=" bg-slate-400 w-2/5 px-6 py-4 rounded-sm flex justify-center items-center flex-col gap-2">
+                    <label htmlFor="starting-point" className=" text-xl">Choose your starting point</label>
                     <form action="">
                         <select name="starting-point" id="starting-point" onChange={handleChange}>
                             <option defaultValue={"initial"}>Select</option>
@@ -31,8 +32,8 @@ export default function RoutePlanner() {
                     </form>
                 </div>
 
-                <div className=" bg-slate-400 w-2/5 px-12 py-6 rounded-sm">
-                    <label htmlFor="destination">Choose your destination</label>
+                <div className=" bg-slate-400 w-2/5 px-6 py-4 rounded-sm flex justify-center items-center flex-col gap-2">
+                    <label htmlFor="destination" className=" text-xl">Choose your destination</label>
                     <form action="">
                         <select name="destination" id="destination" onChange={handleChange}>
                             <option defaultValue={"initial"}>Select</option>
@@ -52,8 +53,8 @@ export default function RoutePlanner() {
 
             <div className="bg-slate-400 row-span-4 grid grid-cols-5 p-4">
                 <div className="col-span-1 grid grid-rows-5 ">
-                    <p className="row-span-1">Trains</p>
-                    <p className="row-span-4">Departing</p>
+                    <p className="row-span-1 font-bold border-b-2 border-black">Trains</p>
+                    <p className="row-span-4 font-bold border-b-2 border-black">Departing</p>
                 </div>
                 <div className="flex justify-evenly col-span-4">
                     <IncomingTrainsContainer />
@@ -61,6 +62,7 @@ export default function RoutePlanner() {
                     <IncomingTrainsContainer />
                     <div className="border-black border-2 p-8 flex flex-col gap-4">
                         <p className=" font-bold text-lg">Fares</p>
+                        {/* placeholder info */}
                         <div className="flex flex-col gap-4">
                             <div>4.40</div>
                             <div>2.20</div>
