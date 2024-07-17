@@ -196,7 +196,6 @@ class Shape(models.Model):
     class Meta:
         db_table = 'shapes'
 
-
 class CalendarAttribute(models.Model):
     service_id = models.OneToOneField(Calendar, on_delete=models.CASCADE, primary_key=True, db_column='service_id')
     service_description = models.TextField(max_length=255)

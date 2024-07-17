@@ -1,5 +1,28 @@
 from rest_framework import serializers
-from .models import Agency, FeedInfo, FareAttribute, FareRule, RiderCategory, FareRiderCategory, Shape, Route, RouteAttribute, RealtimeRoute, Direction, Stop, StopTime, Transfer, Calendar, CalendarAttribute, CalendarDate, Trip, RealtimeStopTimeUpdate, RealtimeAlert, RealtimeTrip
+from .models import (
+    Agency, 
+    FeedInfo, 
+    FareAttribute, 
+    FareRule, 
+    RiderCategory, 
+    FareRiderCategory, 
+    Shape, 
+    Route, 
+    RouteAttribute, 
+    RealtimeRoute, 
+    Direction, 
+    Stop, 
+    StopTime, 
+    Transfer, 
+    Calendar, 
+    CalendarAttribute, 
+    CalendarDate, 
+    Trip, 
+    RealtimeStopTimeUpdate, 
+    RealtimeAlert, 
+    RealtimeTrip,
+    TrainSchedule,
+)
 
 class AgencySerializer(serializers.ModelSerializer):
     class Meta:
@@ -105,3 +128,8 @@ class RealtimeTripSerializer(serializers.ModelSerializer):
     class Meta:
         model = RealtimeTrip
         fields = ['trip_id', 'schedule_relationship', 'vehicle']
+
+class TrainScheduleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TrainSchedule
+        fields = ['arrival_time', 'departure_time', 'station_id', 'trip_id']
