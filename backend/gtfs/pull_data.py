@@ -1,27 +1,24 @@
 import csv
-
 import datetime
-from datetime import datetime
-
 import os
 import requests
-import zipfile
 import sqlite3
+import zipfile
 
 def get_gtfs_data():
     temp_zip_path = "temp.zip"
     url = "https://www.bart.gov/dev/schedules/google_transit.zip"
     path = "/workspaces/bartalysis/backend/gtfs/data/"
-    
+
     with requests.get(url, allow_redirects=True, stream=True) as r:
         r.raise_for_status()
         with open(temp_zip_path, 'wb') as f:
             for chunk in r.iter_content(chunk_size=8192):
                 f.write(chunk)
-    
+
     with zipfile.ZipFile(temp_zip_path, 'r') as zip_ref:
         zip_ref.extractall(path)
-    
+
     os.remove(temp_zip_path)
 
 def write_gtfs_data():
@@ -36,7 +33,7 @@ def write_gtfs_data():
         reader = csv.DictReader(csvfile)
 
         insert_agency = '''
-        INSERT OR IGNORE INTO agency (
+        INSERT INTO agency (
             agency_id,
             agency_name,
             agency_url,
@@ -49,21 +46,21 @@ def write_gtfs_data():
 
         for row in reader:
             curr.execute(insert_agency, (
-                row['agency_id'], 
-                row['agency_name'], 
-                row['agency_url'], 
-                row['agency_timezone'], 
-                row['agency_lang'], 
-                row['agency_phone']
-                ))
+                empty_to_none(row['agency_id']),
+                empty_to_none(row['agency_name']),
+                empty_to_none(row['agency_url']),
+                empty_to_none(row['agency_timezone']),
+                empty_to_none(row['agency_lang']),
+                empty_to_none(row['agency_phone'])
+            ))
         os.remove(path + '/agency.txt')
-    
+
     # Feed Info
     with open(path + '/feed_info.txt', 'r') as csvfile:
         reader = csv.DictReader(csvfile)
 
         insert_feed_info = '''
-        INSERT OR IGNORE INTO feed_info (
+        INSERT INTO feed_info (
             feed_publisher_name,
             feed_publisher_url,
             feed_lang,
@@ -76,13 +73,13 @@ def write_gtfs_data():
 
         for row in reader:
             curr.execute(insert_feed_info, (
-                row['feed_publisher_name'],
-                row['feed_publisher_url'],
-                row['feed_lang'],
-                row['feed_start_date'],
-                row['feed_end_date'],
-                row['feed_version']
-                ))
+                empty_to_none(row['feed_publisher_name']),
+                empty_to_none(row['feed_publisher_url']),
+                empty_to_none(row['feed_lang']),
+                datetime.datetime.strptime(str(row['feed_start_date']), "%Y%m%d").strftime("%Y-%m-%d"),
+                datetime.datetime.strptime(str(row['feed_start_date']), "%Y%m%d").strftime("%Y-%m-%d"),
+                empty_to_none(row['feed_version'])
+            ))
         os.remove(path + '/feed_info.txt')
 
     # Fare Attributes
@@ -90,7 +87,7 @@ def write_gtfs_data():
         reader = csv.DictReader(csvfile)
 
         insert_fare_attribute = '''
-        INSERT OR IGNORE INTO fare_attributes (
+        INSERT INTO fare_attributes (
             fare_id,
             price,
             currency_type,
@@ -103,13 +100,13 @@ def write_gtfs_data():
 
         for row in reader:
             curr.execute(insert_fare_attribute, (
-                row['fare_id'],
-                row['price'],
-                row['currency_type'],
-                row['payment_method'],
-                row['transfers'],
-                row['transfer_duration']
-                ))
+                empty_to_none(row['fare_id']),
+                empty_to_none(row['price']),
+                empty_to_none(row['currency_type']),
+                empty_to_none(row['payment_method']),
+                empty_to_none(row['transfers']),
+                empty_to_none(row['transfer_duration'])
+            ))
         os.remove(path + '/fare_attributes.txt')
 
     # Fare Rules
@@ -117,7 +114,7 @@ def write_gtfs_data():
         reader = csv.DictReader(csvfile)
 
         insert_fare_rule = '''
-        INSERT OR IGNORE INTO fare_rules (
+        INSERT INTO fare_rules (
             fare_id,
             route_id,
             origin_id,
@@ -129,12 +126,12 @@ def write_gtfs_data():
 
         for row in reader:
             curr.execute(insert_fare_rule, (
-                row['fare_id'],
-                row['route_id'],
-                row['origin_id'],
-                row['destination_id'],
-                row['contains_id']
-                ))
+                empty_to_none(row['fare_id']),
+                empty_to_none(row['route_id']),
+                empty_to_none(row['origin_id']),
+                empty_to_none(row['destination_id']),
+                empty_to_none(row['contains_id'])
+            ))
         os.remove(path + '/fare_rules.txt')
 
     # Rider Categories
@@ -142,7 +139,7 @@ def write_gtfs_data():
         reader = csv.DictReader(csvfile)
 
         insert_rider_category = '''
-        INSERT OR IGNORE INTO rider_categories (
+        INSERT INTO rider_categories (
         rider_category_id,
         rider_category_description
         )
@@ -151,9 +148,9 @@ def write_gtfs_data():
 
         for row in reader:
             curr.execute(insert_rider_category, (
-                row['rider_category_id'],
-                row['rider_category_description']
-                ))
+                empty_to_none(row['rider_category_id']),
+                empty_to_none(row['rider_category_description'])
+            ))
         os.remove(path + '/rider_categories.txt')
 
     # Fare Rider Categories
@@ -161,7 +158,7 @@ def write_gtfs_data():
         reader = csv.DictReader(csvfile)
 
         insert_fare_rider_category = '''
-        INSERT OR IGNORE INTO fare_rider_categories (
+        INSERT INTO fare_rider_categories (
             fare_id,
             rider_category_id,
             price
@@ -171,18 +168,18 @@ def write_gtfs_data():
 
         for row in reader:
             curr.execute(insert_fare_rider_category, (
-                row['fare_id'],
-                row['rider_category_id'],
-                row['price']
-                ))
+                empty_to_none(row['fare_id']),
+                empty_to_none(row['rider_category_id']),
+                empty_to_none(row['price'])
+            ))
         os.remove(path + '/fare_rider_categories.txt')
 
-    #Shapes
+    # Shapes
     with open(path + '/shapes.txt', 'r') as csvfile:
         reader = csv.DictReader(csvfile)
 
         insert_shape = '''
-        INSERT OR IGNORE INTO shapes (
+        INSERT INTO shapes (
             shape_id,
             shape_pt_lat,
             shape_pt_lon,
@@ -194,12 +191,12 @@ def write_gtfs_data():
 
         for row in reader:
             curr.execute(insert_shape, (
-                row['shape_id'],
-                row['shape_pt_lat'],
-                row['shape_pt_lon'],
-                row['shape_pt_sequence'],
-                row['shape_dist_traveled']
-                ))
+                empty_to_none(row['shape_id']),
+                empty_to_none(row['shape_pt_lat']),
+                empty_to_none(row['shape_pt_lon']),
+                empty_to_none(row['shape_pt_sequence']),
+                empty_to_none(row['shape_dist_traveled'])
+            ))
         os.remove(path + '/shapes.txt')
 
     # Routes
@@ -207,7 +204,7 @@ def write_gtfs_data():
         reader = csv.DictReader(csvfile)
 
         insert_route = '''
-        INSERT OR IGNORE INTO routes (
+        INSERT INTO routes (
             route_id,
             route_short_name,
             route_long_name,
@@ -222,23 +219,23 @@ def write_gtfs_data():
 
         for row in reader:
             curr.execute(insert_route, (
-                row['route_id'],
-                row['route_short_name'],
-                row['route_long_name'],
-                row['route_desc'],
-                row['route_type'],
-                row['route_url'],
-                row['route_color'],
-                row['route_text_color']
-                ))
+                empty_to_none(row['route_id']),
+                empty_to_none(row['route_short_name']),
+                empty_to_none(row['route_long_name']),
+                empty_to_none(row['route_desc']),
+                empty_to_none(row['route_type']),
+                empty_to_none(row['route_url']),
+                empty_to_none(row['route_color']),
+                empty_to_none(row['route_text_color'])
+            ))
         os.remove(path + '/routes.txt')
-    
+
     # Route Attributes
     with open(path + '/route_attributes.txt', 'r') as csvfile:
         reader = csv.DictReader(csvfile)
 
         insert_route_attribute = '''
-        INSERT OR IGNORE INTO route_attributes (
+        INSERT INTO route_attributes (
             route_id,
             category,
             subcategory,
@@ -249,11 +246,11 @@ def write_gtfs_data():
 
         for row in reader:
             curr.execute(insert_route_attribute, (
-                row['route_id'],
-                row['category'],
-                row['subcategory'],
-                row['running_way']
-                ))
+                empty_to_none(row['route_id']),
+                empty_to_none(row['category']),
+                empty_to_none(row['subcategory']),
+                empty_to_none(row['running_way'])
+            ))
         os.remove(path + '/route_attributes.txt')
 
     # Realtime Routes
@@ -261,7 +258,7 @@ def write_gtfs_data():
         reader = csv.DictReader(csvfile)
 
         insert_realtime_route = '''
-        INSERT OR IGNORE INTO realtime_routes (
+        INSERT INTO realtime_routes (
             route_id,
             realtime_enabled,
             realtime_routename,
@@ -272,11 +269,11 @@ def write_gtfs_data():
 
         for row in reader:
             curr.execute(insert_realtime_route, (
-                row['route_id'],
-                row['realtime_enabled'],
-                row['realtime_routename'],
-                row['realtime_routecode']
-                ))
+                empty_to_none(row['route_id']),
+                empty_to_none(row['realtime_enabled']),
+                empty_to_none(row['realtime_routename']),
+                empty_to_none(row['realtime_routecode'])
+            ))
         os.remove(path + '/realtime_routes.txt')
 
     # Directions
@@ -284,7 +281,7 @@ def write_gtfs_data():
         reader = csv.DictReader(csvfile)
 
         insert_direction = '''
-        INSERT OR IGNORE INTO directions (
+        INSERT INTO directions (
             route_id,
             direction_id,
             direction
@@ -294,10 +291,10 @@ def write_gtfs_data():
 
         for row in reader:
             curr.execute(insert_direction, (
-                row['route_id'],
-                row['direction_id'],
-                row['direction']
-                ))
+                empty_to_none(row['route_id']),
+                empty_to_none(row['direction_id']),
+                empty_to_none(row['direction'])
+            ))
         os.remove(path + '/directions.txt')
 
     # Stops
@@ -305,7 +302,7 @@ def write_gtfs_data():
         reader = csv.DictReader(csvfile)
 
         insert_stop = '''
-        INSERT OR IGNORE INTO stops (
+        INSERT INTO stops (
             stop_id,
             stop_code,
             stop_name,
@@ -322,25 +319,25 @@ def write_gtfs_data():
 
         for row in reader:
             curr.execute(insert_stop, (
-                row['stop_id'],
-                row['stop_code'],
-                row['stop_name'],
-                row['stop_desc'],
-                row['stop_lat'],
-                row['stop_lon'],
-                row['zone_id'],
-                row['plc_url'],
-                row['location_type'],
-                row['parent_station']
-                ))
+                empty_to_none(row['stop_id']),
+                empty_to_none(row['stop_code']),
+                empty_to_none(row['stop_name']),
+                empty_to_none(row['stop_desc']),
+                empty_to_none(row['stop_lat']),
+                empty_to_none(row['stop_lon']),
+                empty_to_none(row['zone_id']),
+                empty_to_none(row['plc_url']),
+                empty_to_none(row['location_type']),
+                empty_to_none(row['parent_station'])
+            ))
         os.remove(path + '/stops.txt')
-    
+
     # Stop Times
     with open(path + '/stop_times.txt', 'r') as csvfile:
         reader = csv.DictReader(csvfile)
 
         insert_stop_time = '''
-        INSERT OR IGNORE INTO stop_times (
+        INSERT INTO stop_times (
             trip_id,
             arrival_time,
             departure_time,
@@ -356,24 +353,24 @@ def write_gtfs_data():
 
         for row in reader:
             curr.execute(insert_stop_time, (
-                row['trip_id'],
-                row['arrival_time'],
-                row['departure_time'],
-                row['stop_id'],
-                row['stop_sequence'],
-                row['stop_headsign'],
-                row['pickup_type'],
-                row['drop_off_type'],
-                row['shape_distance_traveled']
-                ))
-        os.remove(path + '/stop_times.txt') 
-    
+                empty_to_none(row['trip_id']),
+                empty_to_none(row['arrival_time']),
+                empty_to_none(row['departure_time']),
+                empty_to_none(row['stop_id']),
+                empty_to_none(row['stop_sequence']),
+                empty_to_none(row['stop_headsign']),
+                empty_to_none(row['pickup_type']),
+                empty_to_none(row['drop_off_type']),
+                empty_to_none(row['shape_distance_traveled'])
+            ))
+        os.remove(path + '/stop_times.txt')
+
     # Transfers
     with open(path + '/transfers.txt', 'r') as csvfile:
         reader = csv.DictReader(csvfile)
 
         insert_transfer = '''
-        INSERT OR IGNORE INTO transfers (
+        INSERT INTO transfers (
             from_stop_id,
             to_stop_id,
             transfer_type,
@@ -384,19 +381,19 @@ def write_gtfs_data():
 
         for row in reader:
             curr.execute(insert_transfer, (
-                row['from_stop_id'],
-                row['to_stop_id'],
-                row['transfer_type'],
-                row['min_transfer_time']
-                ))
+                empty_to_none(row['from_stop_id']),
+                empty_to_none(row['to_stop_id']),
+                empty_to_none(row['transfer_type']),
+                empty_to_none(row['min_transfer_time'])
+            ))
         os.remove(path + '/transfers.txt')
-        
+
     # Calendar
     with open(path + '/calendar.txt', 'r') as csvfile:
         reader = csv.DictReader(csvfile)
 
         insert_calendar = '''
-        INSERT OR IGNORE INTO calendar (
+        INSERT INTO calendar (
             service_id,
             monday,
             tuesday,
@@ -413,25 +410,25 @@ def write_gtfs_data():
 
         for row in reader:
             curr.execute(insert_calendar, (
-                row['service_id'],
-                row['monday'],
-                row['tuesday'],
-                row['wednesday'],
-                row['thursday'],
-                row['friday'],
-                row['saturday'],
-                row['sunday'],
-                datetime.strptime(str(row['start_date']), "%Y%m%d").strftime("%Y-%m-%d"),
-                datetime.strptime(str(row['end_date']), "%Y%m%d").strftime("%Y-%m-%d")
-                ))
+                empty_to_none(row['service_id']),
+                empty_to_none(row['monday']),
+                empty_to_none(row['tuesday']),
+                empty_to_none(row['wednesday']),
+                empty_to_none(row['thursday']),
+                empty_to_none(row['friday']),
+                empty_to_none(row['saturday']),
+                empty_to_none(row['sunday']),
+                datetime.datetime.strptime(str(row['start_date']), "%Y%m%d").strftime("%Y-%m-%d"),
+                datetime.datetime.strptime(str(row['end_date']), "%Y%m%d").strftime("%Y-%m-%d")
+            ))
         os.remove(path + '/calendar.txt')
-    
+
     # Calendar Attributes
     with open(path + '/calendar_attributes.txt', 'r') as csvfile:
         reader = csv.DictReader(csvfile)
 
         insert_calendar_attribute = '''
-        INSERT OR IGNORE INTO calendar_attributes (
+        INSERT INTO calendar_attributes (
             service_id,
             service_description
         )
@@ -440,9 +437,9 @@ def write_gtfs_data():
 
         for row in reader:
             curr.execute(insert_calendar_attribute, (
-                row['service_id'],
-                row['service_description']
-                ))
+                empty_to_none(row['service_id']),
+                empty_to_none(row['service_description'])
+            ))
         os.remove(path + '/calendar_attributes.txt')
 
     # Calendar Dates
@@ -450,7 +447,7 @@ def write_gtfs_data():
         reader = csv.DictReader(csvfile)
 
         insert_calendar_date = '''
-        INSERT OR IGNORE INTO calendar_dates (
+        INSERT INTO calendar_dates (
             service_id,
             date,
             exception_type
@@ -460,10 +457,10 @@ def write_gtfs_data():
 
         for row in reader:
             curr.execute(insert_calendar_date, (
-                row['service_id'],
-                datetime.strptime(str(row['date']), "%Y%m%d").strftime("%Y-%m-%d"),
-                row['exception_type']
-                ))
+                empty_to_none(row['service_id']),
+                datetime.datetime.strptime(str(row['date']), "%Y%m%d").strftime("%Y-%m-%d"),
+                empty_to_none(row['exception_type'])
+            ))
         os.remove(path + '/calendar_dates.txt')
 
     # Trips
@@ -471,7 +468,7 @@ def write_gtfs_data():
         reader = csv.DictReader(csvfile)
 
         insert_trip = '''
-        INSERT OR IGNORE INTO trips (
+        INSERT INTO trips (
             route_id,
             service_id,
             trip_id,
@@ -485,19 +482,22 @@ def write_gtfs_data():
 
         for row in reader:
             curr.execute(insert_trip, (
-                row['route_id'],
-                row['service_id'],
-                row['trip_id'],
-                row['trip_headsign'],
-                row['direction_id'],
-                row['block_id'],
-                row['shape_id']
-                ))
+                empty_to_none(row['route_id']),
+                empty_to_none(row['service_id']),
+                empty_to_none(row['trip_id']),
+                empty_to_none(row['trip_headsign']),
+                empty_to_none(row['direction_id']),
+                empty_to_none(row['block_id']),
+                empty_to_none(row['shape_id'])
+            ))
         os.remove(path + '/trips.txt')
 
     conn.commit()
     conn.close()
 
     os.rmdir(path)
+
+def empty_to_none(value):
+    return None if value == "" else value
 
 write_gtfs_data()

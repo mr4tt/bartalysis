@@ -75,8 +75,8 @@ class FareRiderCategory(models.Model):
 class Route(models.Model):
     route_id = models.TextField(primary_key=True)
     route_short_name = models.TextField()
-    route_long_name = models.TextField(null=True)
-    route_desc = models.TextField()
+    route_long_name = models.TextField()
+    route_desc = models.TextField(null = True)
     route_type = models.IntegerField()
     route_url = models.URLField(null=True)
     route_color = models.TextField()
@@ -107,13 +107,13 @@ class Stop(models.Model):
         return self.stop_name
 
 class Trip(models.Model):
-    route_id = models.TextField(null=True)
-    service_id = models.TextField(null=True)
+    route_id = models.TextField()
+    service_id = models.TextField()
     trip_id = models.IntegerField(primary_key=True)
     trip_headsign = models.TextField()
     direction_id = models.TextField()
-    block_id = models.TextField()
-    shape_id = models.TextField()
+    block_id = models.TextField(null=True)
+    shape_id = models.TextField(null=True)
 
     class Meta:
         db_table = 'trips'
