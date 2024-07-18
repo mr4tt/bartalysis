@@ -22,7 +22,7 @@ export default function RoutePlanner() {
 
     useEffect(() => {
         const fetchData = async() => {
-            const response = await fetch('https://bug-free-space-meme-956jrx6xpjx29xr4-8000.app.github.dev/api/api/departures/')
+            const response = await fetch('https://bug-free-space-meme-956jrx6xpjx29xr4-8000.app.github.dev/api/departures/')
             const data = await response.json()
             console.log(data)
         }
