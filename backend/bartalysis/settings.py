@@ -39,9 +39,11 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "bartapp",
+    "corsheaders",
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -50,6 +52,18 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ORIGIN_ALLOW_ALL = True
+
+# # CORS_ALLOWED_ORIGINS = [
+# #     'https://bug-free-space-meme-956jrx6xpjx29xr4-5173.app.github.dev',
+# #     'https://bug-free-space-meme-956jrx6xpjx29xr4-8000.app.github.dev'
+# # ]
+
+# CORS_ALLOWED_ORIGINS = [
+#     "https://bug-free-space-meme-956jrx6xpjx29xr4-5173.app.github.dev"
+# ]
 
 ROOT_URLCONF = "bartalysis.urls"
 

@@ -1,7 +1,7 @@
 import React from "react"
 import IncomingTrainsContainer from "../components/IncomingTrainsContainer"
 import { stationList } from "../utils/stations"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 export default function RoutePlanner() {
     const [trip, setTrip] = useState({ "starting-point": "", "destination" : "" })
@@ -16,6 +16,15 @@ export default function RoutePlanner() {
         setTrip({...trip, [e.target.id]: e.target.value})
         console.log(e.target.id, e.target.value)
     }
+
+    useEffect(() => {
+        const fetchData = async() => {
+            const response = await fetch('https://bug-free-space-meme-956jrx6xpjx29xr4-8000.app.github.dev/api/api/departures/')
+            const data = await response.json()
+            console.log(data)
+        }
+        fetchData()
+    }, [])
 
     return (
         <div className="  row-span-7 grid grid-rows-6 gap-12">
@@ -41,7 +50,7 @@ export default function RoutePlanner() {
                                 return <option value={obj.abbreviation} key={i}>{obj.station}</option>
                             })}
                         </select>
-                    </form>
+                 </form>
                 </div>
 
                 <button className="border-black border-2 self-center px-4 py-2 rounded-md 
