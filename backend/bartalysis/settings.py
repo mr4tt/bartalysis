@@ -98,6 +98,9 @@ DATABASES = {
     "bart": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "bart.db",
+        'TEST': {
+            'DEPENDENCIES': [],
+        },
     }
 }
 
