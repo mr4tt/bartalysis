@@ -41,15 +41,26 @@ Go to http://localhost:5173/ to access the webpage
 
 ```
 sudo apt-get update
-pip install -r requirements.txt
 ```
 
-### Create Protoc Compiler
-
-Run the proto.py file.
+### Install SQLite3
 
 ```
-python proto.py
+sudo apt-get install sqlite3
+```
+
+### Install Protoc Compiler
+
+First install the protoc package.
+
+```
+sudo apt install -y protobuf-compiler
+```
+
+Then run the proto.py file.
+
+```
+python backend/gtfs-rt/proto.py
 ```
 
 Ensure the gtfs_realtime_pb2.py file is located in the gtfs-rt directory. This is required to pull data from GTFS-RT.
