@@ -187,7 +187,7 @@ class Transfer(models.Model):
         db_table = 'transfers'
 
 class Shape(models.Model):
-    shape_id = models.ForeignKey(Trip, on_delete=models.CASCADE, db_column='shape_id')
+    shape_id = models.TextField()
     shape_pt_lat = models.IntegerField()
     shape_pt_lon = models.IntegerField()
     shape_pt_sequence = models.IntegerField()
@@ -198,7 +198,7 @@ class Shape(models.Model):
 
 class CalendarAttribute(models.Model):
     service_id = models.OneToOneField(Calendar, on_delete=models.CASCADE, primary_key=True, db_column='service_id')
-    service_description = models.TextField(max_length=255)
+    service_description = models.TextField()
 
     class Meta:
         db_table = 'calendar_attributes'
