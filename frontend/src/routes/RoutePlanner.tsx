@@ -1,10 +1,7 @@
 import React from "react"
 import IncomingTrainsContainer from "../components/IncomingTrainsContainer"
-import { stationList, findStation } from "../utils/stations"
-import { AdvancedMarker, APIProvider, Map, useMap, useMapsLibrary } from '@vis.gl/react-google-maps';
+import { stationList } from "../utils/stations"
 import { useState, useEffect } from "react"
-import Directions from "../components/Directions";
-import { Markers } from "../components/Markers";
 
 export default function RoutePlanner() {
     const [trip, setTrip] = useState({ "starting-point": "", "destination" : "" })
@@ -22,16 +19,15 @@ export default function RoutePlanner() {
         console.log(e.target.id, e.target.value)
     }
 
-    // useEffect(() => {
-    //     const fetchData = async() => {
-    //         const url = "route-planner/ORIG/DEST/?date=<year-month-day>&time=08:00:00" or what ever time mine is
-    //         const response = await fetch('https://bug-free-space-meme-956jrx6xpjx29xr4-8000.app.github.dev/api/departures/')
-    //         const data = await response.json()
-    //         console.log(data)
-    //     }
-    //     fetchData()
-    // }, [])
-    // console.log(trip)
+    useEffect(() => {
+        const fetchData = async() => {
+            const response = await fetch('https://bug-free-space-meme-956jrx6xpjx29xr4-8000.app.github.dev/api/api/departures/')
+            const data = await response.json()
+            console.log(data)
+        }
+        fetchData()
+    }, [])
+
     return (
         <div className="row-span-7 grid grid-cols-5 mt-2">
             <div className="bg-slate-400 grid grid-rows-6 gap-4 col-span-2 border-r-2 border-black py-2 px-6">
@@ -48,17 +44,17 @@ export default function RoutePlanner() {
                         </form>
                     </div>
 
-                    <div className="rounded-sm flex justify-center flex-col gap-2">
-                        <label htmlFor="destination" className="text-lg">Destination</label>
-                        <form action="">
-                            <select name="destination" id="destination" onChange={handleChange} className="w-1/2">
-                                <option defaultValue={"initial"}>Select</option>
-                                { stationList.map((obj, i) => {
-                                    return <option value={obj.abbr} key={i}>{obj.name}</option>
-                                })}
-                            </select>
-                        </form>
-                    </div>
+                <div className=" bg-slate-400 w-2/5 px-6 py-4 rounded-sm flex justify-center items-center flex-col gap-2">
+                    <label htmlFor="destination" className=" text-xl">Choose your destination</label>
+                    <form action="">
+                        <select name="destination" id="destination" onChange={handleChange}>
+                            <option defaultValue={"initial"}>Select</option>
+                            { stationList.map((obj, i) => {
+                                return <option value={obj.abbreviation} key={i}>{obj.station}</option>
+                            })}
+                        </select>
+                 </form>
+                </div>
 
                     <button className="border-black border-2 bg-white self-end px-4 py-2 rounded-md 
                     hover:bg-slate-300" onClick={handleClick}
