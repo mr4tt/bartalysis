@@ -27,7 +27,7 @@ export default function RoutePlanner() {
     }, [])
 
     return (
-        <div className="  row-span-7 grid grid-rows-6 gap-12">
+        <div className="  row-span-7 grid grid-rows-6 gap-12 mt-2 ">
             <div className="flex justify-around row-span-2">
                 <div className=" bg-slate-400 w-2/5 px-6 py-4 rounded-sm flex justify-center items-center flex-col gap-2">
                     <label htmlFor="starting-point" className=" text-xl">Choose your starting point</label>
@@ -35,7 +35,7 @@ export default function RoutePlanner() {
                         <select name="starting-point" id="starting-point" onChange={handleChange}>
                             <option defaultValue={"initial"}>Select</option>
                             { stationList.map((obj, i) => {
-                                return <option value={obj.abbreviation} key={i}>{obj.station}</option>
+                                return <option value={obj.abbr} key={i}>{obj.name}</option>
                             })}
                         </select>
                     </form>
@@ -47,7 +47,7 @@ export default function RoutePlanner() {
                         <select name="destination" id="destination" onChange={handleChange}>
                             <option defaultValue={"initial"}>Select</option>
                             { stationList.map((obj, i) => {
-                                return <option value={obj.abbreviation} key={i}>{obj.station}</option>
+                                return <option value={obj.abbr} key={i}>{obj.name}</option>
                             })}
                         </select>
                  </form>
