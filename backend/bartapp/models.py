@@ -234,8 +234,10 @@ class RealtimeAlert(models.Model):
     class Meta:
         db_table = 'realtime_alerts'
 
-# Models for specific use cases
-class TrainSchedule(models.Model):
-    train_id = models.IntegerField()
-    station_id = models.IntegerField()
-    arrival_time = models.TimeField()
+class RealtimeTrip(models.Model):
+    trip_id = models.ForeignKey(Trip, on_delete=models.CASCADE, db_column='trip_id')
+    schedule_relationship = models.TextField()
+    vehicle = models.TextField()
+
+    class Meta:
+        db_table = 'realtime_trips'

@@ -11,10 +11,29 @@ from .models import (
     RealtimeStopTimeUpdate
 )
 
+# Example test case for AgencyViewSet - assuming you have a viewset for the Agency model, the corresponding serializer, and the correct URL pattern.
+# You need to include setUp information to create test data for the Agency model because the test uses a dummy Agency instance in a dummy database to test the response of the call.
+class AgencyViewSetTest(APITestCase):
+    databases = {'default', 'bart'}
 class EndpointTestCase(TestCase):
     databases = {'bart'}
 
     def setUp(self):
+        # Create test data here
+        Agency.objects.create(agency_id="test_agency", agency_name="Test Agency Name")
+
+    def test_get_agency_list(self):
+        # Assuming there's at least one Agency instance in the database
+        agency = Agency.objects.first()
+
+        # Ensure we have an agency to test with
+        if not agency:
+            self.fail('No Agency instances in the database to test with')
+
+        client = APIClient()
+        url = reverse('agency-list')  # Make sure 'agency-list' is the correct name for your URL
+        response = client.get(url)
+
         # Set up data for the tests
         self.client = APIClient()
         self.test_agency = Agency.objects.create(agency_id="test_agency", agency_name="Test Agency Name")
@@ -24,6 +43,12 @@ class EndpointTestCase(TestCase):
         # Test retrieving an agency by agency_id
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        # Further assertions can be made here depending on the structure of your response
+        # For example, checking if the response data contains the expected agency data
+        
+        # Print the response data to see what it actually found
+        print("Response data:", response.data)
+
         self.assertEqual(response.data['agency_id'], self.test_agency.agency_id)
         self.assertEqual(response.data['agency_name'], self.test_agency.agency_name)
 
