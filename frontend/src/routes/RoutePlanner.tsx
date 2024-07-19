@@ -9,6 +9,9 @@ import { Markers } from "../components/Markers";
 export default function RoutePlanner() {
     const [trip, setTrip] = useState({ "starting-point": "", "destination" : "" })
 
+    const position = { lat: 37.668819, lng: -122.080795}
+
+
     const handleClick = (e: React.FormEvent) => {
         console.log('handle click')
         // when this is triggered, maybe change a state which is a dependency in a useEffect
@@ -30,8 +33,8 @@ export default function RoutePlanner() {
     // }, [])
 
     return (
-        <div className="row-span-7 grid grid-cols-5">
-            <div className="bg-slate-400 grid grid-rows-6 gap-4 mt-2 col-span-2 border-r-2 border-black py-2 px-6">
+        <div className="row-span-7 grid grid-cols-5 mt-2">
+            <div className="bg-slate-400 grid grid-rows-6 gap-4 col-span-2 border-r-2 border-black py-2 px-6">
                 <div className="flex justify-evenly row-span-1">
                     <div className="rounded-sm flex justify-center flex-col gap-2">
                         <label htmlFor="starting-point" className="text-lg">Origin</label>
@@ -83,8 +86,17 @@ export default function RoutePlanner() {
                 </div>
             </div>
             
-            <div className="col-span-3">
-
+            <div className="col-span-3 h-screen w-full">
+                <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}>
+                    <Map
+                        center={position}
+                        zoom={10}
+                        mapId={import.meta.env.VITE_MAP_ID}
+                    >
+                        <Markers points={stationList}/>
+                        <Directions />
+                    </Map>
+                </APIProvider>
             </div>
         </div>
     )
