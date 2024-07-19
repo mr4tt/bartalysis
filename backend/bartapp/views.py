@@ -4,12 +4,16 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.http import HttpResponse
 from django.utils import timezone
+import pytzfrom django.utils import timezone
 import requests
 import pytz
 from rest_framework import serializers
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework import generics
+from rest_framework.decorators import api_view
+from datetime import datetime
 from rest_framework import generics
 from rest_framework.decorators import api_view
 from datetime import datetime
@@ -39,6 +43,7 @@ from .models import (
     RealtimeStopTimeUpdate,
     RealtimeAlert,
     RealtimeTrip,
+
 )
 
 from .serializers import (
@@ -70,6 +75,7 @@ def home(request):
     return HttpResponse("Hello, world. You're at the BART app home page.")
 
 # BART API test response - for testing purposes only
+# BART API test response - for testing purposes only
 def get_departures(request):
     API_KEY = 'MW9S-E7SL-26DU-VV8V'
     BART_API_URL = f'http://api.bart.gov/api/etd.aspx?cmd=etd&orig=all&key={API_KEY}&json=y'
@@ -79,35 +85,44 @@ def get_departures(request):
     return JsonResponse(data)
 
 # Test function to get all agencies from the database
+# Test function to get all agencies from the database
 def get_agencies(request):
     agencies = Agency.objects.all()
     return render(request, 'agency_list.html', {'agencies': agencies})
 
 # Basic viewsets for each model
 class AgencyViewSet(viewsets.ReadOnlyModelViewSet):
+# Basic viewsets for each model
+class AgencyViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Agency.objects.all()
     serializer_class = AgencySerializer
 
+class FeedInfoViewSet(viewsets.ReadOnlyModelViewSet):
 class FeedInfoViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = FeedInfo.objects.all()
     serializer_class = FeedInfoSerializer
 
 class FareAttributeViewSet(viewsets.ReadOnlyModelViewSet):
+class FareAttributeViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = FareAttribute.objects.all()
     serializer_class = FareAttributeSerializer
 
+class FareRuleViewSet(viewsets.ReadOnlyModelViewSet):
 class FareRuleViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = FareRule.objects.all()
     serializer_class = FareRuleSerializer
 
 class RiderCategoryViewSet(viewsets.ReadOnlyModelViewSet):
+class RiderCategoryViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = RiderCategory.objects.all()
     serializer_class = RiderCategorySerializer
 
 class FareRiderCategoryViewSet(viewsets.ReadOnlyModelViewSet):
+class FareRiderCategoryViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = FareRiderCategory.objects.all()
     serializer_class = FareRiderCategorySerializer
 
+class RouteViewSet(viewsets.ReadOnlyModelViewSet):
 class RouteViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Route.objects.all()
     serializer_class = RouteSerializer
@@ -121,49 +136,61 @@ class TripViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = TripSerializer
 
 class CalendarViewSet(viewsets.ReadOnlyModelViewSet):
+class CalendarViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Calendar.objects.all()
     serializer_class = CalendarSerializer
 
+class RouteAttributeViewSet(viewsets.ReadOnlyModelViewSet):
 class RouteAttributeViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = RouteAttribute.objects.all()
     serializer_class = RouteAttributeSerializer
 
 class RealtimeRouteViewSet(viewsets.ReadOnlyModelViewSet):
+class RealtimeRouteViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = RealtimeRoute.objects.all()
     serializer_class = RealtimeRouteSerializer
 
+class DirectionViewSet(viewsets.ReadOnlyModelViewSet):
 class DirectionViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Direction.objects.all()
     serializer_class = DirectionSerializer
 
 class StopTimeViewSet(viewsets.ReadOnlyModelViewSet):
+class StopTimeViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = StopTime.objects.all()
     serializer_class = StopTimeSerializer
 
+class TransferViewSet(viewsets.ReadOnlyModelViewSet):
 class TransferViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Transfer.objects.all()
     serializer_class = TransferSerializer
 
 class ShapeViewSet(viewsets.ReadOnlyModelViewSet):
+class ShapeViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Shape.objects.all()
     serializer_class = ShapeSerializer
 
+class CalendarAttributeViewSet(viewsets.ReadOnlyModelViewSet):
 class CalendarAttributeViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = CalendarAttribute.objects.all()
     serializer_class = CalendarAttributeSerializer
 
 class CalendarDateViewSet(viewsets.ReadOnlyModelViewSet):
+class CalendarDateViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = CalendarDate.objects.all()
     serializer_class = CalendarDateSerializer
 
+class RealtimeStopTimeUpdateViewSet(viewsets.ReadOnlyModelViewSet):
 class RealtimeStopTimeUpdateViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = RealtimeStopTimeUpdate.objects.all()
     serializer_class = RealtimeStopTimeUpdateSerializer
 
 class RealtimeAlertViewSet(viewsets.ReadOnlyModelViewSet):
+class RealtimeAlertViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = RealtimeAlert.objects.all()
     serializer_class = RealtimeAlertSerializer
 
+class RealtimeTripViewSet(viewsets.ReadOnlyModelViewSet):
 class RealtimeTripViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = RealtimeTrip.objects.all()
     serializer_class = RealtimeTripSerializer
@@ -176,7 +203,19 @@ class RoutePlannerView(APIView):
         
         if not date or not time:
             return Response({"error": "Date and time are required"}, status=status.HTTP_400_BAD_REQUEST)
+# Non-Generic Views
+class RoutePlannerView(APIView):
+    def get(self, request, start_station, end_station):
+        date = request.query_params.get('date')
+        time = request.query_params.get('time')
         
+        if not date or not time:
+            return Response({"error": "Date and time are required"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Parse the date and determine the day of the week
+        try:
+            date_obj = datetime.strptime(date, "%Y-%m-%d")
+            day_of_week = date_obj.strftime("%A").lower()
         # Parse the date and determine the day of the week
         try:
             date_obj = datetime.strptime(date, "%Y-%m-%d")

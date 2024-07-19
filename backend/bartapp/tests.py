@@ -10,6 +10,8 @@ from .models import (
     Trip,
     RealtimeStopTimeUpdate
 )
+from rest_framework.test import APITestCase, APIClient
+from .models import Agency
 
 # Example test case for AgencyViewSet - assuming you have a viewset for the Agency model, the corresponding serializer, and the correct URL pattern.
 # You need to include setUp information to create test data for the Agency model because the test uses a dummy Agency instance in a dummy database to test the response of the call.
