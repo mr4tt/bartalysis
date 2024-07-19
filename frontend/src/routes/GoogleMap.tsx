@@ -41,6 +41,7 @@ const Markers = ({ points }: any) => {
   )
 }
 
+// maybe i can add arguments to choose which line that "component" of Directions
 const Directions = () => {
   const map = useMap()
   const routesLibrary = useMapsLibrary("routes")
