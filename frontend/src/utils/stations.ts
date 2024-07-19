@@ -1,56 +1,3 @@
-// export const stationList = [
-//     { station: '12th St. Oakland City Center', abbreviation: '12th' },
-//     { station: '16th St. Mission (SF)', abbreviation: '16th' },
-//     { station: '19th St. Oakland', abbreviation: '19th' },
-//     { station: '24th St. Mission (SF)', abbreviation: '24th' },
-//     { station: 'Ashby (Berkeley)', abbreviation: 'ashb' },
-//     { station: 'Antioch', abbreviation: 'antc' },
-//     { station: 'Balboa Park (SF)', abbreviation: 'balb' },
-//     { station: 'Bay Fair (San Leandro)', abbreviation: 'bayf' },
-//     { station: 'Berryessa / North San Jose', abbreviation: 'bery' },
-//     { station: 'Castro Valley', abbreviation: 'cast' },
-//     { station: 'Civic Center (SF)', abbreviation: 'civc' },
-//     { station: 'Coliseum', abbreviation: 'cols' },
-//     { station: 'Colma', abbreviation: 'colm' },
-//     { station: 'Concord', abbreviation: 'conc' },
-//     { station: 'Daly City', abbreviation: 'daly' },
-//     { station: 'Downtown Berkeley', abbreviation: 'dbrk' },
-//     { station: 'Dublin/Pleasanton', abbreviation: 'dubl' },
-//     { station: 'El Cerrito del Norte', abbreviation: 'deln' },
-//     { station: 'El Cerrito Plaza', abbreviation: 'plza' },
-//     { station: 'Embarcadero (SF)', abbreviation: 'embr' },
-//     { station: 'Fremont', abbreviation: 'frmt' },
-//     { station: 'Fruitvale (Oakland)', abbreviation: 'ftvl' },
-//     { station: 'Glen Park (SF)', abbreviation: 'glen' },
-//     { station: 'Hayward', abbreviation: 'hayw' },
-//     { station: 'Lafayette', abbreviation: 'lafy' },
-//     { station: 'Lake Merritt (Oakland)', abbreviation: 'lake' },
-//     { station: 'MacArthur (Oakland)', abbreviation: 'mcar' },
-//     { station: 'Millbrae', abbreviation: 'mlbr' },
-//     { station: 'Milpitas', abbreviation: 'mlpt' },
-//     { station: 'Montgomery St. (SF)', abbreviation: 'mont' },
-//     { station: 'North Berkeley', abbreviation: 'nbrk' },
-//     { station: 'North Concord/Martinez', abbreviation: 'ncon' },
-//     { station: 'Oakland Int\'l Airport', abbreviation: 'oakl' },
-//     { station: 'Orinda', abbreviation: 'orin' },
-//     { station: 'Pittsburg/Bay Point', abbreviation: 'pitt' },
-//     { station: 'Pittsburg Center', abbreviation: 'pctr' },
-//     { station: 'Pleasant Hill', abbreviation: 'phil' },
-//     { station: 'Powell St. (SF)', abbreviation: 'powl' },
-//     { station: 'Richmond', abbreviation: 'rich' },
-//     { station: 'Rockridge (Oakland)', abbreviation: 'rock' },
-//     { station: 'San Bruno', abbreviation: 'sbrn' },
-//     { station: 'San Francisco Int\'l Airport', abbreviation: 'sfia' },
-//     { station: 'San Leandro', abbreviation: 'sanl' },
-//     { station: 'South Hayward', abbreviation: 'shay' },
-//     { station: 'South San Francisco', abbreviation: 'ssan' },
-//     { station: 'Union City', abbreviation: 'ucty' },
-//     { station: 'Warm Springs/South Fremont', abbreviation: 'warm' },
-//     { station: 'Walnut Creek', abbreviation: 'wcrk' },
-//     { station: 'West Dublin', abbreviation: 'wdub' },
-//     { station: 'West Oakland', abbreviation: 'woak' },
-// ]
-
 export const stationList = [
     {
       "name": "12th St. Oakland City Center",
@@ -602,4 +549,10 @@ export const stationList = [
       "state": "CA",
       "zipcode": "94607"
     }
-  ]
+]
+
+export const findStation = (abbreviation: string) => {
+  if (abbreviation === "initial") return
+  const {0: station} = stationList.filter((station) => station.abbr === abbreviation)
+  return station
+}

@@ -1,8 +1,7 @@
 import React from 'react';
-import { createRoot } from 'react-dom/client';
 import { AdvancedMarker, APIProvider, Map, useMap, useMapsLibrary } from '@vis.gl/react-google-maps';
 import { useEffect, useState } from 'react';
-import { stationList } from '../utils/stations';
+import { stationList, findStation } from '../utils/stations';
 
 export default function GoogleMap() {
   const position = { lat: 37.668819, lng: -122.080795}
@@ -17,7 +16,7 @@ export default function GoogleMap() {
         mapId={import.meta.env.VITE_MAP_ID}
       >
         {/* <Markers points={stationList}/> */}
-        <Directions />
+        {/* <Directions /> */}
       </Map>
     </APIProvider>
     </div>
