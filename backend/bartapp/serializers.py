@@ -21,7 +21,6 @@ from .models import (
     RealtimeStopTimeUpdate, 
     RealtimeAlert, 
     RealtimeTrip,
-    TrainSchedule,
 )
 
 class AgencySerializer(serializers.ModelSerializer):
@@ -128,8 +127,3 @@ class RealtimeTripSerializer(serializers.ModelSerializer):
     class Meta:
         model = RealtimeTrip
         fields = ['trip_id', 'schedule_relationship', 'vehicle']
-
-class TrainScheduleSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TrainSchedule
-        fields = ['arrival_time', 'departure_time', 'station_id', 'trip_id']
