@@ -1,8 +1,24 @@
 from django.contrib import admin
-from .models import Route, Stop, Trip, StopTime, Agency, Calendar
-from .models import FeedInfo, FareAttribute, FareRule, RiderCategory, FareRiderCategory
-from .models import Shape, RouteAttribute, RealtimeRoute, Direction, Transfer
-from .models import CalendarAttribute, CalendarDate
+from .models import (
+    Agency,
+    FeedInfo,
+    Route, 
+    Stop, 
+    Trip, 
+    StopTime, 
+    Calendar,
+    CalendarAttribute,
+    CalendarDate,
+    FareAttribute, 
+    FareRule, 
+    RiderCategory, 
+    FareRiderCategory,
+    Shape, 
+    RouteAttribute, 
+    Direction, 
+    Transfer,
+    RealtimeRoute, 
+)
 
 # Register your models here.
 admin.site.register(Route)

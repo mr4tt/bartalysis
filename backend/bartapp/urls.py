@@ -26,7 +26,7 @@ from .views import (
     RealtimeAlertViewSet,
     RealtimeTripViewSet,
 
-    RoutePlannerView,,
+    RoutePlannerView,
     AlertInfoView,
     StopTimeUpdateView
 )

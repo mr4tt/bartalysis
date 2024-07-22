@@ -11,7 +11,6 @@ class Agency(models.Model):
 
     class Meta:
         db_table = 'agency'
-        app_label = 'bartapp'
 
     def __str__(self):
         return self.agency_name
@@ -26,7 +25,6 @@ class FeedInfo(models.Model):
 
     class Meta:
         db_table = 'feed_info'
-        app_label = 'bartapp'
 
     def __str__(self):
         return self.feed_publisher_name
@@ -39,7 +37,6 @@ class FareAttribute(models.Model):
 
     class Meta:
         db_table = 'fare_attributes'
-        app_label = 'bartapp'
 
     def __str__(self):
         return self.fare_id
@@ -51,7 +48,6 @@ class FareRule(models.Model):
 
     class Meta:
         db_table = 'fare_rules'
-        app_label = 'bartapp'
 
 class RiderCategory(models.Model):
     rider_category_id = models.IntegerField(primary_key=True)
@@ -59,7 +55,6 @@ class RiderCategory(models.Model):
 
     class Meta:
         db_table = 'rider_categories'
-        app_label = 'bartapp'
 
     def __str__(self):
         return self.rider_category_id
@@ -71,7 +66,6 @@ class FareRiderCategory(models.Model):
 
     class Meta:
         db_table = 'fare_rider_categories'
-        app_label = 'bartapp'
         unique_together = (('fare_id', 'rider_category_id'),)
 
 class Route(models.Model):
@@ -86,7 +80,6 @@ class Route(models.Model):
 
     class Meta:
         db_table = 'routes'
-        app_label = 'bartapp'
 
     def __str__(self):
         return self.route_long_name
@@ -104,7 +97,6 @@ class Stop(models.Model):
 
     class Meta:
         db_table = 'stops'
-        app_label = 'bartapp'
 
     def __str__(self):
         return self.stop_name
@@ -119,7 +111,6 @@ class Trip(models.Model):
 
     class Meta:
         db_table = 'trips'
-        app_label = 'bartapp'
 
 class Calendar(models.Model):
     service_id = models.TextField(primary_key=True)
@@ -135,7 +126,6 @@ class Calendar(models.Model):
 
     class Meta:
         db_table = 'calendar'
-        app_label = 'bartapp'
 
 class RouteAttribute(models.Model):
     route_id = models.ForeignKey(Route, on_delete=models.CASCADE, db_column='route_id')
@@ -145,7 +135,6 @@ class RouteAttribute(models.Model):
 
     class Meta:
         db_table = 'route_attributes'
-        app_label = 'bartapp'
         unique_together = (('route_id', 'category', 'subcategory', 'running_way'),)
 
 class RealtimeRoute(models.Model):
@@ -154,7 +143,6 @@ class RealtimeRoute(models.Model):
 
     class Meta:
         db_table = 'realtime_routes'
-        app_label = 'bartapp'
 
 class Direction(models.Model):
     route_id = models.ForeignKey(Route, on_delete=models.CASCADE, db_column='route_id')
@@ -163,7 +151,6 @@ class Direction(models.Model):
 
     class Meta:
         db_table = 'directions'
-        app_label = 'bartapp'
 
 class StopTime(models.Model):
     trip_id = models.ForeignKey(Trip, on_delete=models.CASCADE, db_column='trip_id')
@@ -176,7 +163,6 @@ class StopTime(models.Model):
 
     class Meta:
         db_table = 'stop_times'
-        app_label = 'bartapp'
         unique_together = ['trip_id', 'stop_id', 'stop_sequence']
 
 class Transfer(models.Model):
@@ -189,7 +175,6 @@ class Transfer(models.Model):
 
     class Meta:
         db_table = 'transfers'
-        app_label = 'bartapp'
         unique_together = ['from_stop_id', 'to_stop_id', 'transfer_type', 'min_transfer_time', 'from_route_id', 'to_route_id']
 
 class Shape(models.Model):
@@ -201,7 +186,6 @@ class Shape(models.Model):
 
     class Meta:
         db_table = 'shapes'
-        app_label = 'bartapp'
         unique_together = ['shape_id', 'shape_pt_lat', 'shape_pt_lon', 'shape_pt_sequence', 'shape_dist_traveled']
 
 class CalendarAttribute(models.Model):
@@ -210,7 +194,6 @@ class CalendarAttribute(models.Model):
 
     class Meta:
         db_table = 'calendar_attributes'
-        app_label = 'bartapp'
 
 class CalendarDate(models.Model):
     service_id = models.ForeignKey(Calendar, on_delete=models.CASCADE, db_column='service_id')
@@ -219,7 +202,6 @@ class CalendarDate(models.Model):
 
     class Meta:
         db_table = 'calendar_dates'
-        app_label = 'bartapp'
         unique_together = ['exception_type', 'date']
 
 class RealtimeTrip(models.Model):
@@ -242,7 +224,6 @@ class RealtimeStopTimeUpdate(models.Model):
 
     class Meta:
         db_table = 'realtime_stop_time_updates'
-        app_label = 'bartapp'
         unique_together = ['trip_id', 'stop_id']
 
 class RealtimeAlert(models.Model):
@@ -252,14 +233,5 @@ class RealtimeAlert(models.Model):
 
     class Meta:
         db_table = 'realtime_alerts'
-        app_label = 'bartapp'
 
-class RealtimeTrip(models.Model):
-    trip_id = models.ForeignKey(Trip, on_delete=models.CASCADE, db_column='trip_id')
-    schedule_relationship = models.TextField()
-    vehicle = models.TextField()
-
-    class Meta:
-        db_table = 'realtime_trips'
-        app_label = 'bartapp'
         

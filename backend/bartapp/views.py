@@ -1,25 +1,15 @@
 import requests
+from datetime import datetime
 
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.http import HttpResponse
-from django.utils import timezone
-import pytzfrom django.utils import timezone
-import requests
-import pytz
-from rest_framework import serializers
+from django.db import connections
+
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework import generics
-from rest_framework.decorators import api_view
-from datetime import datetime
-from rest_framework import generics
-from rest_framework.decorators import api_view
-from datetime import datetime
 from rest_framework import viewsets
-from django.db import connection
-from django.db import connections
 
 from .models import (
     Agency, 
@@ -71,7 +61,6 @@ from .serializers import (
 )
 
 # Homepage initial response
-# Homepage initial response
 def home(request):
     return HttpResponse("Hello, world. You're at the BART app home page.")
 
@@ -119,11 +108,9 @@ class RouteViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = RouteSerializer
 
 class StopViewSet(viewsets.ReadOnlyModelViewSet):
-class StopViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Stop.objects.all()
     serializer_class = StopSerializer
 
-class TripViewSet(viewsets.ReadOnlyModelViewSet):
 class TripViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Trip.objects.all()
     serializer_class = TripSerializer
@@ -296,114 +283,6 @@ class RoutePlannerView(APIView):
         }
 
         return Response(response_data, status=status.HTTP_200_OK)
-
-            return Response({"error": "Invalid date format. Use YYYY-MM-DD."}, status=status.HTTP_400_BAD_REQUEST)
-        
-        # Map day of the week to corresponding column in the calendar table
-        day_column = {
-            'monday': 'c.monday',
-            'tuesday': 'c.tuesday',
-            'wednesday': 'c.wednesday',
-            'thursday': 'c.thursday',
-            'friday': 'c.friday',
-            'saturday': 'c.saturday',
-            'sunday': 'c.sunday'
-        }.get(day_of_week, None)
-        
-        if not day_column:
-            return Response({"error": "Invalid day of the week."}, status=status.HTTP_400_BAD_REQUEST)
-
-        # Query for incoming trains
-        train_query = f"""
-        SELECT DISTINCT
-            r.route_short_name AS TrainName, 
-            r.route_color AS TrainColor, 
-            r.route_long_name AS TrainDescription,
-            st1.stop_id AS StartingID, 
-            st2.stop_id AS EndingID, 
-            st1.departure_time AS DepartureTime, 
-            st2.arrival_time AS ArrivalTime
-        FROM trips t
-        JOIN stop_times st1 ON t.trip_id = st1.trip_id AND st1.stop_id = %s
-        JOIN stop_times st2 ON t.trip_id = st2.trip_id AND st2.stop_id = %s
-        JOIN routes r ON t.route_id = r.route_id
-        JOIN calendar c ON t.service_id = c.service_id
-        WHERE {day_column} = 1
-        AND st1.departure_time > %s
-        AND st1.stop_sequence < st2.stop_sequence
-        AND %s BETWEEN c.start_date AND c.end_date
-        ORDER BY st1.departure_time;
-        """
-        
-        # Query for fare information
-        fare_query = """
-        SELECT DISTINCT FareID, Price, Description
-        FROM (
-            SELECT
-                fa.fare_id AS FareID,
-                fa.price AS Price,
-                'Regular' AS Description
-            FROM fare_attributes fa
-            WHERE fa.fare_id IN (
-                SELECT fare_id FROM fare_rules
-                WHERE origin_id = %s
-                AND destination_id = %s
-            )
-
-            UNION ALL
-
-            SELECT
-                frc.fare_id AS FareID,
-                frc.price AS Price,
-                rc.rider_category_description AS Description
-            FROM fare_rider_categories frc
-            JOIN rider_categories rc ON frc.rider_category_id = rc.rider_category_id
-            WHERE frc.fare_id IN (
-                SELECT fare_id FROM fare_rules
-                WHERE origin_id = %s
-                AND destination_id = %s
-            )
-        ) ORDER BY FareID, Description;
-        """
-
-        with connections['bart'].cursor() as cursor:
-            # Execute train query
-            cursor.execute(train_query, [start_station, end_station, time, date])
-            train_rows = cursor.fetchall()
-            
-            # Execute fare query
-            cursor.execute(fare_query, [start_station, end_station, start_station, end_station])
-            fare_rows = cursor.fetchall()
-        
-        trains = [
-            {
-                "TrainName": row[0],
-                "TrainColor": row[1],
-                "TrainDescription": row[2],
-                "StartingID": row[3],
-                "EndingID": row[4],
-                "DepartureTime": row[5],
-                "ArrivalTime": row[6]
-            }
-            for row in train_rows
-        ]
-        
-        fares = [
-            {
-                "FareID": row[0],
-                "Price": row[1],
-                "Description": row[2]
-            }
-            for row in fare_rows
-        ]
-        
-        response_data = {
-            "trains": trains,
-            "fares": fares
-        }
-
-        return Response(response_data, status=status.HTTP_200_OK)
-
     
 class AlertInfoView(APIView):
     def get(self, request):
