@@ -1,3 +1,5 @@
+
+
 export const stationList = [
     {
       "name": "12th St. Oakland City Center",
@@ -556,3 +558,5 @@ export const findStation = (abbreviation: string) => {
   const {0: station} = stationList.filter((station) => station.abbr === abbreviation)
   return station
 }
+
+//CREATE A TYPE HERE CUH, AND MAKE SURE TO TRY TO CHANGE THE TYPES OF THE OTHER FILES

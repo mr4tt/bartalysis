@@ -11,7 +11,6 @@ export default function RoutePlanner() {
 
     const position = { lat: 37.668819, lng: -122.080795}
 
-
     const handleClick = (e: React.FormEvent) => {
         console.log('handle click')
         // when this is triggered, maybe change a state which is a dependency in a useEffect
@@ -25,13 +24,14 @@ export default function RoutePlanner() {
 
     // useEffect(() => {
     //     const fetchData = async() => {
+    //         const url = "route-planner/ORIG/DEST/?date=<year-month-day>&time=08:00:00" or what ever time mine is
     //         const response = await fetch('https://bug-free-space-meme-956jrx6xpjx29xr4-8000.app.github.dev/api/departures/')
     //         const data = await response.json()
     //         console.log(data)
     //     }
     //     fetchData()
     // }, [])
-    console.log(trip)
+    // console.log(trip)
     return (
         <div className="row-span-7 grid grid-cols-5 mt-2">
             <div className="bg-slate-400 grid grid-rows-6 gap-4 col-span-2 border-r-2 border-black py-2 px-6">
