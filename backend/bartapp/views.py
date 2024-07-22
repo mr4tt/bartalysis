@@ -15,6 +15,7 @@ from rest_framework.decorators import api_view
 from datetime import datetime
 from rest_framework import viewsets
 from django.db import connection
+from django.db import connections
 
 from .models import (
     Agency, 
@@ -250,7 +251,7 @@ class RoutePlannerView(APIView):
         ) ORDER BY FareID, Description;
         """
 
-        with connection.cursor() as cursor:
+        with connections['bart'].cursor() as cursor:
             # Execute train query
             cursor.execute(train_query, [start_station, end_station, time, date])
             train_rows = cursor.fetchall()

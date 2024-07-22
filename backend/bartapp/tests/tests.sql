@@ -67,7 +67,7 @@ JOIN calendar c ON t.service_id = c.service_id
 WHERE c.thursday = 1
 AND st1.departure_time > '08:00:00'
 AND st1.stop_sequence < st2.stop_sequence
-AND '2024-07-18' BETWEEN c.start_date AND c.end_date
+AND '2024-08-12' BETWEEN c.start_date AND c.end_date
 ORDER BY st1.departure_time;
 .output stdout
 
