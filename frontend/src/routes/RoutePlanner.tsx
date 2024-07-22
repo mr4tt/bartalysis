@@ -11,7 +11,6 @@ export default function RoutePlanner() {
 
     const position = { lat: 37.668819, lng: -122.080795}
 
-
     const handleClick = (e: React.FormEvent) => {
         console.log('handle click')
         // when this is triggered, maybe change a state which is a dependency in a useEffect
