@@ -2,8 +2,9 @@ import React from "react"
 import { AdvancedMarker, InfoWindow } from "@vis.gl/react-google-maps"
 import bartLogo from "../assets/img/bart-logo.png"
 import { useState } from "react"
+import { stationType } from "../utils/types"
 
-export default function PinMarker({ point }: { point: any}) {
+export default function PinMarker({ point }: { point: stationType}) {
     const [open, setOpen] = useState(false)
 
     return (
