@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom/client'
 import App from './App'
 import RoutePlanner from './routes/RoutePlanner'
 import Service from './routes/Service'
-import GoogleMap from './routes/GoogleMap'
 import './index.css'
 import {
   createBrowserRouter,
@@ -23,10 +22,6 @@ const router = createBrowserRouter([
         path: "/service",
         element: <Service />
       },
-      {
-        path: "/map",
-        element: <GoogleMap />
-      }
     ]
   },
 ]);

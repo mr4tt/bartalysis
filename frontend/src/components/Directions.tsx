@@ -2,7 +2,7 @@
 import { useMap, useMapsLibrary } from "@vis.gl/react-google-maps"
 import { useState, useEffect } from "react"
 
-export default function Directions() {
+export default function Directions({ origin, destination } : any) {
     const map = useMap()
     const routesLibrary = useMapsLibrary("routes")
     const [directionsService, setDirectionsService] = useState<google.maps.DirectionsService>()
@@ -19,16 +19,16 @@ export default function Directions() {
       if (!directionsService || !directionsRenderer) return
   
       directionsService.route({
-        origin: "1620 Berryessa Road",
-        destination: "500 John Daly Blvd.",
+        origin: { lat: parseFloat(origin.lat), lng: parseFloat(origin.lng) },
+        destination: { lat: parseFloat(destination.lat), lng: parseFloat(destination.lng) },
         travelMode: google.maps.TravelMode.DRIVING,
         provideRouteAlternatives: true,
       }).then((response) => {
         directionsRenderer.setDirections(response)
         setRoutes(response.routes)
       })
-    }, [directionsService, directionsRenderer])
+    }, [directionsService, directionsRenderer, origin, destination])
   
-    console.log(routes)
+    // console.log(routes)
     return (null)
   }

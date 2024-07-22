@@ -31,7 +31,7 @@ export default function RoutePlanner() {
     //     }
     //     fetchData()
     // }, [])
-
+    console.log(trip)
     return (
         <div className="row-span-7 grid grid-cols-5 mt-2">
             <div className="bg-slate-400 grid grid-rows-6 gap-4 col-span-2 border-r-2 border-black py-2 px-6">
@@ -94,7 +94,7 @@ export default function RoutePlanner() {
                         mapId={import.meta.env.VITE_MAP_ID}
                     >
                         <Markers points={stationList}/>
-                        <Directions />
+                        { trip["starting-point"] && trip.destination && <Directions origin={findStation(trip["starting-point"])} destination={findStation(trip["destination"]) }/> }
                     </Map>
                 </APIProvider>
             </div>
