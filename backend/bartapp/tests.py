@@ -1,12 +1,15 @@
-import os
-
 from django.urls import reverse
-from django.test import TestCase, Client
-from django.urls import reverse
+from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIClient
-from rest_framework.test import APITestCase
-from .models import Agency
+
+from .models import (
+    Agency,
+    RealtimeAlert,
+    Stop,
+    Trip,
+    RealtimeStopTimeUpdate
+)
 
 class EndpointTestCase(TestCase):
     databases = {'bart'}
@@ -43,6 +46,48 @@ class EndpointTestCase(TestCase):
             # If the response is not JSON, directly search for 'agency_id' in the response content
             self.assertContains(response, "agency_id")
 
+class ServiceInfoTests(TestCase):
+    def setup(self):
+        self.alert = RealtimeAlert.objects.create(
+            info = 'test info'
+        )
+
+        self.trip = Trip.objects.create(
+            route_id = 1,
+            service_id = '2024_08_12-DX-MVS-Weekday-01',
+            trip_id = 1560937,
+            trip_headsign = 'San Francisco International Airport',
+            direction_id = 1,
+            shape_id = '001A_shp'
+        )
+
+        self.stop = Stop.objects.create(
+            stop_id = 'LAKE',
+            stop_name = 'Lake Merrit',
+            stop_lat = 37.7749,
+            stop_lon = -122.4194,
+            location_type = 0
+        )
+
+        self.stop_time_update = RealtimeStopTimeUpdate.objects.create(
+            trip_id=self.trip,
+            stop_id=self.stop,
+            arrival_delay=0,
+            arrival_time="0",
+            arrival_uncertainty=0,
+            departure_delay=0,
+            departure_time="0",
+            departure_uncertainty=0
+        )
+
+    def test_alert_info(self):
+        response = self.client.get(reverse('alerts'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "info")
+
+
+
+# Test database integrity using fixture
 class DatabaseTests(TestCase):
     databases = {'bart'}
     fixtures = ['bart_data.json']

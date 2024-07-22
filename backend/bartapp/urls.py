@@ -25,7 +25,10 @@ from .views import (
     RealtimeStopTimeUpdateViewSet,
     RealtimeAlertViewSet,
     RealtimeTripViewSet,
-    IncomingTrainsView
+
+    IncomingTrainsView,
+    AlertInfoView,
+    StopTimeUpdateView
 )
 
 router = DefaultRouter()
@@ -57,4 +60,8 @@ urlpatterns = [
     path('router/', include(router.urls)), # API routes
     path('api/departures/', get_departures, name='departures'), # For testing purposes only. Returns JSON data from BART API.
     path('api/incoming_trains/<int:station_id>/', IncomingTrainsView.as_view(), name='incoming_trains'), # For testing purposes. Still in development.
+
+    # Endpoints
+    path('api/alerts/', AlertInfoView.as_view(), name='alerts'),
+    path('api/stop_time_updates/<str:stop_id>/', StopTimeUpdateView.as_view(), name='stop_time_updates'),
 ]

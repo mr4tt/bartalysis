@@ -1,16 +1,13 @@
+import requests
+
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.http import HttpResponse
-import requests
 
-from rest_framework import serializers
-from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework import generics
-from rest_framework.decorators import api_view
-
 from rest_framework import viewsets
+
 from .models import (
     Agency, 
     FeedInfo,
@@ -33,6 +30,7 @@ from .models import (
     RealtimeStopTimeUpdate,
     RealtimeAlert,
     RealtimeTrip,
+
     TrainSchedule,
 )
 
@@ -58,14 +56,12 @@ from .serializers import (
     RealtimeStopTimeUpdateSerializer,
     RealtimeAlertSerializer,
     RealtimeTripSerializer,
+
     TrainScheduleSerializer,
 )
 
-from rest_framework import generics
-
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
 from datetime import datetime
 
 def home(request):
@@ -160,11 +156,6 @@ class RealtimeStopTimeUpdateViewSet(viewsets.ModelViewSet):
     queryset = RealtimeStopTimeUpdate.objects.all()
     serializer_class = RealtimeStopTimeUpdateSerializer
 
-    # def get(self, request, stop_id):
-    #     realtime_stop_times = RealtimeStopTimeUpdate.objects.filter(stop_id=stop_id)
-    #     serializer = RealtimeStopTimeUpdateSerializer(realtime_stop_times, many=True)
-    #     return Response(serializer.data)
-
 class RealtimeAlertViewSet(viewsets.ModelViewSet):
     queryset = RealtimeAlert.objects.all()
     serializer_class = RealtimeAlertSerializer
@@ -172,19 +163,6 @@ class RealtimeAlertViewSet(viewsets.ModelViewSet):
 class RealtimeTripViewSet(viewsets.ModelViewSet):
     queryset = RealtimeTrip.objects.all()
     serializer_class = RealtimeTripSerializer
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 class IncomingTrainsView(APIView):
     def incoming_trains_view(request, station_id):
@@ -203,4 +181,19 @@ class IncomingTrainsView(APIView):
         ).order_by('arrival_time')[:3]
 
         serializer = TrainScheduleSerializer(incoming_trains, many=True)
+        return Response(serializer.data)
+    
+class AlertInfoView(APIView):
+    def get(self, request):
+        alerts = RealtimeAlert.objects.values_list('info', flat=True)
+        return Response(alerts)
+
+class StopTimeUpdateView(APIView):
+    def get(self, request, **kwargs):
+        stop_id = self.kwargs['stop_id']
+        if stop_id is not None:
+            stop_time_updates = RealtimeStopTimeUpdate.objects.filter(stop_id=stop_id)
+        else:
+            return Response({'error': 'stop_id is required'}, status=400)
+        serializer = RealtimeStopTimeUpdateSerializer(stop_time_updates, many=True)
         return Response(serializer.data)
