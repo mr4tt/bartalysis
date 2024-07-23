@@ -5,15 +5,16 @@ import { AdvancedMarker, APIProvider, Map, useMap, useMapsLibrary } from '@vis.g
 import { useState, useEffect } from "react"
 import Directions from "../components/Directions";
 import { Markers } from "../components/Markers";
+import { getNextThreeTrains } from "../utils/utils";
 
 export default function RoutePlanner() {
     const [trip, setTrip] = useState({ "starting-point": "", "destination" : "" })
-
+    const [trains, setTrains] = useState<any[]>([])
     const position = { lat: 37.668819, lng: -122.080795}
 
     const handleClick = (e: React.FormEvent) => {
         console.log('handle click')
-        // when this is triggered, maybe change a state which is a dependency in a useEffect
+        // when this is triggered, maybe change a state (trip; change the state trip) which is a dependency in a useEffect
         // where that useEffect fetches the data from our api
     }
 
@@ -22,15 +23,20 @@ export default function RoutePlanner() {
         console.log(e.target.id, e.target.value)
     }
 
-    // useEffect(() => {
-    //     const fetchData = async() => {
-    //         const url = "route-planner/ORIG/DEST/?date=<year-month-day>&time=08:00:00" or what ever time mine is
-    //         const response = await fetch('https://bug-free-space-meme-956jrx6xpjx29xr4-8000.app.github.dev/api/departures/')
-    //         const data = await response.json()
-    //         console.log(data)
-    //     }
-    //     fetchData()
-    // }, [])
+    useEffect(() => {
+        const fetchData = async() => {
+            const response = await fetch('https://bug-free-space-meme-956jrx6xpjx29xr4-8000.app.github.dev/route-planner/DALY/SHAY/?date=2024-08-13&time=08:00:00')
+            const data = await response.json()
+            const nextThreeTrains = getNextThreeTrains(data.trains)
+            console.log(nextThreeTrains)
+            setTrains([...nextThreeTrains])
+
+
+        }
+        fetchData()
+    }, [])
+
+    
     // console.log(trip)
     return (
         <div className="row-span-7 grid grid-cols-5 mt-2">
@@ -67,15 +73,9 @@ export default function RoutePlanner() {
                     </button>
                 </div>
 
-                <div className="bg-slate-400 row-span-5 grid grid-cols-5 gap-2">
-                    <div className="col-span-1 grid grid-rows-5 ">
-                        <p className="row-span-1 font-bold border-b-2 border-black">Trains</p>
-                        <p className="row-span-4 font-bold border-b-2 border-black">Departing</p>
-                    </div>
-                    <div className="flex justify-evenly col-span-4 gap-2">
-                        <IncomingTrainsContainer />
-                        <IncomingTrainsContainer />
-                        <IncomingTrainsContainer />
+                <div className="bg-slate-400 row-span-5 grid  gap-2">
+                    <div className="grid grid-row-3 gap-2">
+                        { trains.map((train: any, i) => <IncomingTrainsContainer train={train} key={i} />)}
                         {/* <div className="border-black border-2 flex flex-col ">
                             <p className=" font-bold text-md">Fares</p>
                             <div className="flex flex-col ">
