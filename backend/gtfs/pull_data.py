@@ -70,7 +70,7 @@ def get_gtfs_data():
                     empty_to_none(row['feed_publisher_url']),
                     empty_to_none(row['feed_lang']),
                     datetime.datetime.strptime(str(row['feed_start_date']), "%Y%m%d").strftime("%Y-%m-%d"),
-                    datetime.datetime.strptime(str(row['feed_start_date']), "%Y%m%d").strftime("%Y-%m-%d"),
+                    datetime.datetime.strptime(str(row['feed_end_date']), "%Y%m%d").strftime("%Y-%m-%d"),
                     empty_to_none(row['feed_version'])
                 ))
 
