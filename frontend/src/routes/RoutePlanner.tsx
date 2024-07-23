@@ -10,10 +10,14 @@ import { getNextThreeTrains } from "../utils/utils";
 export default function RoutePlanner() {
     const [trip, setTrip] = useState({ "starting-point": "", "destination" : "" })
     const [trains, setTrains] = useState<any[]>([])
+    const [flag, setFlag] = useState(false)
     const position = { lat: 37.668819, lng: -122.080795}
 
     const handleClick = (e: React.FormEvent) => {
-        console.log('handle click')
+        if (!(trip["starting-point"] === "" || trip["starting-point"] === "Select" || trip.destination === "" || trip.destination === "Select")) {
+            setFlag(!flag)
+        }
+
         // when this is triggered, maybe change a state (trip; change the state trip) which is a dependency in a useEffect
         // where that useEffect fetches the data from our api
     }
@@ -25,16 +29,14 @@ export default function RoutePlanner() {
 
     useEffect(() => {
         const fetchData = async() => {
-            const response = await fetch('https://bug-free-space-meme-956jrx6xpjx29xr4-8000.app.github.dev/route-planner/DALY/SHAY/?date=2024-08-13&time=08:00:00')
+            const response = await fetch(`https://bug-free-space-meme-956jrx6xpjx29xr4-8000.app.github.dev/route-planner/${trip['starting-point']}/${trip.destination}/?date=2024-08-13&time=08:00:00`)
             const data = await response.json()
             const nextThreeTrains = getNextThreeTrains(data.trains)
-            console.log(nextThreeTrains)
+            // console.log(nextThreeTrains)
             setTrains([...nextThreeTrains])
-
-
         }
         fetchData()
-    }, [])
+    }, [flag])
 
     
     // console.log(trip)
@@ -94,7 +96,9 @@ export default function RoutePlanner() {
                         mapId={import.meta.env.VITE_MAP_ID}
                     >
                         <Markers points={stationList}/>
-                        { trip["starting-point"] && trip.destination && <Directions origin={findStation(trip["starting-point"])} destination={findStation(trip["destination"]) }/> }
+                        { trip["starting-point"] && trip.destination && 
+                        <Directions flag={flag} origin={findStation(trip["starting-point"])} destination={findStation(trip["destination"]) }/> 
+                        }
                     </Map>
                 </APIProvider>
             </div>
