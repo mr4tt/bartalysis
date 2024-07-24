@@ -2,14 +2,16 @@ import requests
 from datetime import datetime
 
 from django.shortcuts import render
-from django.http import JsonResponse
-from django.http import HttpResponse
-from django.db import connections
+from django.http import JsonResponse, HttpResponse
+from django.db import connection, connections
+from django.utils import timezone
 
-from rest_framework import status
+import pytz
+
+from rest_framework import serializers, status, generics, viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework import viewsets
+from rest_framework.decorators import api_view
 
 from .models import (
     Agency, 
@@ -290,7 +292,7 @@ class RoutePlannerView(APIView):
         }
 
         return Response(response_data, status=status.HTTP_200_OK)
-    
+        
 class AlertInfoView(APIView):
     def get(self, request):
         alerts = RealtimeAlert.objects.values_list('info', flat=True)
