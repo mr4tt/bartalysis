@@ -27,6 +27,10 @@ export default function RoutePlanner() {
         console.log(e.target.id, e.target.value)
     }
 
+    // it shows the route on the first time I change origin and destination without clicking submit
+    // check this: https://developers.google.com/maps/documentation/javascript/examples/directions-travel-modes
+    // they have code here
+
     useEffect(() => {
         const fetchData = async() => {
             const response = await fetch(`https://bug-free-space-meme-956jrx6xpjx29xr4-8000.app.github.dev/route-planner/${trip['starting-point']}/${trip.destination}/?date=2024-08-13&time=08:00:00`)
@@ -75,7 +79,7 @@ export default function RoutePlanner() {
                     </button>
                 </div>
 
-                <div className="bg-slate-400 row-span-5 grid  gap-2">
+                <div className="bg-slate-400 row-span-5 grid gap-2">
                     <div className="grid grid-row-3 gap-2">
                         { trains.map((train: any, i) => <IncomingTrainsContainer train={train} key={i} />)}
                         {/* <div className="border-black border-2 flex flex-col ">

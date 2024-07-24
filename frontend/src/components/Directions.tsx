@@ -22,7 +22,7 @@ export default function Directions({ origin, destination, flag } : { origin: sta
       directionsService.route({
         origin: { lat: parseFloat(origin?.lat ?? '0'), lng: parseFloat(origin?.lng ?? '0') },
         destination: { lat: parseFloat(destination?.lat ?? '0'), lng: parseFloat(destination?.lng ?? '0') },
-        travelMode: google.maps.TravelMode.DRIVING,
+        travelMode: google.maps.TravelMode.TRANSIT,
         provideRouteAlternatives: true,
       }).then((response) => {
         directionsRenderer.setDirections(response)
