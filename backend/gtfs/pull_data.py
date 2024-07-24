@@ -1,6 +1,6 @@
 import csv
 import datetime
-import os
+from pathlib import Path
 import requests
 import tempfile
 
@@ -8,7 +8,7 @@ import sqlite3
 import zipfile
 
 def get_gtfs_data():
-    conn = sqlite3.connect('/workspaces/bartalysis/backend/bart.db')
+    conn = sqlite3.connect(Path(__file__).parent.parent / 'bart.db')
     curr = conn.cursor()
 
     with tempfile.TemporaryDirectory() as temp_dir:
