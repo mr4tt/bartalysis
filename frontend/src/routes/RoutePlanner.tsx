@@ -7,16 +7,17 @@ import Directions from "../components/Directions";
 import { Markers } from "../components/Markers";
 import { getNextThreeTrains } from "../utils/utils";
 import { train } from "../utils/types";
+import StationForm from "../components/StationForm";
 
 export default function RoutePlanner() {
-    const [trip, setTrip] = useState({ "starting-point": "", "destination" : "" })
+    const [trip, setTrip] = useState({ "origin": "", "destination" : "" })
     const [trains, setTrains] = useState<train[]>([])
     const [flag, setFlag] = useState(false)
     const firstSubmit = useRef(false)
     const position = { lat: 37.668819, lng: -122.080795}
 
     const handleClick = (e: React.FormEvent) => {
-        if (!(trip["starting-point"] === "" || trip["starting-point"] === "Select" 
+        if (!(trip["origin"] === "" || trip["origin"] === "Select" 
             || trip.destination === "" || trip.destination === "Select")) {
             setFlag(!flag)
             firstSubmit.current = true
@@ -30,10 +31,10 @@ export default function RoutePlanner() {
 
     useEffect(() => {
         const fetchData = async() => {
-            const response = await fetch(`https://bug-free-space-meme-956jrx6xpjx29xr4-8000.app.github.dev/route-planner/${trip['starting-point']}/${trip.destination}/?date=2024-08-13&time=08:00:00`)
+            const response = await fetch(`https://bug-free-space-meme-956jrx6xpjx29xr4-8000.app.github.dev/route-planner/${trip['origin']}/${trip.destination}/?date=2024-08-13&time=08:00:00`)
             const data = await response.json()
             const nextThreeTrains = getNextThreeTrains(data.trains)
-            // console.log(nextThreeTrains)
+            console.log(nextThreeTrains)
             setTrains([...nextThreeTrains])
         }
         fetchData()
@@ -45,35 +46,10 @@ export default function RoutePlanner() {
         <div className="row-span-7 grid grid-cols-5 mt-2">
             <div className="bg-slate-400 grid grid-rows-6 gap-4 col-span-2 border-r-2 border-black py-2 px-6">
                 <div className="flex justify-evenly row-span-1">
-                    {/* make this a component; i need a parameter that changes origin/destination and starting-point??? 
-                    maybe I should change starting-point to origin */}
-                    <div className="rounded-sm flex justify-center flex-col gap-2">
-                        <label htmlFor="starting-point" className="text-lg">Origin</label>
-                        <form action="">
-                            <select name="starting-point" id="starting-point" onChange={handleChange} className="w-1/2">
-                                <option defaultValue={"initial"}>Select</option>
-                                { stationList.map((obj, i) => {
-                                    return <option value={obj.abbr} key={i}>{obj.name}</option>
-                                })}
-                            </select>
-                        </form>
-                    </div>
-
-                    <div className="rounded-sm flex justify-center flex-col gap-2">
-                        <label htmlFor="destination" className="text-lg">Destination</label>
-                        <form action="">
-                            <select name="destination" id="destination" onChange={handleChange} className="w-1/2">
-                                <option defaultValue={"initial"}>Select</option>
-                                { stationList.map((obj, i) => {
-                                    return <option value={obj.abbr} key={i}>{obj.name}</option>
-                                })}
-                            </select>
-                        </form>
-                    </div>
-
+                    <StationForm location="Origin" handleChange={handleChange}/>
+                    <StationForm location="Destination" handleChange={handleChange}/>
                     <button className="border-black border-2 bg-white self-end px-4 py-2 rounded-md 
-                    hover:bg-slate-300" onClick={handleClick}
-                    >
+                    hover:bg-slate-300" onClick={handleClick}>
                         Submit
                     </button>
                 </div>
@@ -99,8 +75,8 @@ export default function RoutePlanner() {
                         mapId={import.meta.env.VITE_MAP_ID}
                     >
                         <Markers points={stationList}/>
-                        { trip["starting-point"] && trip.destination && 
-                        <Directions flag={flag} firstSubmit={firstSubmit.current} origin={findStation(trip["starting-point"])} destination={findStation(trip["destination"]) }/> 
+                        { trip["origin"] && trip.destination && 
+                        <Directions flag={flag} firstSubmit={firstSubmit.current} origin={findStation(trip["origin"])} destination={findStation(trip["destination"]) }/> 
                         }
                     </Map>
                 </APIProvider>
