@@ -1,6 +1,7 @@
 import React from "react";
+import { train } from "../utils/types";
 
-export default function IncomingTrainsContainer({ train }: any) {
+export default function IncomingTrainsContainer({ train }: { train: train}) {
     return (
         <div className="bg-slate-500 px-4 py-2 grid gap-2">
             <p>Train color: {train.TrainName.slice(0, train.TrainName.length - 2)}</p>

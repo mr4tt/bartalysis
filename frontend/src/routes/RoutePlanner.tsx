@@ -6,10 +6,11 @@ import { useState, useEffect } from "react"
 import Directions from "../components/Directions";
 import { Markers } from "../components/Markers";
 import { getNextThreeTrains } from "../utils/utils";
+import { train } from "../utils/types";
 
 export default function RoutePlanner() {
     const [trip, setTrip] = useState({ "starting-point": "", "destination" : "" })
-    const [trains, setTrains] = useState<any[]>([])
+    const [trains, setTrains] = useState<train[]>([])
     const [flag, setFlag] = useState(false)
     const position = { lat: 37.668819, lng: -122.080795}
 
@@ -42,7 +43,7 @@ export default function RoutePlanner() {
         fetchData()
     }, [flag])
 
-    
+    console.log(trains)
     // console.log(trip)
     return (
         <div className="row-span-7 grid grid-cols-5 mt-2">
@@ -81,7 +82,7 @@ export default function RoutePlanner() {
 
                 <div className="bg-slate-400 row-span-5 grid gap-2">
                     <div className="grid grid-row-3 gap-2">
-                        { trains.map((train: any, i) => <IncomingTrainsContainer train={train} key={i} />)}
+                        { trains.map((train: train, i) => <IncomingTrainsContainer train={train} key={i} />)}
                         {/* <div className="border-black border-2 flex flex-col ">
                             <p className=" font-bold text-md">Fares</p>
                             <div className="flex flex-col ">
