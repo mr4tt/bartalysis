@@ -1,4 +1,0 @@
-1023|1.15|Clipper START
-1023|2.3|Regular
-1023|0.85|Senior/Disabled Clipper
-1023|1.15|Youth Clipper
