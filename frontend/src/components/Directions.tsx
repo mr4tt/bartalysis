@@ -3,7 +3,7 @@ import { useMap, useMapsLibrary } from "@vis.gl/react-google-maps"
 import { useState, useEffect } from "react"
 import { stationType } from "../utils/types"
 
-export default function Directions({ origin, destination } : { origin: stationType | undefined, destination: stationType | undefined }) {
+export default function Directions({ origin, destination, flag } : { origin: stationType | undefined, destination: stationType | undefined, flag: boolean}) {
     const map = useMap()
     const routesLibrary = useMapsLibrary("routes")
     const [directionsService, setDirectionsService] = useState<google.maps.DirectionsService>()
@@ -22,13 +22,13 @@ export default function Directions({ origin, destination } : { origin: stationTy
       directionsService.route({
         origin: { lat: parseFloat(origin?.lat ?? '0'), lng: parseFloat(origin?.lng ?? '0') },
         destination: { lat: parseFloat(destination?.lat ?? '0'), lng: parseFloat(destination?.lng ?? '0') },
-        travelMode: google.maps.TravelMode.DRIVING,
+        travelMode: google.maps.TravelMode.TRANSIT,
         provideRouteAlternatives: true,
       }).then((response) => {
         directionsRenderer.setDirections(response)
         setRoutes(response.routes)
       })
-    }, [directionsService, directionsRenderer, origin, destination])
+    }, [directionsService, directionsRenderer, flag])
   
     // console.log(routes)
     return (null)

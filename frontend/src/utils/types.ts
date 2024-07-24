@@ -13,3 +13,13 @@ export interface stationType {
 export interface stationTypeArr {
     points: stationType[]
 }
+
+export interface train {
+    "ArrivalTime": string,
+    "DepartureTime": string,
+    "EndingId": string,
+    "StartingID": string,
+    "TrainColor": string,
+    "TrainDescription": string,
+    "TrainName": string,
+}
