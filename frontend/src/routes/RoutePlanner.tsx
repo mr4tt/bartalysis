@@ -2,7 +2,7 @@ import React from "react"
 import IncomingTrainsContainer from "../components/IncomingTrainsContainer"
 import { stationList, findStation } from "../utils/stations"
 import { AdvancedMarker, APIProvider, Map, useMap, useMapsLibrary } from '@vis.gl/react-google-maps';
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import Directions from "../components/Directions";
 import { Markers } from "../components/Markers";
 import { getNextThreeTrains } from "../utils/utils";
@@ -12,25 +12,21 @@ export default function RoutePlanner() {
     const [trip, setTrip] = useState({ "starting-point": "", "destination" : "" })
     const [trains, setTrains] = useState<train[]>([])
     const [flag, setFlag] = useState(false)
+    const firstSubmit = useRef(false)
     const position = { lat: 37.668819, lng: -122.080795}
 
     const handleClick = (e: React.FormEvent) => {
-        if (!(trip["starting-point"] === "" || trip["starting-point"] === "Select" || trip.destination === "" || trip.destination === "Select")) {
+        if (!(trip["starting-point"] === "" || trip["starting-point"] === "Select" 
+            || trip.destination === "" || trip.destination === "Select")) {
             setFlag(!flag)
+            firstSubmit.current = true
         }
-
-        // when this is triggered, maybe change a state (trip; change the state trip) which is a dependency in a useEffect
-        // where that useEffect fetches the data from our api
     }
 
     const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setTrip({...trip, [e.target.id]: e.target.value})
         console.log(e.target.id, e.target.value)
     }
-
-    // it shows the route on the first time I change origin and destination without clicking submit
-    // check this: https://developers.google.com/maps/documentation/javascript/examples/directions-travel-modes
-    // they have code here
 
     useEffect(() => {
         const fetchData = async() => {
@@ -43,12 +39,14 @@ export default function RoutePlanner() {
         fetchData()
     }, [flag])
 
-    console.log(trains)
+    // console.log(trains)
     // console.log(trip)
     return (
         <div className="row-span-7 grid grid-cols-5 mt-2">
             <div className="bg-slate-400 grid grid-rows-6 gap-4 col-span-2 border-r-2 border-black py-2 px-6">
                 <div className="flex justify-evenly row-span-1">
+                    {/* make this a component; i need a parameter that changes origin/destination and starting-point??? 
+                    maybe I should change starting-point to origin */}
                     <div className="rounded-sm flex justify-center flex-col gap-2">
                         <label htmlFor="starting-point" className="text-lg">Origin</label>
                         <form action="">
@@ -102,7 +100,7 @@ export default function RoutePlanner() {
                     >
                         <Markers points={stationList}/>
                         { trip["starting-point"] && trip.destination && 
-                        <Directions flag={flag} origin={findStation(trip["starting-point"])} destination={findStation(trip["destination"]) }/> 
+                        <Directions flag={flag} firstSubmit={firstSubmit.current} origin={findStation(trip["starting-point"])} destination={findStation(trip["destination"]) }/> 
                         }
                     </Map>
                 </APIProvider>
