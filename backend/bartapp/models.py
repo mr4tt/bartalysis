@@ -202,7 +202,7 @@ class CalendarDate(models.Model):
 
     class Meta:
         db_table = 'calendar_dates'
-        unique_together = ['exception_type', 'date']
+        unique_together = ['service_id', 'exception_type', 'date']
 
 class RealtimeTrip(models.Model):
     trip_id = models.IntegerField(primary_key=True)
