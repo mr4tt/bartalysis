@@ -105,3 +105,31 @@ FROM (
     )
 ) ORDER BY FareID, Description;
 .output stdout
+
+
+-- Query producing service information based on realtime data
+.output result3.txt
+SELECT
+    datetime(departure_time - (8 * 3600), 'unixepoch') AS readable_departure_time,
+    stop_id,
+    trip_id
+FROM realtime_stop_time_updates
+WHERE stop_id = 'SHAY'
+ORDER BY departure_time;
+.output stdout
+
+.output result4.txt
+SELECT 
+    st.stop_id,
+    st.stop_sequence,
+    st.departure_time,
+    st.trip_id,
+    r.route_short_name
+FROM stop_times st
+JOIN trips t ON st.trip_id = t.trip_id
+JOIN routes r ON t.route_id = r.route_id
+WHERE st.stop_id = 'SHAY'
+AND departure_time > '12:30:00'
+AND departure_time < '13:00:00'
+ORDER BY r.route_short_name, st.departure_time;
+.output stdout
