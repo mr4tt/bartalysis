@@ -31,3 +31,6 @@ __init
 gtfs_realtime_pb2.py
 bart.db
 django.db
+
+backend/result*.txt
+postbart.db

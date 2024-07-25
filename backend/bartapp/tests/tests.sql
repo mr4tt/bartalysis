@@ -67,7 +67,7 @@ JOIN calendar c ON t.service_id = c.service_id
 WHERE c.thursday = 1
 AND st1.departure_time > '08:00:00'
 AND st1.stop_sequence < st2.stop_sequence
-AND '2024-08-12' BETWEEN c.start_date AND c.end_date
+AND '2024-07-24' BETWEEN c.start_date AND c.end_date
 ORDER BY st1.departure_time;
 .output stdout
 
@@ -129,7 +129,41 @@ FROM stop_times st
 JOIN trips t ON st.trip_id = t.trip_id
 JOIN routes r ON t.route_id = r.route_id
 WHERE st.stop_id = 'SHAY'
-AND departure_time > '12:30:00'
-AND departure_time < '13:00:00'
+AND departure_time > '10:45:00'
+AND departure_time < '12:00:00'
+ORDER BY r.route_short_name, st.departure_time;
+.output stdout
+
+.output result5.txt
+SELECT 
+    rstu.stop_id,
+    rstu.trip_id,
+    datetime(rstu.departure_time - (8 * 3600), 'unixepoch') AS readable_departure_time,
+    r.route_short_name
+FROM realtime_stop_time_updates rstu
+JOIN trips t ON rstu.trip_id = t.trip_id
+JOIN routes r ON t.route_id = r.route_id
+WHERE rstu.stop_id = 'SHAY'
+ORDER BY r.route_short_name, rstu.departure_time;
+.output stdout
+
+.output result6.txt
+SELECT DISTINCT
+    st.stop_id,
+    st.departure_time,
+    r.route_short_name
+FROM (
+    SELECT DISTINCT st.departure_time, r.route_short_name
+    FROM stop_times st
+    JOIN trips t ON st.trip_id = t.trip_id
+    JOIN routes r ON t.route_id = r.route_id
+    WHERE st.stop_id = 'SHAY'
+    AND st.departure_time > '10:48:00'
+    AND st.departure_time < '12:00:00'
+) dt
+JOIN stop_times st ON st.departure_time = dt.departure_time
+JOIN trips t ON st.trip_id = t.trip_id
+JOIN routes r ON t.route_id = r.route_id
+WHERE st.stop_id = 'SHAY'
 ORDER BY r.route_short_name, st.departure_time;
 .output stdout
