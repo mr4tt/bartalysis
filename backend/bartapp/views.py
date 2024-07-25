@@ -288,6 +288,14 @@ class AlertInfoView(APIView):
     def get(self, request):
         alerts = RealtimeAlert.objects.values_list('info', flat=True)
         return Response(alerts)
+    
+class FareView(APIView):
+    def get(self, request, category, origin, destination):
+        fare = FareAttribute.objects.select_related('farerule'
+        ).select_related('fareridercategory'
+        ).filter(fareridercategory__rider_category_id=category, farerule__origin_id=origin, farerule__destination_id=destination, 
+        ).values_list('price', flat=True)
+        return Response(fare)
 
 class StopTimeUpdateView(APIView):
     def get(self, request, **kwargs):
