@@ -2,14 +2,16 @@ import requests
 from datetime import datetime
 
 from django.shortcuts import render
-from django.http import JsonResponse
-from django.http import HttpResponse
-from django.db import connections
+from django.http import JsonResponse, HttpResponse
+from django.db import connection, connections
+from django.utils import timezone
 
-from rest_framework import status
+import pytz
+
+from rest_framework import serializers, status, generics, viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework import viewsets
+from rest_framework.decorators import api_view
 
 from .models import (
     Agency, 
@@ -58,6 +60,13 @@ from .serializers import (
     RealtimeStopTimeUpdateSerializer,
     RealtimeAlertSerializer,
     RealtimeTripSerializer,
+
+    RealtimeStopTimeUpdateSerializerForStopTimeUpdateView,
+    RouteSummarySerializer,
+    StopSummarySerializer,
+    TripsSummarySerializer,
+    RealtimeTripSummarySerializer,
+    RealtimeStopTimeUpdateSummarySerializer
 )
 
 # Homepage initial response
@@ -283,7 +292,7 @@ class RoutePlannerView(APIView):
         }
 
         return Response(response_data, status=status.HTTP_200_OK)
-    
+        
 class AlertInfoView(APIView):
     def get(self, request):
         alerts = RealtimeAlert.objects.values_list('info', flat=True)
@@ -311,5 +320,29 @@ class StopTimeUpdateView(APIView):
             stop_time_updates = RealtimeStopTimeUpdate.objects.filter(stop_id=stop_id)
         else:
             return Response({'error': 'stop_id is required'}, status=400)
-        serializer = RealtimeStopTimeUpdateSerializer(stop_time_updates, many=True)
+        serializer = RealtimeStopTimeUpdateSerializerForStopTimeUpdateView(stop_time_updates, many=True)
         return Response(serializer.data)
+        
+class ServiceInfoView(APIView):
+    def get(self, request):
+        routes = Route.objects.all()
+        stops = Stop.objects.all()
+        trips = Trip.objects.all()
+        realtime_trips = RealtimeTrip.objects.all()
+        realtime_stop_time_updates = RealtimeStopTimeUpdate.objects.all()
+
+        route_serializer = RouteSummarySerializer(routes, many=True)
+        stop_serializer = StopSummarySerializer(stops, many=True)
+        trip_serializer = TripsSummarySerializer(trips, many=True)
+        realtime_trip_serializer = RealtimeTripSummarySerializer(realtime_trips, many=True)
+        realtime_stop_time_update_serializer = RealtimeStopTimeUpdateSummarySerializer(realtime_stop_time_updates, many=True)
+
+        service_info = {
+            "routes": route_serializer.data,
+            "stops": stop_serializer.data,
+            "trips": trip_serializer.data,
+            "realtime_trips": realtime_trip_serializer.data,
+            "realtime_stop_time_updates": realtime_stop_time_update_serializer.data
+        }
+
+        return Response(service_info, status=status.HTTP_200_OK)
