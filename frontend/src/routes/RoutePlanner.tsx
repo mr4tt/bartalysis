@@ -37,9 +37,10 @@ export default function RoutePlanner() {
             console.log(nextThreeTrains)
             setTrains([...nextThreeTrains])
         }
+        
         fetchData()
     }, [flag])
-
+  
     // console.log(trains)
     // console.log(trip)
     return (
@@ -73,6 +74,8 @@ export default function RoutePlanner() {
                         center={position}
                         zoom={10}
                         mapId={import.meta.env.VITE_MAP_ID}
+                        streetViewControl={false}
+                        mapTypeControl={false}
                     >
                         <Markers points={stationList}/>
                         { trip["origin"] && trip.destination && 
