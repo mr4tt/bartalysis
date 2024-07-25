@@ -290,7 +290,14 @@ class AlertInfoView(APIView):
         return Response(alerts)
     
 class FareView(APIView):
-    def get(self, request, category, origin, destination):
+    def get(self, request):
+        category = request.query_params.get('category')
+        origin = request.query_params.get('origin')
+        destination = request.query_params.get('destination')
+
+        if not category or not origin or not destination:
+            return Response({'error': 'category, origin, and destination are required'}, status=status.HTTP_400_BAD_REQUEST)
+
         fare = FareAttribute.objects.select_related('farerule'
         ).select_related('fareridercategory'
         ).filter(fareridercategory__rider_category_id=category, farerule__origin_id=origin, farerule__destination_id=destination, 
