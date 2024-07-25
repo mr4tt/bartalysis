@@ -37,34 +37,28 @@ Go to http://localhost:5173/ to access the webpage
 
 ## Building the Backend
 
-### Update Packages
+### Update and Install Packages
 
 ```
 sudo apt-get update
+pip install -r requirements.txt
 ```
 
-### Install SQLite3
+### Create Protoc Compiler
+
+Install proto-buf.
 
 ```
-sudo apt-get install sqlite3
+sudo apt-get install -y protobuf-compiler
 ```
 
-### Install Protoc Compiler
-
-First install the protoc package.
+Run the proto.py file.
 
 ```
-pip install protobuf==3.20.0
-apt install -y protobuf-compiler
+python proto.py
 ```
 
-Then run the proto.py file.
-
-```
-python backend/gtfs-rt/proto.py
-```
-
-This is required to pull data from GTFS-RT.
+Ensure the gtfs_realtime_pb2.py file is located in the gtfs-rt directory. This is required to pull data from GTFS-RT.
 
 ### Build the Database
 

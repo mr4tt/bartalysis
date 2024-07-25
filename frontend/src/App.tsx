@@ -5,7 +5,7 @@ import { Outlet } from 'react-router-dom';
 // root element
 function App() {
   return (
-    <div className="h-screen grid grid-rows-8 gap-4">
+    <div className="h-screen grid grid-rows-8 ">
       <Nav />
       <Outlet />
     </div>

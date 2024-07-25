@@ -1,10 +1,115 @@
-from django.test import TestCase, Client
 from django.urls import reverse
-from .models import Agency, Route, Trip, Stop, Calendar, RealtimeStopTimeUpdate, RealtimeAlert, RealtimeTrip, trainschedule
+from django.test import TestCase
+from rest_framework import status
+from rest_framework.test import APIClient
+
+from .models import (
+    Agency,
+    RealtimeAlert,
+    Stop,
+    Trip,
+    RealtimeStopTimeUpdate
+)
 
 class EndpointTestCase(TestCase):
+    databases = {'bart'}
+
     def setUp(self):
-        self.client = Client()
+        # Create test data here
+        Agency.objects.create(agency_id="test_agency", agency_name="Test Agency Name")
+
+    def test_get_agency_list(self):
+        # Assuming there's at least one Agency instance in the database
+        agency = Agency.objects.first()
+
+        # Ensure we have an agency to test with
+        if not agency:
+            self.fail('No Agency instances in the database to test with')
+
+        client = APIClient()
+        url = reverse('agency-list')  # Make sure 'agency-list' is the correct name for your URL
+        response = client.get(url)
+
+        # Set up data for the tests
+        self.client = APIClient()
+        self.test_agency = Agency.objects.create(agency_id="test_agency", agency_name="Test Agency Name")
+        # self.url = reverse('agency-detail', kwargs={'agency_id': self.test_agency.agency_id})
+
+    def test_get_agency_detail(self):
+        # Test retrieving an agency by agency_id
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        # Further assertions can be made here depending on the structure of your response
+        # For example, checking if the response data contains the expected agency data
+        
+        # Print the response data to see what it actually found
+        print("Response data:", response.data)
+
+        self.assertEqual(response.data['agency_id'], self.test_agency.agency_id)
+        self.assertEqual(response.data['agency_name'], self.test_agency.agency_name)
+
+    def test_agency_not_found(self):
+        # Test retrieving an agency that does not exist
+        url = reverse('agency-detail', kwargs={'agency_id': 'nonexistent_agency'})
+        response = self.client.get(url)
+        self.assertEqual(response.status_status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_agency_list(self):
+        response = self.client.get(reverse('agency-list'))
+        self.assertEqual(response.status_code, 200)
+        
+        # Check if the response is JSON and decode it
+        if response['Content-Type'] == 'application/json':
+            response_data = response.json()
+            # Assuming the response should be a list of agencies, check if any agency contains 'agency_id'
+            self.assertTrue(any('agency_id' in agency for agency in response_data), "Response does not contain 'agency_id'")
+        else:
+            # If the response is not JSON, directly search for 'agency_id' in the response content
+            self.assertContains(response, "agency_id")
+
+class ServiceInfoTests(TestCase):
+    def setup(self):
+        self.alert = RealtimeAlert.objects.create(
+            info = 'test info'
+        )
+
+        self.trip = Trip.objects.create(
+            route_id = 1,
+            service_id = '2024_08_12-DX-MVS-Weekday-01',
+            trip_id = 1560937,
+            trip_headsign = 'San Francisco International Airport',
+            direction_id = 1,
+            shape_id = '001A_shp'
+        )
+
+        self.stop = Stop.objects.create(
+            stop_id = 'LAKE',
+            stop_name = 'Lake Merrit',
+            stop_lat = 37.7749,
+            stop_lon = -122.4194,
+            location_type = 0
+        )
+
+        self.stop_time_update = RealtimeStopTimeUpdate.objects.create(
+            trip_id=self.trip,
+            stop_id=self.stop,
+            arrival_delay=0,
+            arrival_time="0",
+            arrival_uncertainty=0,
+            departure_delay=0,
+            departure_time="0",
+            departure_uncertainty=0
+        )
+
+    def test_alert_info(self):
+        response = self.client.get(reverse('alerts'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "info")
+
+# Test database integrity using fixture
+class DatabaseTests(TestCase):
+    databases = {'bart'}
+    fixtures = ['bart_data.json']
 
     def test_agency_list(self):
         response = self.client.get(reverse('agency-list'))
@@ -114,20 +219,20 @@ class EndpointTestCase(TestCase):
         self.assertContains(response, "trip_id")
         self.assertContains(response, "route_id")
 
-    def test_rt_stop_time_update_list(self):
-        response = self.client.get(reverse('rtstoptimeupdate-list'))
+    def test_realtime_stop_time_update_list(self):
+        response = self.client.get(reverse('realtimestoptimeupdate-list'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "trip_id")
         self.assertContains(response, "stop_id")
 
-    def test_rt_alert_list(self):
-        response = self.client.get(reverse('rtalert-list'))
+    def test_realtime_alert_list(self):
+        response = self.client.get(reverse('realtimealert-list'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "alert_id")
         self.assertContains(response, "info")
 
-    def test_rt_trip_list(self):
-        response = self.client.get(reverse('rttrip-list'))
+    def test_realtime_trip_list(self):
+        response = self.client.get(reverse('realtimetrip-list'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "trip_id")
         self.assertContains(response, "schedule_relationship")

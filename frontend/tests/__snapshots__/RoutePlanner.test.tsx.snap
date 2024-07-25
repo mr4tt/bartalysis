@@ -1,0 +1,729 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`RoutePlanner > renders RoutePlanner 1`] = `
+<div>
+  <div
+    class="row-span-7 grid grid-cols-5 mt-2"
+  >
+    <div
+      class="bg-slate-400 grid grid-rows-6 gap-4 col-span-2 border-r-2 border-black py-2 px-6"
+    >
+      <div
+        class="flex justify-evenly row-span-1"
+      >
+        <div
+          class="rounded-sm flex justify-center flex-col gap-2"
+        >
+          <label
+            class="text-lg"
+            for="starting-point"
+          >
+            Origin
+          </label>
+          <form
+            action=""
+          >
+            <select
+              class="w-1/2"
+              id="starting-point"
+              name="starting-point"
+            >
+              <option>
+                Select
+              </option>
+              <option
+                value="12TH"
+              >
+                12th St. Oakland City Center
+              </option>
+              <option
+                value="16TH"
+              >
+                16th St. Mission
+              </option>
+              <option
+                value="19TH"
+              >
+                19th St. Oakland
+              </option>
+              <option
+                value="24TH"
+              >
+                24th St. Mission
+              </option>
+              <option
+                value="ANTC"
+              >
+                Antioch
+              </option>
+              <option
+                value="ASHB"
+              >
+                Ashby
+              </option>
+              <option
+                value="BALB"
+              >
+                Balboa Park
+              </option>
+              <option
+                value="BAYF"
+              >
+                Bay Fair
+              </option>
+              <option
+                value="BERY"
+              >
+                Berryessa/North San Jose
+              </option>
+              <option
+                value="CAST"
+              >
+                Castro Valley
+              </option>
+              <option
+                value="CIVC"
+              >
+                Civic Center/UN Plaza
+              </option>
+              <option
+                value="COLS"
+              >
+                Coliseum
+              </option>
+              <option
+                value="COLM"
+              >
+                Colma
+              </option>
+              <option
+                value="CONC"
+              >
+                Concord
+              </option>
+              <option
+                value="DALY"
+              >
+                Daly City
+              </option>
+              <option
+                value="DBRK"
+              >
+                Downtown Berkeley
+              </option>
+              <option
+                value="DUBL"
+              >
+                Dublin/Pleasanton
+              </option>
+              <option
+                value="DELN"
+              >
+                El Cerrito del Norte
+              </option>
+              <option
+                value="PLZA"
+              >
+                El Cerrito Plaza
+              </option>
+              <option
+                value="EMBR"
+              >
+                Embarcadero
+              </option>
+              <option
+                value="FRMT"
+              >
+                Fremont
+              </option>
+              <option
+                value="FTVL"
+              >
+                Fruitvale
+              </option>
+              <option
+                value="GLEN"
+              >
+                Glen Park
+              </option>
+              <option
+                value="HAYW"
+              >
+                Hayward
+              </option>
+              <option
+                value="LAFY"
+              >
+                Lafayette
+              </option>
+              <option
+                value="LAKE"
+              >
+                Lake Merritt
+              </option>
+              <option
+                value="MCAR"
+              >
+                MacArthur
+              </option>
+              <option
+                value="MLBR"
+              >
+                Millbrae
+              </option>
+              <option
+                value="MLPT"
+              >
+                Milpitas
+              </option>
+              <option
+                value="MONT"
+              >
+                Montgomery St.
+              </option>
+              <option
+                value="NBRK"
+              >
+                North Berkeley
+              </option>
+              <option
+                value="NCON"
+              >
+                North Concord/Martinez
+              </option>
+              <option
+                value="OAKL"
+              >
+                Oakland International Airport
+              </option>
+              <option
+                value="ORIN"
+              >
+                Orinda
+              </option>
+              <option
+                value="PITT"
+              >
+                Pittsburg/Bay Point
+              </option>
+              <option
+                value="PCTR"
+              >
+                Pittsburg Center
+              </option>
+              <option
+                value="PHIL"
+              >
+                Pleasant Hill/Contra Costa Centre
+              </option>
+              <option
+                value="POWL"
+              >
+                Powell St.
+              </option>
+              <option
+                value="RICH"
+              >
+                Richmond
+              </option>
+              <option
+                value="ROCK"
+              >
+                Rockridge
+              </option>
+              <option
+                value="SBRN"
+              >
+                San Bruno
+              </option>
+              <option
+                value="SFIA"
+              >
+                San Francisco International Airport
+              </option>
+              <option
+                value="SANL"
+              >
+                San Leandro
+              </option>
+              <option
+                value="SHAY"
+              >
+                South Hayward
+              </option>
+              <option
+                value="SSAN"
+              >
+                South San Francisco
+              </option>
+              <option
+                value="UCTY"
+              >
+                Union City
+              </option>
+              <option
+                value="WCRK"
+              >
+                Walnut Creek
+              </option>
+              <option
+                value="WARM"
+              >
+                Warm Springs/South Fremont
+              </option>
+              <option
+                value="WDUB"
+              >
+                West Dublin/Pleasanton
+              </option>
+              <option
+                value="WOAK"
+              >
+                West Oakland
+              </option>
+            </select>
+          </form>
+        </div>
+        <div
+          class="rounded-sm flex justify-center flex-col gap-2"
+        >
+          <label
+            class="text-lg"
+            for="destination"
+          >
+            Destination
+          </label>
+          <form
+            action=""
+          >
+            <select
+              class="w-1/2"
+              id="destination"
+              name="destination"
+            >
+              <option>
+                Select
+              </option>
+              <option
+                value="12TH"
+              >
+                12th St. Oakland City Center
+              </option>
+              <option
+                value="16TH"
+              >
+                16th St. Mission
+              </option>
+              <option
+                value="19TH"
+              >
+                19th St. Oakland
+              </option>
+              <option
+                value="24TH"
+              >
+                24th St. Mission
+              </option>
+              <option
+                value="ANTC"
+              >
+                Antioch
+              </option>
+              <option
+                value="ASHB"
+              >
+                Ashby
+              </option>
+              <option
+                value="BALB"
+              >
+                Balboa Park
+              </option>
+              <option
+                value="BAYF"
+              >
+                Bay Fair
+              </option>
+              <option
+                value="BERY"
+              >
+                Berryessa/North San Jose
+              </option>
+              <option
+                value="CAST"
+              >
+                Castro Valley
+              </option>
+              <option
+                value="CIVC"
+              >
+                Civic Center/UN Plaza
+              </option>
+              <option
+                value="COLS"
+              >
+                Coliseum
+              </option>
+              <option
+                value="COLM"
+              >
+                Colma
+              </option>
+              <option
+                value="CONC"
+              >
+                Concord
+              </option>
+              <option
+                value="DALY"
+              >
+                Daly City
+              </option>
+              <option
+                value="DBRK"
+              >
+                Downtown Berkeley
+              </option>
+              <option
+                value="DUBL"
+              >
+                Dublin/Pleasanton
+              </option>
+              <option
+                value="DELN"
+              >
+                El Cerrito del Norte
+              </option>
+              <option
+                value="PLZA"
+              >
+                El Cerrito Plaza
+              </option>
+              <option
+                value="EMBR"
+              >
+                Embarcadero
+              </option>
+              <option
+                value="FRMT"
+              >
+                Fremont
+              </option>
+              <option
+                value="FTVL"
+              >
+                Fruitvale
+              </option>
+              <option
+                value="GLEN"
+              >
+                Glen Park
+              </option>
+              <option
+                value="HAYW"
+              >
+                Hayward
+              </option>
+              <option
+                value="LAFY"
+              >
+                Lafayette
+              </option>
+              <option
+                value="LAKE"
+              >
+                Lake Merritt
+              </option>
+              <option
+                value="MCAR"
+              >
+                MacArthur
+              </option>
+              <option
+                value="MLBR"
+              >
+                Millbrae
+              </option>
+              <option
+                value="MLPT"
+              >
+                Milpitas
+              </option>
+              <option
+                value="MONT"
+              >
+                Montgomery St.
+              </option>
+              <option
+                value="NBRK"
+              >
+                North Berkeley
+              </option>
+              <option
+                value="NCON"
+              >
+                North Concord/Martinez
+              </option>
+              <option
+                value="OAKL"
+              >
+                Oakland International Airport
+              </option>
+              <option
+                value="ORIN"
+              >
+                Orinda
+              </option>
+              <option
+                value="PITT"
+              >
+                Pittsburg/Bay Point
+              </option>
+              <option
+                value="PCTR"
+              >
+                Pittsburg Center
+              </option>
+              <option
+                value="PHIL"
+              >
+                Pleasant Hill/Contra Costa Centre
+              </option>
+              <option
+                value="POWL"
+              >
+                Powell St.
+              </option>
+              <option
+                value="RICH"
+              >
+                Richmond
+              </option>
+              <option
+                value="ROCK"
+              >
+                Rockridge
+              </option>
+              <option
+                value="SBRN"
+              >
+                San Bruno
+              </option>
+              <option
+                value="SFIA"
+              >
+                San Francisco International Airport
+              </option>
+              <option
+                value="SANL"
+              >
+                San Leandro
+              </option>
+              <option
+                value="SHAY"
+              >
+                South Hayward
+              </option>
+              <option
+                value="SSAN"
+              >
+                South San Francisco
+              </option>
+              <option
+                value="UCTY"
+              >
+                Union City
+              </option>
+              <option
+                value="WCRK"
+              >
+                Walnut Creek
+              </option>
+              <option
+                value="WARM"
+              >
+                Warm Springs/South Fremont
+              </option>
+              <option
+                value="WDUB"
+              >
+                West Dublin/Pleasanton
+              </option>
+              <option
+                value="WOAK"
+              >
+                West Oakland
+              </option>
+            </select>
+          </form>
+        </div>
+        <button
+          class="border-black border-2 bg-white self-end px-4 py-2 rounded-md 
+                    hover:bg-slate-300"
+        >
+          Submit
+        </button>
+      </div>
+      <div
+        class="bg-slate-400 row-span-5 grid grid-cols-5 gap-2"
+      >
+        <div
+          class="col-span-1 grid grid-rows-5 "
+        >
+          <p
+            class="row-span-1 font-bold border-b-2 border-black"
+          >
+            Trains
+          </p>
+          <p
+            class="row-span-4 font-bold border-b-2 border-black"
+          >
+            Departing
+          </p>
+        </div>
+        <div
+          class="flex justify-evenly col-span-4 gap-2"
+        >
+          <div
+            class="grid grid-rows-5 bg-slate-600 py-2 px-6 rounded-sm"
+          >
+            <div
+              class="row-span-1"
+            >
+              Destination
+            </div>
+            <div
+              class="row-span-4 grid gap-2 justify-items-center"
+            >
+              <div
+                class=""
+              >
+                <p>
+                  Incoming train #1:
+                </p>
+                <p>
+                  X mins
+                </p>
+              </div>
+              <div
+                class=""
+              >
+                <p>
+                  Incoming train #2:
+                </p>
+                <p>
+                  X mins
+                </p>
+              </div>
+              <div
+                class=""
+              >
+                <p>
+                  Incoming train #3:
+                </p>
+                <p>
+                  X mins
+                </p>
+              </div>
+            </div>
+          </div>
+          <div
+            class="grid grid-rows-5 bg-slate-600 py-2 px-6 rounded-sm"
+          >
+            <div
+              class="row-span-1"
+            >
+              Destination
+            </div>
+            <div
+              class="row-span-4 grid gap-2 justify-items-center"
+            >
+              <div
+                class=""
+              >
+                <p>
+                  Incoming train #1:
+                </p>
+                <p>
+                  X mins
+                </p>
+              </div>
+              <div
+                class=""
+              >
+                <p>
+                  Incoming train #2:
+                </p>
+                <p>
+                  X mins
+                </p>
+              </div>
+              <div
+                class=""
+              >
+                <p>
+                  Incoming train #3:
+                </p>
+                <p>
+                  X mins
+                </p>
+              </div>
+            </div>
+          </div>
+          <div
+            class="grid grid-rows-5 bg-slate-600 py-2 px-6 rounded-sm"
+          >
+            <div
+              class="row-span-1"
+            >
+              Destination
+            </div>
+            <div
+              class="row-span-4 grid gap-2 justify-items-center"
+            >
+              <div
+                class=""
+              >
+                <p>
+                  Incoming train #1:
+                </p>
+                <p>
+                  X mins
+                </p>
+              </div>
+              <div
+                class=""
+              >
+                <p>
+                  Incoming train #2:
+                </p>
+                <p>
+                  X mins
+                </p>
+              </div>
+              <div
+                class=""
+              >
+                <p>
+                  Incoming train #3:
+                </p>
+                <p>
+                  X mins
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="col-span-3 h-screen w-full"
+    >
+      <div
+        data-testid="map"
+        style="width: 100%; height: 100%; position: relative; z-index: 0;"
+      />
+    </div>
+  </div>
+</div>
+`;

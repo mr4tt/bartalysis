@@ -1,27 +1,19 @@
 import csv
 import datetime
 from pathlib import Path
-import requests
 import tempfile
 
 import sqlite3
 import zipfile
 
 def get_gtfs_data():
-    conn = sqlite3.connect(Path(__file__).parent.parent / 'bart.db')
+    conn = sqlite3.connect('/workspaces/bartalysis/backend/bart.db')
     curr = conn.cursor()
 
     with tempfile.TemporaryDirectory() as temp_dir:
-        temp_zip_path = temp_dir + '/temp.zip'
-        url = 'https://www.bart.gov/dev/schedules/google_transit.zip'
+        path = Path(__file__).parent / 'gtfs.zip'
 
-        with requests.get(url, allow_redirects=True, stream=True) as r:
-            r.raise_for_status()
-            with open(temp_zip_path, 'wb') as f:
-                for chunk in r.iter_content(chunk_size=8192):
-                    f.write(chunk)
-
-        with zipfile.ZipFile(temp_zip_path, 'r') as zip_ref:
+        with zipfile.ZipFile(path, 'r') as zip_ref:
             zip_ref.extractall(temp_dir)
 
         # Agency

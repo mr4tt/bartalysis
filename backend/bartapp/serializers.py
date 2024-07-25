@@ -1,5 +1,28 @@
 from rest_framework import serializers
-from .models import Agency, FeedInfo, FareAttribute, FareRule, RiderCategory, FareRiderCategory, Shape, Route, RouteAttribute, RealtimeRoute, Direction, Stop, StopTime, Transfer, Calendar, CalendarAttribute, CalendarDate, Trip, RealtimeStopTimeUpdate, RealtimeAlert, RealtimeTrip
+
+from .models import (
+    Agency, 
+    FeedInfo, 
+    FareAttribute, 
+    FareRule, 
+    RiderCategory, 
+    FareRiderCategory, 
+    Shape, 
+    Route, 
+    RouteAttribute, 
+    RealtimeRoute, 
+    Direction, 
+    Stop, 
+    StopTime, 
+    Transfer, 
+    Calendar, 
+    CalendarAttribute, 
+    CalendarDate, 
+    Trip, 
+    RealtimeStopTimeUpdate, 
+    RealtimeAlert, 
+    RealtimeTrip,
+)
 
 class AgencySerializer(serializers.ModelSerializer):
     class Meta:
@@ -94,14 +117,48 @@ class TripSerializer(serializers.ModelSerializer):
 class RealtimeStopTimeUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = RealtimeStopTimeUpdate
-        fields = ['arrival_uncertainty', 'departure_delay', 'departure_time', 'departure_uncertainty']
+        fields = '__all__'
 
 class RealtimeAlertSerializer(serializers.ModelSerializer):
     class Meta:
         model = RealtimeAlert
-        fields = ['alert_id', 'info', 'lang']
+        fields = '__all__'
 
 class RealtimeTripSerializer(serializers.ModelSerializer):
     class Meta:
         model = RealtimeTrip
+        fields = '__all__'
+
+
+# Specific serializers
+
+class RealtimeStopTimeUpdateSerializerForStopTimeUpdateView(serializers.ModelSerializer):
+    class Meta:
+        model = RealtimeStopTimeUpdate
+        fields = ['arrival_uncertainty', 'departure_delay', 'departure_time', 'departure_uncertainty']
+
+class RouteSummarySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Route
+        fields = ['route_short_name', 'route_long_name', 'route_color']
+
+class StopSummarySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Stop
+        fields = ['stop_id', 'stop_name']
+
+class TripsSummarySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Trip
+        fields = ['trip_id', 'route_id', 'service_id', 'direction_id']
+
+class RealtimeTripSummarySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RealtimeTrip
         fields = ['trip_id', 'schedule_relationship', 'vehicle']
+
+class RealtimeStopTimeUpdateSummarySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RealtimeStopTimeUpdate
+        fields = ['arrival_uncertainty', 'arrival_time', 'departure_delay', 'departure_time', 'departure_uncertainty', 'stop_id', 'trip_id']
+
