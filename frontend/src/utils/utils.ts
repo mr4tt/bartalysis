@@ -12,3 +12,8 @@ export const getNextThreeTrains = (trains: train[]) => {
     })
     return nextThreeTrains
 }
+
+export const countDecimals = (val: any) => {
+    if (Math.floor(val) === val) return 0;
+    return val.toString().split(".")[1].length || 0; 
+}
