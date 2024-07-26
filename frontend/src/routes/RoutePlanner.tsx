@@ -5,13 +5,14 @@ import { AdvancedMarker, APIProvider, Map, useMap, useMapsLibrary } from '@vis.g
 import { useState, useEffect, useRef } from "react"
 import Directions from "../components/Directions";
 import { Markers } from "../components/Markers";
-import { getNextThreeTrains } from "../utils/utils";
+import { getNextThreeTrains, countDecimals } from "../utils/utils";
 import { train } from "../utils/types";
 import StationForm from "../components/StationForm";
 
 export default function RoutePlanner() {
     const [trip, setTrip] = useState({ "origin": "", "destination" : "" })
     const [trains, setTrains] = useState<train[]>([])
+    const [fares, setFares] = useState([])
     const [flag, setFlag] = useState(false)
     const firstSubmit = useRef(false)
     const position = { lat: 37.668819, lng: -122.080795}
@@ -36,7 +37,9 @@ export default function RoutePlanner() {
             console.log(data)
             const nextThreeTrains = getNextThreeTrains(data.trains)
             // console.log(nextThreeTrains)
+            setFares(data.fares)
             setTrains([...nextThreeTrains])
+
         }
         if (flag) fetchData()
     }, [flag])
@@ -55,8 +58,8 @@ export default function RoutePlanner() {
                     </button>
                 </div>
 
-                <div className="bg-slate-400 row-span-5 grid gap-2">
-                    <div className="grid grid-row-3 gap-2">
+                <div className="bg-slate-400 row-span-5 grid grid-cols-5 gap-2">
+                    <div className="grid grid-row-3 gap-2 col-span-3">
                         { trains.map((train: train, i) => <IncomingTrainsContainer train={train} key={i} />)}
                         {/* <div className="border-black border-2 flex flex-col ">
                             <p className=" font-bold text-md">Fares</p>
@@ -64,6 +67,17 @@ export default function RoutePlanner() {
                                
                             </div>
                         </div> */}
+                    </div>
+                    <div className="col-span-2 grid gap-2 bg-slate-500 h-min px-4 py-2">
+                        <div className="font-bold text-lg">Price</div>
+                        { fares.map((fare: any, i) => {
+                            return (
+                                <div key={i}>
+                                    <p className="">{ fare.Description }</p>
+                                    <p className="text-sm">${ fare.Price }{ countDecimals(fare.Price) === 1 ? "0" : "" }</p>
+                                </div>
+                            )
+                        })}
                     </div>
                 </div>
             </div>
