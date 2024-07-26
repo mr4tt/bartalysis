@@ -6,7 +6,7 @@ from django.http import JsonResponse, HttpResponse
 from django.db import connection, connections
 from django.utils import timezone
 
-import pytz
+# import pytz
 
 from rest_framework import serializers, status, generics, viewsets
 from rest_framework.response import Response
