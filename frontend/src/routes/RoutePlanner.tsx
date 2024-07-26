@@ -6,7 +6,7 @@ import { useState, useEffect, useRef } from "react"
 import Directions from "../components/Directions";
 import { Markers } from "../components/Markers";
 import { getNextThreeTrains, countDecimals } from "../utils/utils";
-import { train } from "../utils/types";
+import { train, fare } from "../utils/types";
 import StationForm from "../components/StationForm";
 
 export default function RoutePlanner() {
@@ -41,7 +41,7 @@ export default function RoutePlanner() {
             setTrains([...nextThreeTrains])
 
         }
-        if (flag) fetchData()
+        fetchData()
     }, [flag])
   
     // console.log(trains)
@@ -72,9 +72,8 @@ export default function RoutePlanner() {
                     <div className="col-span-2 grid gap-2 grid-rows-10">
                         <p className="bg-slate-500 font-bold grid justify-items-center items-center p-2 row-span-1">Price</p>
                         <div className="bg-slate-500 self-start row-span-9  grid gap-2">
-                            
                             { fares.length !== 0 
-                                ? fares.map((fare: any, i) => {
+                                ? fares.map((fare: fare, i) => {
                                     return (
                                         <div className="px-4 py-2" key={i}>
                                             <p className="">{ fare.Description }</p>

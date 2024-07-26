@@ -23,3 +23,9 @@ export interface train {
     "TrainDescription": string,
     "TrainName": string,
 }
+
+export interface fare {
+    "Description": string,
+    "FareID": number,
+    "Price": number
+}
