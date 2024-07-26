@@ -1,8 +1,8 @@
 import React from "react"
 import IncomingTrainsContainer from "../components/IncomingTrainsContainer"
 import { stationList, findStation } from "../utils/stations"
-import { AdvancedMarker, APIProvider, Map, useMap, useMapsLibrary } from '@vis.gl/react-google-maps';
-import { useState, useEffect, useRef } from "react"
+import { AdvancedMarker, APIProvider, Map } from '@vis.gl/react-google-maps';
+import { useState, useRef } from "react"
 import Directions from "../components/Directions";
 import { Markers } from "../components/Markers";
 import { getNextThreeTrains, countDecimals } from "../utils/utils";
@@ -17,11 +17,17 @@ export default function RoutePlanner() {
     const firstSubmit = useRef(false)
     const position = { lat: 37.668819, lng: -122.080795}
 
-    const handleClick = (e: React.FormEvent) => {
-        if (!(trip["origin"] === "" || trip["origin"] === "Select" 
-            || trip.destination === "" || trip.destination === "Select")) {
+    const handleClick = async(e: React.FormEvent) => {
+        if (!(trip.origin === "" || trip.origin === "Select" || trip.destination === "" || trip.destination === "Select")) {
             setFlag(!flag)
             firstSubmit.current = true
+            const response = await fetch(`https://bug-free-space-meme-956jrx6xpjx29xr4-8000.app.github.dev/route-planner/${trip.origin}/${trip.destination}/?date=2024-08-13&time=08:00:00`)
+            const data = await response.json()
+            console.log(data)
+            const nextThreeTrains = getNextThreeTrains(data.trains)
+            // console.log(nextThreeTrains)
+            setFares(data.fares)
+            setTrains([...nextThreeTrains])
         }
     }
 
@@ -29,20 +35,6 @@ export default function RoutePlanner() {
         setTrip({...trip, [e.target.id]: e.target.value})
         console.log(e.target.id, e.target.value)
     }
-
-    useEffect(() => {
-        const fetchData = async() => {
-            const response = await fetch(`https://bug-free-space-meme-956jrx6xpjx29xr4-8000.app.github.dev/route-planner/${trip['origin']}/${trip.destination}/?date=2024-08-13&time=08:00:00`)
-            const data = await response.json()
-            console.log(data)
-            const nextThreeTrains = getNextThreeTrains(data.trains)
-            // console.log(nextThreeTrains)
-            setFares(data.fares)
-            setTrains([...nextThreeTrains])
-
-        }
-        fetchData()
-    }, [flag])
   
     // console.log(trains)
     // console.log(trip)
@@ -98,8 +90,8 @@ export default function RoutePlanner() {
                         mapTypeControl={false}
                     >
                         <Markers points={stationList}/>
-                        { trip["origin"] && trip.destination && 
-                        <Directions flag={flag} firstSubmit={firstSubmit.current} origin={findStation(trip["origin"])} destination={findStation(trip["destination"]) }/> 
+                        { trip.origin && trip.destination && 
+                        <Directions flag={flag} firstSubmit={firstSubmit.current} origin={findStation(trip.origin)} destination={findStation(trip["destination"]) }/> 
                         }
                     </Map>
                 </APIProvider>
