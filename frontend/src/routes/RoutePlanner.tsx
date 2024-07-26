@@ -3,6 +3,8 @@ import IncomingTrainsContainer from "../components/IncomingTrainsContainer"
 import { stationList, findStation } from "../utils/stations"
 import { AdvancedMarker, APIProvider, Map } from '@vis.gl/react-google-maps';
 import { useState, useRef } from "react"
+import { AdvancedMarker, APIProvider, Map } from '@vis.gl/react-google-maps';
+import { useState, useRef } from "react"
 import Directions from "../components/Directions";
 import { Markers } from "../components/Markers";
 import { getNextThreeTrains, countDecimals, sortFares } from "../utils/utils";
@@ -19,6 +21,8 @@ export default function RoutePlanner() {
 
     const handleClick = async(e: React.FormEvent) => {
         if (!(trip.origin === "" || trip.origin === "Select" || trip.destination === "" || trip.destination === "Select")) {
+    const handleClick = async(e: React.FormEvent) => {
+        if (!(trip.origin === "" || trip.origin === "Select" || trip.destination === "" || trip.destination === "Select")) {
             setFlag(!flag)
             firstSubmit.current = true
             const response = await fetch(`https://bug-free-space-meme-956jrx6xpjx29xr4-8000.app.github.dev/route-planner/${trip.origin}/${trip.destination}/?date=2024-08-13&time=08:00:00`)
@@ -26,17 +30,18 @@ export default function RoutePlanner() {
             console.log(data)
             const nextThreeTrains = getNextThreeTrains(data.trains)
             // console.log(nextThreeTrains)
-            setFares(sortFares(data.fares))
-            console.log(data.fares)
+            setFares(data.fares)
             setTrains([...nextThreeTrains])
         }
     }
 
     const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setTrip({...trip, [e.target.id]: e.target.value})
-        // console.log(e.target.id, e.target.value)
+        console.log(e.target.id, e.target.value)
     }
- 
+  
+    // console.log(trains)
+    // console.log(trip)
     return (
         <div className="row-span-7 grid grid-cols-5 mt-2">
             <div className="bg-slate-200 grid grid-rows-6 gap-4 col-span-2 border-r-2 border-black py-2 px-6">
@@ -92,10 +97,8 @@ export default function RoutePlanner() {
                         disableDefaultUI={true}
                     >
                         <Markers points={stationList}/>
-                        { trip.origin && trip.destination && trains.length !== 0 &&
-                        <Directions flag={flag} firstSubmit={firstSubmit.current} origin={findStation(trip.origin)} 
-                            destination={findStation(trip["destination"])} trainColor={trains[0].TrainColor}
-                        /> 
+                        { trip.origin && trip.destination && 
+                        <Directions flag={flag} firstSubmit={firstSubmit.current} origin={findStation(trip.origin)} destination={findStation(trip["destination"]) }/> 
                         }
                     </Map>
                 </APIProvider>
