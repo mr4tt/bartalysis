@@ -28,7 +28,9 @@ from .views import (
 
     RoutePlannerView,
     AlertInfoView,
-    StopTimeUpdateView
+    FareView,
+    StopTimeUpdateView,
+    ServiceInfoView,
 )
 
 router = DefaultRouter()
@@ -60,8 +62,8 @@ urlpatterns = [
     path('router/', include(router.urls)), # API routes
     path('api/departures/', get_departures, name='departures'), # For testing purposes only. Returns JSON data from BART API.
     path('route-planner/<str:start_station>/<str:end_station>/', RoutePlannerView.as_view(), name='route_planner'),
-
-    # Endpoints
     path('api/alerts/', AlertInfoView.as_view(), name='alerts'),
+    path('api/fare', FareView.as_view(), name='fare'),
     path('api/stop_time_updates/<str:stop_id>/', StopTimeUpdateView.as_view(), name='stop_time_updates'),
+    path('service-info/', ServiceInfoView.as_view(), name='service-info'),
 ]
