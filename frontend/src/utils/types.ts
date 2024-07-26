@@ -17,7 +17,7 @@ export interface stationTypeArr {
 export interface train {
     "ArrivalTime": string,
     "DepartureTime": string,
-    "EndingId": string,
+    "EndingID": string,
     "StartingID": string,
     "TrainColor": string,
     "TrainDescription": string,

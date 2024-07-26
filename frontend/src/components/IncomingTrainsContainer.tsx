@@ -2,6 +2,7 @@ import React from "react";
 import { train } from "../utils/types";
 
 export default function IncomingTrainsContainer({ train }: { train: train }) {
+    console.log(train)
     return (
         <div className="bg-slate-500 px-4 py-2 grid gap-2">
             <p>{train.TrainDescription}</p>
