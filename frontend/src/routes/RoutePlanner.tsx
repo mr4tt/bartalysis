@@ -33,12 +33,12 @@ export default function RoutePlanner() {
         const fetchData = async() => {
             const response = await fetch(`https://bug-free-space-meme-956jrx6xpjx29xr4-8000.app.github.dev/route-planner/${trip['origin']}/${trip.destination}/?date=2024-08-13&time=08:00:00`)
             const data = await response.json()
+            console.log(data)
             const nextThreeTrains = getNextThreeTrains(data.trains)
-            console.log(nextThreeTrains)
+            // console.log(nextThreeTrains)
             setTrains([...nextThreeTrains])
         }
-        
-        fetchData()
+        if (flag) fetchData()
     }, [flag])
   
     // console.log(trains)
