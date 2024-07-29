@@ -2,7 +2,7 @@ import React from 'react';
 import { describe, it, expect } from 'vitest';
 import { findStation, stationList } from '../src/utils/stations'
 
-describe("stations.ts file", () => {
+describe("stations.ts", () => {
     const fremontStation = stationList[20]
     const result = findStation("FRMT")
 
@@ -10,7 +10,7 @@ describe("stations.ts file", () => {
         expect(fremontStation).toEqual(result)
     })
 
-    it("object has correct properties and value types", () => {
+    it("should have correct properties", () => {
         expect(fremontStation).toHaveProperty("name")
         expect(fremontStation).toHaveProperty("abbr")
         expect(fremontStation).toHaveProperty("lat")
@@ -22,7 +22,7 @@ describe("stations.ts file", () => {
         expect(fremontStation).toHaveProperty("zipcode")
     })
 
-    it("lat and lng property are floats after converting from string", () => {
+    it("should have correct types", () => {
         expect(parseFloat(fremontStation.lat)).not.toBe(Math.floor(parseFloat(fremontStation.lat)))
     })
 })

@@ -16,7 +16,7 @@ exports[`RoutePlanner > renders RoutePlanner 1`] = `
         >
           <label
             class="text-lg"
-            for="starting-point"
+            for="origin"
           >
             Origin
           </label>
@@ -25,8 +25,8 @@ exports[`RoutePlanner > renders RoutePlanner 1`] = `
           >
             <select
               class="w-1/2"
-              id="starting-point"
-              name="starting-point"
+              id="origin"
+              name="origin"
             >
               <option>
                 Select
@@ -568,150 +568,35 @@ exports[`RoutePlanner > renders RoutePlanner 1`] = `
         class="bg-slate-400 row-span-5 grid grid-cols-5 gap-2"
       >
         <div
-          class="col-span-1 grid grid-rows-5 "
+          class="col-span-3 grid grid-rows-10 gap-2"
         >
-          <p
-            class="row-span-1 font-bold border-b-2 border-black"
+          <div
+            class="font-bold row-span-1 bg-slate-500 p-2 flex items-center justify-center"
           >
             Trains
-          </p>
-          <p
-            class="row-span-4 font-bold border-b-2 border-black"
+          </div>
+          <div
+            class="grid grid-row-3 gap-2 row-span-9"
           >
-            Departing
-          </p>
+            <div
+              class="bg-slate-500 h-full"
+            />
+          </div>
         </div>
         <div
-          class="flex justify-evenly col-span-4 gap-2"
+          class="col-span-2 grid gap-2 grid-rows-10"
         >
+          <p
+            class="bg-slate-500 font-bold grid justify-items-center items-center p-2 row-span-1"
+          >
+            Price
+          </p>
           <div
-            class="grid grid-rows-5 bg-slate-600 py-2 px-6 rounded-sm"
+            class="bg-slate-500 self-start row-span-9  grid gap-2"
           >
             <div
-              class="row-span-1"
-            >
-              Destination
-            </div>
-            <div
-              class="row-span-4 grid gap-2 justify-items-center"
-            >
-              <div
-                class=""
-              >
-                <p>
-                  Incoming train #1:
-                </p>
-                <p>
-                  X mins
-                </p>
-              </div>
-              <div
-                class=""
-              >
-                <p>
-                  Incoming train #2:
-                </p>
-                <p>
-                  X mins
-                </p>
-              </div>
-              <div
-                class=""
-              >
-                <p>
-                  Incoming train #3:
-                </p>
-                <p>
-                  X mins
-                </p>
-              </div>
-            </div>
-          </div>
-          <div
-            class="grid grid-rows-5 bg-slate-600 py-2 px-6 rounded-sm"
-          >
-            <div
-              class="row-span-1"
-            >
-              Destination
-            </div>
-            <div
-              class="row-span-4 grid gap-2 justify-items-center"
-            >
-              <div
-                class=""
-              >
-                <p>
-                  Incoming train #1:
-                </p>
-                <p>
-                  X mins
-                </p>
-              </div>
-              <div
-                class=""
-              >
-                <p>
-                  Incoming train #2:
-                </p>
-                <p>
-                  X mins
-                </p>
-              </div>
-              <div
-                class=""
-              >
-                <p>
-                  Incoming train #3:
-                </p>
-                <p>
-                  X mins
-                </p>
-              </div>
-            </div>
-          </div>
-          <div
-            class="grid grid-rows-5 bg-slate-600 py-2 px-6 rounded-sm"
-          >
-            <div
-              class="row-span-1"
-            >
-              Destination
-            </div>
-            <div
-              class="row-span-4 grid gap-2 justify-items-center"
-            >
-              <div
-                class=""
-              >
-                <p>
-                  Incoming train #1:
-                </p>
-                <p>
-                  X mins
-                </p>
-              </div>
-              <div
-                class=""
-              >
-                <p>
-                  Incoming train #2:
-                </p>
-                <p>
-                  X mins
-                </p>
-              </div>
-              <div
-                class=""
-              >
-                <p>
-                  Incoming train #3:
-                </p>
-                <p>
-                  X mins
-                </p>
-              </div>
-            </div>
+              class="bg-slate-500 h-full"
+            />
           </div>
         </div>
       </div>
