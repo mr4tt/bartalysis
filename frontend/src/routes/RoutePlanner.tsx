@@ -27,6 +27,7 @@ export default function RoutePlanner() {
             const nextThreeTrains = getNextThreeTrains(data.trains)
             // console.log(nextThreeTrains)
             setFares(data.fares)
+            console.log(data.fares)
             setTrains([...nextThreeTrains])
         }
     }
