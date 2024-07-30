@@ -60,7 +60,7 @@ SELECT DISTINCT
     st1.departure_time AS DepartureTime, 
     st2.arrival_time AS ArrivalTime
 FROM trips t
-JOIN stop_times st1 ON t.trip_id = st1.trip_id AND st1.stop_id = 'MCAR'
+JOIN stop_times st1 ON t.trip_id = st1.trip_id AND st1.stop_id = 'SHAY'
 JOIN stop_times st2 ON t.trip_id = st2.trip_id AND st2.stop_id = 'FRMT'
 JOIN routes r ON t.route_id = r.route_id
 JOIN calendar c ON t.service_id = c.service_id
@@ -107,18 +107,16 @@ FROM (
 .output stdout
 
 
--- -- Queries producing service information based on realtime and static data for comparison.
-
--- -- Realtime mass data
--- .output result3.txt
--- SELECT
---     datetime(departure_time - (8 * 3600), 'unixepoch') AS readable_departure_time,
---     stop_id,
---     trip_id
--- FROM realtime_stop_time_updates
--- WHERE stop_id = 'SHAY'
--- ORDER BY departure_time;
--- .output stdout
+-- Query producing service information based on realtime data
+.output result3.txt
+SELECT
+    datetime(departure_time - (8 * 3600), 'unixepoch') AS readable_departure_time,
+    stop_id,
+    trip_id
+FROM realtime_stop_time_updates
+WHERE stop_id = 'SHAY'
+ORDER BY departure_time;
+.output stdout
 
 -- .output result4.txt
 -- SELECT 
