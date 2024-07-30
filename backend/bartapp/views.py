@@ -13,6 +13,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 
+from .graph_utils import build_graph, update_with_realtime, dijkstra
+
 from .models import (
     Agency, 
     FeedInfo,
@@ -35,7 +37,6 @@ from .models import (
     RealtimeStopTimeUpdate,
     RealtimeAlert,
     RealtimeTrip,
-
 )
 
 from .serializers import (
@@ -292,7 +293,14 @@ class RoutePlannerView(APIView):
         }
 
         return Response(response_data, status=status.HTTP_200_OK)
-        
+
+class PlanRouteView(APIView):
+    def get(self, request, start_stop_id, end_stop_id):
+        graph = build_graph()
+        graph = update_with_realtime(graph)
+        path, duration = dijkstra(graph, start_stop_id, end_stop_id)
+        return Response({'path': path, 'duration': duration})
+
 class AlertInfoView(APIView):
     def get(self, request):
         alerts = RealtimeAlert.objects.values_list('info', flat=True)
