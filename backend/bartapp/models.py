@@ -205,7 +205,7 @@ class CalendarDate(models.Model):
         unique_together = ['service_id', 'exception_type', 'date']
 
 class RealtimeTrip(models.Model):
-    trip_id = models.IntegerField(primary_key=True)
+    trip_id = models.OneToOneField(Trip, on_delete=models.CASCADE, db_constraint=False, primary_key=True, db_column='trip_id')
     schedule_relationship = models.TextField()
     vehicle = models.TextField()
 
