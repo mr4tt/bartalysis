@@ -37,7 +37,7 @@ export default function RoutePlanner() {
         console.log(e.target.id, e.target.value)
     }
   
-    // console.log(trains)
+    console.log(trains)
     // console.log(trip)
     return (
         <div className="row-span-7 grid grid-cols-5 mt-2">
@@ -64,7 +64,7 @@ export default function RoutePlanner() {
                     
                     <div className="col-span-2 grid gap-2 grid-rows-10">
                         <p className="bg-slate-500 font-bold grid justify-items-center items-center p-2 row-span-1">Price</p>
-                        <div className="bg-slate-500 self-start row-span-9  grid gap-2">
+                        <div className="bg-slate-500 self-start row-span-9 grid gap-2">
                             { fares.length !== 0 
                                 ? fares.map((fare: fare, i) => {
                                     return (
@@ -74,8 +74,8 @@ export default function RoutePlanner() {
                                         </div>
                                     )
                                 })
-                            : <div className="bg-slate-500 h-full"></div>
-                        }
+                                : <div className="bg-slate-500 h-full"></div>
+                            }
                         </div>
                     </div>
                 </div>  
@@ -91,8 +91,10 @@ export default function RoutePlanner() {
                         mapTypeControl={false}
                     >
                         <Markers points={stationList}/>
-                        { trip.origin && trip.destination && 
-                        <Directions flag={flag} firstSubmit={firstSubmit.current} origin={findStation(trip.origin)} destination={findStation(trip["destination"]) }/> 
+                        { trip.origin && trip.destination && trains.length !== 0 &&
+                        <Directions flag={flag} firstSubmit={firstSubmit.current} origin={findStation(trip.origin)} 
+                            destination={findStation(trip["destination"])} trainColor={trains[0].TrainColor}
+                        /> 
                         }
                     </Map>
                 </APIProvider>
