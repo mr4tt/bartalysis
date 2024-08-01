@@ -5,14 +5,14 @@ import { AdvancedMarker, APIProvider, Map } from '@vis.gl/react-google-maps';
 import { useState, useRef } from "react"
 import Directions from "../components/Directions";
 import { Markers } from "../components/Markers";
-import { getNextThreeTrains, countDecimals } from "../utils/utils";
+import { getNextThreeTrains, countDecimals, sortFares } from "../utils/utils";
 import { train, fare } from "../utils/types";
 import StationForm from "../components/StationForm";
 
 export default function RoutePlanner() {
     const [trip, setTrip] = useState({ "origin": "", "destination" : "" })
     const [trains, setTrains] = useState<train[]>([])
-    const [fares, setFares] = useState([])
+    const [fares, setFares] = useState<fare[]>([])
     const [flag, setFlag] = useState(false)
     const firstSubmit = useRef(false)
     const position = { lat: 37.668819, lng: -122.080795}
@@ -26,7 +26,7 @@ export default function RoutePlanner() {
             console.log(data)
             const nextThreeTrains = getNextThreeTrains(data.trains)
             // console.log(nextThreeTrains)
-            setFares(data.fares)
+            setFares(sortFares(data.fares))
             console.log(data.fares)
             setTrains([...nextThreeTrains])
         }
@@ -34,11 +34,9 @@ export default function RoutePlanner() {
 
     const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setTrip({...trip, [e.target.id]: e.target.value})
-        console.log(e.target.id, e.target.value)
+        // console.log(e.target.id, e.target.value)
     }
-  
-    console.log(trains)
-    // console.log(trip)
+ 
     return (
         <div className="row-span-7 grid grid-cols-5 mt-2">
             <div className="bg-slate-200 grid grid-rows-6 gap-4 col-span-2 border-r-2 border-black py-2 px-6">
