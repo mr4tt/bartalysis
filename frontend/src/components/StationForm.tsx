@@ -7,7 +7,7 @@ export default function StationForm({ handleChange, location }: { handleChange: 
         <div className="rounded-sm flex justify-center flex-col gap-2">
             <label htmlFor={`${location.toLowerCase()}`} className="text-lg">{ location }</label>
             <form action="">
-                <select name={`${location.toLowerCase()}`} id={`${location.toLowerCase()}`} onChange={ handleChange } className="w-1/2">
+                <select name={`${location.toLowerCase()}`} id={`${location.toLowerCase()}`} onChange={ handleChange } className="w-1/2 rounded-sm px-2 py-1">
                     <option defaultValue={"initial"}>Select</option>
                     { stationList.map((obj, i) => {
                         return <option value={obj.abbr} key={i}>{obj.name}</option>
