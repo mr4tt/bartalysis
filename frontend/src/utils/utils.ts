@@ -20,8 +20,9 @@ export const countDecimals = (val: number) => {
 
 export const sortFares = (fares: fare[]) => {
     const res = fares
+    console.log(res)
     for (let i = 0; i < res.length; i++) {
-        let minPrice = 9999
+        let minPrice = res[i].Price
         let minIndex = i
         for (let j = i + 1; j < res.length; j++) {
             if (res[j].Price < minPrice) {
