@@ -15,7 +15,7 @@ export default function RoutePlanner() {
     const [fares, setFares] = useState<fare[]>([])
     const [flag, setFlag] = useState(false)
     const firstSubmit = useRef(false)
-    const position = { lat: 37.668819, lng: -122.080795}
+    const position = { lat: 37.668819, lng: -122.080795 }
 
     const handleClick = async(e: React.FormEvent) => {
         if (!(trip.origin === "" || trip.origin === "Select" || trip.destination === "" || trip.destination === "Select")) {
@@ -85,11 +85,11 @@ export default function RoutePlanner() {
             <div className="col-span-3 h-screen w-full">
                 <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}>
                     <Map
-                        center={position}
-                        zoom={10}
+                        defaultCenter={position}
+                        defaultZoom={10}
                         mapId={import.meta.env.VITE_MAP_ID}
-                        streetViewControl={false}
-                        mapTypeControl={false}
+                        gestureHandling={'greedy'}
+                        disableDefaultUI={true}
                     >
                         <Markers points={stationList}/>
                         { trip.origin && trip.destination && trains.length !== 0 &&
