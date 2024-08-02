@@ -71,6 +71,7 @@ from .serializers import (
     TripsSummarySerializer,
     RealtimeTripSummarySerializer,
     RealtimeStopTimeUpdateSummarySerializer,
+    LateTripsViewSerializer,
 )
 
 # Homepage initial response
