@@ -655,45 +655,8 @@ class StopTimeUpdateView(APIView):
             return Response({'error': 'stop_id is required'}, status=400)
         serializer = RealtimeStopTimeUpdateSerializerForStopTimeUpdateView(stop_time_updates, many=True)
         return Response(serializer.data)
-
-# class LateTripsView(APIView):
-#     def get(self, request):
-#         late_subquery = (
-#             RealtimeStopTimeUpdate.objects
-#             .select_related('trip_id__trip_id__route_id')
-#             .filter(
-#                 arrival_delay__gt=0, 
-#                 trip_id__trip_id__route_id=OuterRef('pk')
-#             )
-#             .values('trip_id__trip_id__route_id')
-#             .annotate(count=Count('trip_id__trip_id', distinct=True))
-#             .values('count')
-#         )
-
-#         total_subquery = (
-#             RealtimeStopTimeUpdate.objects
-#             .select_related('trip_id__trip_id__route_id')
-#             .filter(
-#                 trip_id__trip_id__route_id=OuterRef('pk')
-#             )
-#             .values('trip_id__trip_id__route_id')
-#             .annotate(count=Count('trip_id__trip_id', distinct=True))
-#             .values('count')
-#         )
         
-#         routes_with_counts = (
-#             Route.objects
-#             .annotate(
-#                 late_count=Subquery(late_subquery),
-#                 total_count=Subquery(total_subquery)
-#             )
-#             .filter(late_count__isnull=False)
-#             .values('route_id', 'late_count', 'total_count')
-#         )
-
-        return Response(routes_with_counts)
-
-class ActiveTrainsView(APIView):
+class ServiceInfoView(APIView):
     def get(self, request):
         load_dotenv()
         api_key = os.getenv('API_KEY')
