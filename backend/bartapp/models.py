@@ -102,7 +102,7 @@ class Stop(models.Model):
         return self.stop_name
 
 class Trip(models.Model):
-    route_id = models.TextField()
+    route_id = models.ForeignKey(Route, on_delete=models.CASCADE, db_column='route_id')
     service_id = models.TextField()
     trip_id = models.IntegerField(primary_key=True)
     trip_headsign = models.TextField()
