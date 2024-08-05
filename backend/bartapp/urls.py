@@ -31,6 +31,7 @@ from .views import (
     FareView,
     StopTimeUpdateView,
     LateTripsView,
+    ActiveTrainsView,
     PlanRouteView
 )
 
@@ -66,7 +67,8 @@ urlpatterns = [
     path('api/alerts/', AlertInfoView.as_view(), name='alerts'),
     path('api/fare', FareView.as_view(), name='fare'),
     path('api/stop_time_updates/<str:stop_id>/', StopTimeUpdateView.as_view(), name='stop_time_updates'),
-    path('api /late-trips/', LateTripsView.as_view(), name='late-trips'),
+    path('api/late-trips/', LateTripsView.as_view(), name='late-trips'),
+    path('api/active-trains/', ActiveTrainsView.as_view(), name='active-trains'),
     
     path('plan_route/<str:start_stop_id>/<str:end_stop_id>/', PlanRouteView.as_view(), name='plan_route'),
 ]
