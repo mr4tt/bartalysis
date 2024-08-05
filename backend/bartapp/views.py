@@ -666,3 +666,48 @@ class ServiceInfoView(APIView):
         data = response.json().get('root').get('traincount')
 
         return Response(data)
+        late_subquery = (
+            RealtimeStopTimeUpdate.objects
+            .select_related('trip_id__trip_id__route_id')
+            .filter(
+                arrival_delay__gt=0, 
+                trip_id__trip_id__route_id=OuterRef('pk')
+            )
+            .values('trip_id__trip_id__route_id')
+            .annotate(count=Count('trip_id__trip_id', distinct=True))
+            .values('count')
+        )
+
+        total_subquery = (
+            RealtimeStopTimeUpdate.objects
+            .select_related('trip_id__trip_id__route_id')
+            .filter(
+                trip_id__trip_id__route_id=OuterRef('pk')
+            )
+            .values('trip_id__trip_id__route_id')
+            .annotate(count=Count('trip_id__trip_id', distinct=True))
+            .values('count')
+        )
+        
+        routes_with_counts = (
+            Route.objects
+            .annotate(
+                late_count=Subquery(late_subquery),
+                total_count=Subquery(total_subquery)
+            )
+            .filter(late_count__isnull=False)
+            .values('route_id', 'late_count', 'total_count')
+        )
+
+        return Response(routes_with_counts)
+
+class ActiveTrainsView(APIView):
+    def get(self, request):
+        load_dotenv()
+        api_key = os.getenv('API_KEY')
+        api_url = f'https://api.bart.gov/api/bsa.aspx?cmd=count&key={api_key}&json=y'
+        
+        response = requests.get(api_url)
+        data = response.json().get('root').get('traincount')
+
+        return Response(data)
