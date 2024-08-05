@@ -1,5 +1,7 @@
 import requests
 from datetime import datetime
+from dotenv import load_dotenv
+import os
 
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
@@ -67,7 +69,6 @@ from .serializers import (
     TripsSummarySerializer,
     RealtimeTripSummarySerializer,
     RealtimeStopTimeUpdateSummarySerializer,
-    LateTripsViewSerializer,
 )
 
 # Homepage initial response
@@ -360,3 +361,14 @@ class LateTripsView(APIView):
         )
 
         return Response(routes_with_counts)
+
+class ActiveTrainsView(APIView):
+    def get(self, request):
+        load_dotenv()
+        api_key = os.getenv('API_KEY')
+        api_url = f'https://api.bart.gov/api/bsa.aspx?cmd=count&key={api_key}&json=y'
+        
+        response = requests.get(api_url)
+        data = response.json().get('root').get('traincount')
+
+        return Response(data)
