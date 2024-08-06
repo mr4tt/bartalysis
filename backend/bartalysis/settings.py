@@ -66,17 +66,6 @@ CORS_ALLOW_ALL_ORIGINS = True
 #     "https://bug-free-space-meme-956jrx6xpjx29xr4-5173.app.github.dev"
 # ]
 
-CORS_ALLOW_ALL_ORIGINS = True
-# CORS_ORIGIN_ALLOW_ALL = True
-
-# # CORS_ALLOWED_ORIGINS = [
-# #     'https://bug-free-space-meme-956jrx6xpjx29xr4-5173.app.github.dev',
-# #     'https://bug-free-space-meme-956jrx6xpjx29xr4-8000.app.github.dev'
-# # ]
-
-# CORS_ALLOWED_ORIGINS = [
-#     "https://bug-free-space-meme-956jrx6xpjx29xr4-5173.app.github.dev"
-# ]
 
 ROOT_URLCONF = "bartalysis.urls"
 
