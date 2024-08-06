@@ -28,7 +28,6 @@ from .views import (
 
     RoutePlannerView,
     # RoutePlannerView2,
-    # RoutePlannerView2,
     AlertInfoView,
     FareView,
     StopTimeUpdateView,
