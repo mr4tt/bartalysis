@@ -17,7 +17,7 @@ export default function RoutePlanner() {
     const firstSubmit = useRef(false)
     const position = { lat: 37.668819, lng: -122.080795 }
 
-    const handleClick = async(e: React.FormEvent) => {
+    const handleClick = async(e: React.MouseEvent<HTMLButtonElement>) => {
         if (!(trip.origin === "" || trip.origin === "Select" || trip.destination === "" || trip.destination === "Select")) {
             setFlag(!flag)
             firstSubmit.current = true

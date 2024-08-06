@@ -1,4 +1,5 @@
 import { train, fare } from "./types"
+import { DateTime } from "luxon";
 
 export const getNextThreeTrains = (trains: train[]) => {
     let counter = 0
@@ -20,7 +21,6 @@ export const countDecimals = (val: number) => {
 
 export const sortFares = (fares: fare[]) => {
     const res = fares
-    console.log(res)
     for (let i = 0; i < res.length; i++) {
         let minPrice = res[i].Price
         let minIndex = i
@@ -37,4 +37,21 @@ export const sortFares = (fares: fare[]) => {
         }
     }
     return res
+}
+
+export const updateTime = (time: string) => {
+    if (time >= "13:00:00") {
+        let parsedTime = DateTime.fromFormat(time, "HH:mm:ss");
+        parsedTime = parsedTime.minus({ hours: 12 });
+        let formattedTime = parsedTime.toFormat("HH:mm:ss");
+        if (formattedTime < "10:00:00") {
+            return formattedTime.slice(1, formattedTime.length - 3) + " pm";
+        }
+        return formattedTime.slice(0, formattedTime.length - 3) + " pm";
+    } else if (time >= "12:00:00" && time < "13:00:00") {
+        return time.slice(0, time.length - 3) + " pm";
+    } else if (time >= "10:00:00") {
+        return time.slice(0, time.length - 3) + " am"
+    }
+    return time.slice(1, time.length - 3) + " am"
 }
