@@ -1,10 +1,13 @@
 import requests
 from datetime import datetime
+from dotenv import load_dotenv
+import os
 
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
 from django.db import connection, connections
 from django.utils import timezone
+from django.db.models import F, OuterRef, Subquery, Count
 
 # import pytz
 
@@ -35,7 +38,6 @@ from .models import (
     RealtimeStopTimeUpdate,
     RealtimeAlert,
     RealtimeTrip,
-
 )
 
 from .serializers import (
@@ -66,7 +68,7 @@ from .serializers import (
     StopSummarySerializer,
     TripsSummarySerializer,
     RealtimeTripSummarySerializer,
-    RealtimeStopTimeUpdateSummarySerializer
+    RealtimeStopTimeUpdateSummarySerializer,
 )
 
 # Homepage initial response
@@ -322,27 +324,51 @@ class StopTimeUpdateView(APIView):
             return Response({'error': 'stop_id is required'}, status=400)
         serializer = RealtimeStopTimeUpdateSerializerForStopTimeUpdateView(stop_time_updates, many=True)
         return Response(serializer.data)
-        
-class ServiceInfoView(APIView):
+
+class LateTripsView(APIView):
     def get(self, request):
-        routes = Route.objects.all()
-        stops = Stop.objects.all()
-        trips = Trip.objects.all()
-        realtime_trips = RealtimeTrip.objects.all()
-        realtime_stop_time_updates = RealtimeStopTimeUpdate.objects.all()
+        late_subquery = (
+            RealtimeStopTimeUpdate.objects
+            .select_related('trip_id__trip_id__route_id')
+            .filter(
+                arrival_delay__gt=0, 
+                trip_id__trip_id__route_id=OuterRef('pk')
+            )
+            .values('trip_id__trip_id__route_id')
+            .annotate(count=Count('trip_id__trip_id', distinct=True))
+            .values('count')
+        )
 
-        route_serializer = RouteSummarySerializer(routes, many=True)
-        stop_serializer = StopSummarySerializer(stops, many=True)
-        trip_serializer = TripsSummarySerializer(trips, many=True)
-        realtime_trip_serializer = RealtimeTripSummarySerializer(realtime_trips, many=True)
-        realtime_stop_time_update_serializer = RealtimeStopTimeUpdateSummarySerializer(realtime_stop_time_updates, many=True)
+        total_subquery = (
+            RealtimeStopTimeUpdate.objects
+            .select_related('trip_id__trip_id__route_id')
+            .filter(
+                trip_id__trip_id__route_id=OuterRef('pk')
+            )
+            .values('trip_id__trip_id__route_id')
+            .annotate(count=Count('trip_id__trip_id', distinct=True))
+            .values('count')
+        )
+        
+        routes_with_counts = (
+            Route.objects
+            .annotate(
+                late_count=Subquery(late_subquery),
+                total_count=Subquery(total_subquery)
+            )
+            .filter(late_count__isnull=False)
+            .values('route_id', 'late_count', 'total_count')
+        )
 
-        service_info = {
-            "routes": route_serializer.data,
-            "stops": stop_serializer.data,
-            "trips": trip_serializer.data,
-            "realtime_trips": realtime_trip_serializer.data,
-            "realtime_stop_time_updates": realtime_stop_time_update_serializer.data
-        }
+        return Response(routes_with_counts)
 
-        return Response(service_info, status=status.HTTP_200_OK)
+class ActiveTrainsView(APIView):
+    def get(self, request):
+        load_dotenv()
+        api_key = os.getenv('API_KEY')
+        api_url = f'https://api.bart.gov/api/bsa.aspx?cmd=count&key={api_key}&json=y'
+        
+        response = requests.get(api_url)
+        data = response.json().get('root').get('traincount')
+
+        return Response(data)

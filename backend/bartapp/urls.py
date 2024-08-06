@@ -30,7 +30,8 @@ from .views import (
     AlertInfoView,
     FareView,
     StopTimeUpdateView,
-    ServiceInfoView,
+    LateTripsView,
+    ActiveTrainsView,
 )
 
 router = DefaultRouter()
@@ -65,5 +66,6 @@ urlpatterns = [
     path('api/alerts/', AlertInfoView.as_view(), name='alerts'),
     path('api/fare', FareView.as_view(), name='fare'),
     path('api/stop_time_updates/<str:stop_id>/', StopTimeUpdateView.as_view(), name='stop_time_updates'),
-    path('service-info/', ServiceInfoView.as_view(), name='service-info'),
+    path('api/late-trips/', LateTripsView.as_view(), name='late-trips'),
+    path('api/active-trains/', ActiveTrainsView.as_view(), name='active-trains'),
 ]
