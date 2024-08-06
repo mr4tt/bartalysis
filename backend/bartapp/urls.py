@@ -26,14 +26,19 @@ from .views import (
     RealtimeAlertViewSet,
     RealtimeTripViewSet,
 
-    RoutePlannerView,
+    # RoutePlannerView,
     # RoutePlannerView2,
     AlertInfoView,
     FareView,
     StopTimeUpdateView,
     LateTripsView,
     ActiveTrainsView,
-    PlanRouteView
+    # PlanRouteView,
+    StationInfoView,
+    StationScheduleView,
+    StationAccessView,
+    ScheduleInfoArriveView,
+    ScheduleInfoDepartView,
 )
 
 router = DefaultRouter()
@@ -64,7 +69,7 @@ urlpatterns = [
     path('', home, name='home'), # Home page
     path('router/', include(router.urls)), # API routes
     path('api/departures/', get_departures, name='departures'), # For testing purposes only. Returns JSON data from BART API.
-    path('route-planner/<str:start_station>/<str:end_station>/', RoutePlannerView.as_view(), name='route_planner'),
+    # path('route-planner/<str:start_station>/<str:end_station>/', RoutePlannerView.as_view(), name='route_planner'),
     # path('route-planner2/<str:start_station>/<str:end_station>/', RoutePlannerView2.as_view(), name='route_planner2'),
 
     path('api/alerts/', AlertInfoView.as_view(), name='alerts'),
@@ -72,6 +77,11 @@ urlpatterns = [
     path('api/stop_time_updates/<str:stop_id>/', StopTimeUpdateView.as_view(), name='stop_time_updates'),
     path('api/late-trips/', LateTripsView.as_view(), name='late-trips'),
     path('api/active-trains/', ActiveTrainsView.as_view(), name='active-trains'),
-    
-    path('plan_route/<str:start_station>/<str:end_station>/', PlanRouteView.as_view(), name='plan_route'),
+    # path('plan_route/<str:start_station>/<str:end_station>/', PlanRouteView.as_view(), name='plan_route'),
+    path('api/station-info/', StationInfoView.as_view(), name='station-info'),
+    path('api/station-schedule/', StationScheduleView.as_view(), name='station-schedule'),
+    path('api/station-access/', StationAccessView.as_view(), name='station-access'),
+    path('api/schedule-info-arrive/', ScheduleInfoArriveView.as_view(), name='schedule-info-arrive'),
+    path('api/schedule-info-depart/', ScheduleInfoDepartView.as_view(), name='schedule-info-depart'),
+
 ]

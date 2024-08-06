@@ -34,3 +34,4 @@ django.db
 
 backend/result*.txt
 postbart.db
+.env
