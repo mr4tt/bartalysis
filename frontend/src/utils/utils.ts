@@ -39,7 +39,7 @@ export const sortFares = (fares: fare[]) => {
     return res
 }
 
-export const updateTime = (time: string) => {
+export const formatTime = (time: string) => {
     if (time >= "13:00:00") {
         let parsedTime = DateTime.fromFormat(time, "HH:mm:ss");
         parsedTime = parsedTime.minus({ hours: 12 });

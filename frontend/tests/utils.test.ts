@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, expect, beforeEach } from 'vitest';
-import { getNextThreeTrains, countDecimals, sortFares } from "../src/utils/utils"
+import { getNextThreeTrains, countDecimals, sortFares, formatTime } from "../src/utils/utils"
 
 describe("utils.js", async() => {
     const now = new Date().toTimeString().slice(0,9)
@@ -43,10 +43,24 @@ describe("utils.js", async() => {
         expect(sortFares([{"Description": "", "FareID": 1, "Price": 1}])).toEqual([{"Description": "", "FareID": 1, "Price": 1}])
         expect(sortFares([{"Description": "", "FareID": 1, "Price": 1}]).length).toBe(1)
     })
+
+    it("should output the correct time format", () => {
+        const time1 = "01:59:00"
+        const time2 = "09:59:00"
+        const time3 = "10:00:00"
+        const time4 = "12:00:00"
+        const time5 = "13:00:00"
+        expect(formatTime(time1)).toBe("1:59 am")
+        expect(formatTime(time2)).toBe("9:59 am")
+        expect(formatTime(time3)).toBe("10:00 am")
+        expect(formatTime(time4)).toBe("12:00 pm")
+        expect(formatTime(time5)).toBe("1:00 pm")
+
+    })
 })
 
 const fetchData = async() => {
-    const response = await fetch('https://bug-free-space-meme-956jrx6xpjx29xr4-8000.app.github.dev/route-planner/DALY/SHAY/?date=2024-08-13&time=08:00:00')
+    const response = await fetch('https://bug-free-space-meme-956jrx6xpjx29xr4-8000.app.github.dev/route-planner/DALY/SHAY/?date=2024-08-15&time=08:00:00')
     const data = await response.json()
     const nextThreeTrains = getNextThreeTrains(data.trains)
    return nextThreeTrains

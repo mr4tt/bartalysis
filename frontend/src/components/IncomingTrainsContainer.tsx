@@ -1,6 +1,6 @@
 import React from "react";
 import { train } from "../utils/types";
-import { updateTime } from "../utils/utils";
+import { formatTime } from "../utils/utils";
 
 export default function IncomingTrainsContainer({ train }: { train: train }) {
     return (
@@ -8,8 +8,8 @@ export default function IncomingTrainsContainer({ train }: { train: train }) {
             <p>{train.TrainDescription}</p>
             <p>Train color: {train.TrainName.slice(0, train.TrainName.length - 2)}</p>
             <div className="flex justify-between items-center">
-                <p>Incoming at: <span className="font-bold">{updateTime(train.DepartureTime)}</span></p>
-                <p>ETA: <span className="font-bold">{updateTime(train.ArrivalTime)}</span></p>
+                <p>Incoming at: <span className="font-bold">{formatTime(train.DepartureTime)}</span></p>
+                <p>ETA: <span className="font-bold">{formatTime(train.ArrivalTime)}</span></p>
             </div>
         </div>
     )
