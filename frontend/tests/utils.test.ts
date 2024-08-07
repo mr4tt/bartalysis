@@ -8,7 +8,9 @@ describe("utils.js", async() => {
     let flag = true
 
     it("tests getNextTreeTrains function", () => {
+    it("tests getNextTreeTrains function", () => {
         for (let i = 0; i < nextThreeTrains.length; i++) {
+            if (nextThreeTrains[i].ArrivalTime < now) {
             if (nextThreeTrains[i].ArrivalTime < now) {
                 flag = false
                 return
