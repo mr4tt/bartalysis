@@ -2,8 +2,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import (
     home,
-    get_departures,
-    get_agencies,
+
     AgencyViewSet,
     RouteViewSet,
     StopViewSet,
@@ -26,16 +25,14 @@ from .views import (
     RealtimeAlertViewSet,
     RealtimeTripViewSet,
 
-    # RoutePlannerView,
-    # RoutePlannerView2,
     AlertInfoView,
     FareView,
-    StopTimeUpdateView,
     LateTripsView,
     ActiveTrainsView,
-    # PlanRouteView,
     StationInfoView,
+    StationRTInfoView,
     StationScheduleView,
+    AdvisoryElevatorInfoView,
     StationAccessView,
     ScheduleInfoArriveView,
     ScheduleInfoDepartView,
@@ -66,20 +63,16 @@ router.register(r'realtime_trips', RealtimeTripViewSet, basename='realtimetrip')
 
 
 urlpatterns = [
-    path('', home, name='home'), # Home page
-    path('router/', include(router.urls)), # API routes
-    path('api/departures/', get_departures, name='departures'), # For testing purposes only. Returns JSON data from BART API.
-    # path('route-planner/<str:start_station>/<str:end_station>/', RoutePlannerView.as_view(), name='route_planner'),
-    # path('route-planner2/<str:start_station>/<str:end_station>/', RoutePlannerView2.as_view(), name='route_planner2'),
-
+    path('', home, name='home'),
+    path('router/', include(router.urls)),
     path('api/alerts/', AlertInfoView.as_view(), name='alerts'),
-    path('api/fare', FareView.as_view(), name='fare'),
-    path('api/stop_time_updates/<str:stop_id>/', StopTimeUpdateView.as_view(), name='stop_time_updates'),
+    path('api/fare/', FareView.as_view(), name='fare'),
     path('api/late-trips/', LateTripsView.as_view(), name='late-trips'),
     path('api/active-trains/', ActiveTrainsView.as_view(), name='active-trains'),
-    # path('plan_route/<str:start_station>/<str:end_station>/', PlanRouteView.as_view(), name='plan_route'),
     path('api/station-info/', StationInfoView.as_view(), name='station-info'),
+    path('api/station-rt-info/', StationRTInfoView.as_view(), name='station-rt-info'),
     path('api/station-schedule/', StationScheduleView.as_view(), name='station-schedule'),
+    path('api/advisory-elevators/', AdvisoryElevatorInfoView.as_view(), name='advisory-elevators'),
     path('api/station-access/', StationAccessView.as_view(), name='station-access'),
     path('api/schedule-info-arrive/', ScheduleInfoArriveView.as_view(), name='schedule-info-arrive'),
     path('api/schedule-info-depart/', ScheduleInfoDepartView.as_view(), name='schedule-info-depart'),
