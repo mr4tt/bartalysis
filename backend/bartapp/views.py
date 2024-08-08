@@ -69,6 +69,7 @@ from .serializers import (
     TripsSummarySerializer,
     RealtimeTripSummarySerializer,
     RealtimeStopTimeUpdateSummarySerializer,
+    RouteSpecificSerializer,
 )
 
 # Homepage initial response
@@ -264,7 +265,30 @@ class StationInfoView(APIView):
         api_url = f'https://api.bart.gov/api/stn.aspx?cmd=stninfo&orig={station}&key={api_key}&json=y'
         
         response = requests.get(api_url)
-        data = response.json().get('root').get('stations').get('station')
+        
+        if response.status_code != 200:
+            return Response({'error': 'Failed to fetch station information from BART API'}, status=status.HTTP_502_BAD_GATEWAY)
+
+        if not response.content:
+            return Response({'error': 'Empty response from BART API'}, status=status.HTTP_502_BAD_GATEWAY)
+
+        try:
+            data = response.json().get('root').get('stations').get('station')
+        except ValueError:
+            return Response({'error': 'Invalid JSON response from BART API'}, status=status.HTTP_502_BAD_GATEWAY)
+
+        # Fetch route details from the database
+        north_routes = [route.replace('ROUTE ', '') for route in data.get('north_routes', {}).get('route', [])]
+        south_routes = [route.replace('ROUTE ', '') for route in data.get('south_routes', {}).get('route', [])]
+
+        north_route_details = Route.objects.filter(route_id__in=north_routes)
+        south_route_details = Route.objects.filter(route_id__in=south_routes)
+
+        north_routes_serialized = RouteSpecificSerializer(north_route_details, many=True).data
+        south_routes_serialized = RouteSpecificSerializer(south_route_details, many=True).data
+
+        data['north_routes'] = {'route': north_routes_serialized}
+        data['south_routes'] = {'route': south_routes_serialized}
 
         return Response(data)
 
@@ -295,9 +319,29 @@ class StationScheduleView(APIView):
         
         response = requests.get(api_url)
         
-        data = response.json()
-        root = data.get('root')
-        station_schedule = root.get('station')
+        if response.status_code != 200:
+            return Response({'error': 'Failed to fetch station schedule from BART API'}, status=status.HTTP_502_BAD_GATEWAY)
+
+        if not response.content:
+            return Response({'error': 'Empty response from BART API'}, status=status.HTTP_502_BAD_GATEWAY)
+
+        try:
+            data = response.json()
+            root = data.get('root')
+            station_schedule = root.get('station')
+        except ValueError:
+            return Response({'error': 'Invalid JSON response from BART API'}, status=status.HTTP_502_BAD_GATEWAY)
+
+        # Fetch route details from the database
+        items = station_schedule.get('item', [])
+        route_ids = [item.get('@line').split()[-1] for item in items]  # Extract numeric part from "ROUTE X"
+        route_details = Route.objects.filter(route_id__in=route_ids)
+        route_map = {str(route.route_id): RouteSpecificSerializer(route).data for route in route_details}
+
+        for item in items:
+            route_id = item.get('@line').split()[-1]  # Extract numeric part from "ROUTE X"
+            item['route_details'] = route_map.get(route_id, {})
+
         return Response(station_schedule)
 
 # Requests advisory information on elevator status for all stations

@@ -162,3 +162,7 @@ class RealtimeStopTimeUpdateSummarySerializer(serializers.ModelSerializer):
         model = RealtimeStopTimeUpdate
         fields = ['arrival_uncertainty', 'arrival_time', 'departure_delay', 'departure_time', 'departure_uncertainty', 'stop_id', 'trip_id']
 
+class RouteSpecificSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Route
+        fields = ['route_id', 'route_short_name', 'route_long_name', 'route_color']
