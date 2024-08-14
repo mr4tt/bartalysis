@@ -1,10 +1,31 @@
-import datetime
-from datetime import datetime, timezone
-
 import requests
 import re
+from pathlib import Path
 import sqlite3
 import gtfs_realtime_pb2
+
+def clear_tables():
+    conn = sqlite3.connect(Path(__file__).parent.parent / 'bart.db')
+    curr = conn.cursor()
+
+    clear_alerts = '''
+    DELETE FROM realtime_alerts
+    '''
+
+    clear_trips = '''
+    DELETE FROM realtime_trips
+    '''
+
+    clear_stop_times = '''
+    DELETE FROM realtime_stop_time_updates
+    '''
+
+    curr.execute(clear_alerts)
+    curr.execute(clear_trips)
+    curr.execute(clear_stop_times)
+
+    conn.commit()
+    conn.close()
 
 def get_alerts():
     url = "http://api.bart.gov/gtfsrt/alerts.aspx"
@@ -14,14 +35,14 @@ def get_alerts():
         r.raise_for_status()
         feed.ParseFromString(r.content)
 
-    conn = sqlite3.connect('/workspaces/bartalysis/backend/bart.db')
+    conn = sqlite3.connect(Path(__file__).parent.parent / 'bart.db')
     curr = conn.cursor()
 
     insert_alert = '''
-    INSERT OR IGNORE INTO rt_alert (
-    alert_id,
-    info, 
-    lang
+    INSERT INTO realtime_alerts (
+        alert_id,
+        info, 
+        lang
     )
     VALUES (?, ?, ?)
     '''
@@ -30,7 +51,7 @@ def get_alerts():
         if entity.HasField('alert'):
             alert_id = re.sub(r'\D', '', entity.id)
             info = entity.alert.description_text.translation[0].text
-            lang = entity.alert.description_text.translation[1].text if len(entity.alert.description_text.translation) > 1 else "en-US"
+            lang = 'en-US'
             
             curr.execute(insert_alert, (
                 alert_id, 
@@ -53,24 +74,24 @@ def get_trip_updates():
     curr = conn.cursor()
 
     insert_trip = '''
-    INSERT OR IGNORE INTO rt_trip (
-    trip_id,
-    schedule_relationship, 
-    vehicle
+    INSERT INTO realtime_trips (
+        trip_id,
+        schedule_relationship, 
+        vehicle
     ) 
     VALUES (?, ?, ?)
     '''
 
     insert_stop_time = '''
-    INSERT OR IGNORE INTO rt_stop_time_update (
-    trip_id, 
-    stop_id, 
-    arrival_delay, 
-    arrival_time, 
-    arrival_uncertainty, 
-    departure_delay, 
-    departure_time, 
-    departure_uncertainty
+    INSERT INTO realtime_stop_time_updates (
+        trip_id, 
+        stop_id, 
+        arrival_delay, 
+        arrival_time, 
+        arrival_uncertainty, 
+        departure_delay, 
+        departure_time, 
+        departure_uncertainty
     ) 
     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     '''
@@ -89,10 +110,10 @@ def get_trip_updates():
             for stop_time_update in entity.trip_update.stop_time_update:
                 stop_id = stop_time_update.stop_id
                 arrival_delay = stop_time_update.arrival.delay
-                arrival_time = datetime.fromtimestamp(stop_time_update.arrival.time, tz=timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
+                arrival_time = stop_time_update.arrival.time
                 arrival_uncertainty = stop_time_update.arrival.uncertainty
                 departure_delay = stop_time_update.departure.delay
-                departure_time = datetime.fromtimestamp(stop_time_update.departure.time, tz=timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
+                departure_time = stop_time_update.departure.time
                 departure_uncertainty = stop_time_update.departure.uncertainty
                 curr.execute(insert_stop_time, (
                     trip_id,
@@ -107,6 +128,7 @@ def get_trip_updates():
 
     conn.commit()
     conn.close()
-                    
+
+clear_tables()
 get_trip_updates()
 get_alerts()

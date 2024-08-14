@@ -1,25 +1,15 @@
 import React from "react";
+import { train } from "../utils/types";
+import { formatTime } from "../utils/utils";
 
-// probably need a counter for the incoming train and the minutes, 
-// i'll just use .map later when we have the actual data
-// parameters: destination (string), trains (array of objects)
-export default function IncomingTrainsContainer() {
+export default function IncomingTrainsContainer({ train }: { train: train }) {
     return (
-        <div className="grid grid-rows-5 bg-slate-600 px-8 py-6 rounded-sm">
-            <div className="row-span-1">Destination</div>
-            <div className="row-span-4 grid gap-2 justify-items-center">
-                <div className="">
-                    <p>Incoming train #1:</p>
-                    <p>X mins</p>
-                </div>
-                <div className="">
-                    <p>Incoming train #2:</p>
-                    <p>X mins</p>
-                </div>
-                <div className="">
-                    <p>Incoming train #3:</p>
-                    <p>X mins</p>
-                </div>
+        <div className="bg-slate-300 px-4 py-2 grid gap-2 items-center">
+            <p>{train.TrainDescription}</p>
+            <p>Train color: {train.TrainName.slice(0, train.TrainName.length - 2)}</p>
+            <div className="flex justify-between items-center">
+                <p>Incoming at: <span className="font-bold">{formatTime(train.DepartureTime)}</span></p>
+                <p>ETA: <span className="font-bold">{formatTime(train.ArrivalTime)}</span></p>
             </div>
         </div>
     )

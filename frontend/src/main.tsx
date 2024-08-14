@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
 import RoutePlanner from './routes/RoutePlanner'
+import Service from './routes/Service'
 import './index.css'
 import {
   createBrowserRouter,
@@ -16,7 +17,11 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <RoutePlanner />
-      }
+      },
+      {
+        path: "/service",
+        element: <Service />
+      },
     ]
   },
 ]);

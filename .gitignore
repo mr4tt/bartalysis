@@ -23,7 +23,15 @@ dist-ssr
 *.sln
 *.sw?
 
+.env
+
 env
 __pycache__
+__init
 gtfs_realtime_pb2.py
 bart.db
+django.db
+
+backend/result*.txt
+postbart.db
+.env
