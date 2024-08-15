@@ -7,18 +7,14 @@ import Directions from "../components/Directions";
 import { Markers } from "../components/Markers";
 import { getNextThreeTrains, countDecimals, sortFares } from "../utils/utils";
 import { train, fare } from "../utils/types";
-import { getNextThreeTrains, countDecimals, sortFares } from "../utils/utils";
-import { train, fare } from "../utils/types";
 import StationForm from "../components/StationForm";
 
 export default function RoutePlanner() {
     const [trip, setTrip] = useState({ "origin": "", "destination" : "" })
     const [trains, setTrains] = useState<train[]>([])
     const [fares, setFares] = useState<fare[]>([])
-    const [fares, setFares] = useState<fare[]>([])
     const [flag, setFlag] = useState(false)
     const firstSubmit = useRef(false)
-    const position = { lat: 37.668819, lng: -122.080795 }
     const position = { lat: 37.668819, lng: -122.080795 }
 
     const handleClick = async(e: React.MouseEvent<HTMLButtonElement>) => {
@@ -43,7 +39,6 @@ export default function RoutePlanner() {
  
     return (
         <div className="row-span-7 grid grid-cols-5 mt-2">
-            <div className="bg-slate-200 grid grid-rows-6 gap-4 col-span-2 border-r-2 border-black py-2 px-6">
             <div className="bg-slate-200 grid grid-rows-6 gap-4 col-span-2 border-r-2 border-black py-2 px-6">
                 <div className="flex justify-evenly row-span-1">
                     <StationForm location="Origin" handleChange={handleChange}/>
@@ -126,11 +121,7 @@ export default function RoutePlanner() {
                     <Map
                         defaultCenter={position}
                         defaultZoom={10}
-                        defaultCenter={position}
-                        defaultZoom={10}
                         mapId={import.meta.env.VITE_MAP_ID}
-                        gestureHandling={'greedy'}
-                        disableDefaultUI={true}
                         gestureHandling={'greedy'}
                         disableDefaultUI={true}
                     >
@@ -144,5 +135,5 @@ export default function RoutePlanner() {
                 </APIProvider>
             </div>
         </div>
-    )
-}
+    </div>
+)}
